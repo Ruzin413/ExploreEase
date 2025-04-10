@@ -1,9 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Models.Models
-
 @inject SignInManager<ExploreEaseUser> SignInManager
 @inject UserManager<ExploreEaseUser> UserManager
-
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {

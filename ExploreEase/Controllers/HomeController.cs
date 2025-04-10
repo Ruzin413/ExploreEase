@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using ExploreEase.Models;
 using Microsoft.AspNetCore.Mvc;
-
 namespace ExploreEase.Controllers
 {
     public class HomeController : Controller

@@ -9,7 +9,6 @@ builder.Services.AddDbContext<ExploreEaseDbContext>(options =>
         sqlServerOptions => sqlServerOptions.MigrationsAssembly("ExploreEase")));
 builder.Services.AddDefaultIdentity<ExploreEaseUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ExploreEaseDbContext>();
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
@@ -30,7 +29,7 @@ app.MapControllerRoute(
 app.MapAreaControllerRoute(
     name: "Admin",
     areaName: "Admin",
-    pattern: "Admin/{controller=Admin}/{action=Index}/{id?}");
+    pattern: "ExploreEase/{controller=Admin}/{action=Index}/{id?}");
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
