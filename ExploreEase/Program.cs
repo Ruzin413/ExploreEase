@@ -29,7 +29,7 @@ app.MapControllerRoute(
 app.MapAreaControllerRoute(
     name: "Admin",
     areaName: "Admin",
-    pattern: "ExploreEase/{controller=Admin}/{action=Index}/{id?}");
+    pattern: "ExploreEase/{area=Admin}/{controller=Admin}/{action=Index}/{id?}");
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

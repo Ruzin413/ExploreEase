@@ -25,6 +25,8 @@
   <ItemGroup>
     <ProjectReference Include="..\DataAcessLayer\DataAcessLayer.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Repository\Repository.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>
