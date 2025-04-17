@@ -26,26 +26,18 @@ namespace ExploreEase.Areas.Admin.Controllers
             
             return View(users); 
         }
-        [Area("Admin")]
-        public IActionResult DeleteUser()
-        {
-            //var user = await _userManager.FindByIdAsync(id);
-            //if (user != null)
-            //{
-            //    await _userManager.DeleteAsync(user);
-            //}
-            return View();
-        }
-        [Area("Admin")]
+        
+    
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            //var user = await _userManager.FindByIdAsync(id);
-            //if (user != null)
-            //{
-            //    await _userManager.DeleteAsync(user);
-            //}
-            return View();
+            var user = await _userManager.FindByIdAsync(id);
+            var result = new IdentityResult();
+            if (user != null)
+            {
+                 result = await _userManager.DeleteAsync(user);
+            }
+            return Json(result);
         }
     }
 }
