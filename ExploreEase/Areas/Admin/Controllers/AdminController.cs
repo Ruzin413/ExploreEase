@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Models;
 using Repository.Repository;
+using Services.Services;
 using System.Diagnostics;
 namespace ExploreEase.Areas.Admin.Controllers
 {
@@ -11,11 +12,18 @@ namespace ExploreEase.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<ExploreEaseUser> _userManager;
-        public AdminController(UserManager<ExploreEaseUser> userManager)
+        private readonly TourServices _tourServices;
+
+        public AdminController(UserManager<ExploreEaseUser> userManager, TourServices tourServices)
         {
             _userManager = userManager;
+            _tourServices = tourServices;
         }
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult Test()
         {
             return View();
         }
@@ -26,8 +34,6 @@ namespace ExploreEase.Areas.Admin.Controllers
             
             return View(users); 
         }
-        
-    
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -38,6 +44,23 @@ namespace ExploreEase.Areas.Admin.Controllers
                  result = await _userManager.DeleteAsync(user);
             }
             return Json(result);
+        }
+        public IActionResult AddServices(){
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddServices(IFormCollection form)
+        {
+            var result = await _tourServices.InsertAllAsync(form);
+
+            if (result.IsSuccess)
+            {
+                return Json(new { success = true, message = result.Message });
+            }
+            else
+            {
+                return Json(new { success = false, message = result.Message });
+            }
         }
     }
 }

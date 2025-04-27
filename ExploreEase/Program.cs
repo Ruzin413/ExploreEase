@@ -1,69 +1,92 @@
 ﻿using DataAcessLayer.DataAcess;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Repository.Interfaces;
+using Repository.Repository;
+using Services.Interfaces;
+using Services.Services;
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("ExploreEaseDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ExploreEaseDbContextConnection' not found.");
+// Connection string retrieval
+var connectionString = builder.Configuration.GetConnectionString("ExploreEaseDbContextConnection")
+                        ?? throw new InvalidOperationException("Connection string 'ExploreEaseDbContextConnection' not found.");
+// Adding DbContext for SQL Server
 builder.Services.AddDbContext<ExploreEaseDbContext>(options =>
-    options.UseSqlServer(connectionString,
-        sqlServerOptions => sqlServerOptions.MigrationsAssembly("ExploreEase")));
-builder.Services.AddDefaultIdentity<ExploreEaseUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
+    options.UseSqlServer(connectionString, sqlServerOptions => sqlServerOptions.MigrationsAssembly("ExploreEase")));
+// Adding Identity services
+builder.Services.AddDefaultIdentity<ExploreEaseUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ExploreEaseDbContext>();
-// Add services to the container.
+// Registering services for DI
+builder.Services.AddScoped<ImageSaveService>(); // Register ImageSaveService
+builder.Services.AddScoped<TourRepository>(); // Register TourRepository
+builder.Services.AddScoped<TourServices>(); // Register ITourServices and its implementation
+builder.Logging.AddConsole();
+// Adding MVC support (controllers with views)
 builder.Services.AddControllersWithViews();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 104857600; // 100 MB
+});
+// Build the app after services registration
 var app = builder.Build();
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage(); // Enable detailed error pages in development mode
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
+// Map routes
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
 app.MapAreaControllerRoute(
     name: "Admin",
     areaName: "Admin",
     pattern: "{area=Admin}/{controller=Admin}/{action=Index}/{id?}");
+// Role and User initialization
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await CreateRoles(services);
 }
+// Mapping Razor Pages
 app.MapRazorPages();
+// Run the app
 app.Run();
 async Task CreateRoles(IServiceProvider serviceProvider)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = serviceProvider.GetRequiredService<UserManager<ExploreEaseUser>>(); // 👈 use your ExploreEaseUser type!
+    var userManager = serviceProvider.GetRequiredService<UserManager<ExploreEaseUser>>();
 
+    // Define roles
     string[] roleNames = { "Admin", "Manager", "User" };
-    IdentityResult roleResult;
 
+    // Create roles if they don't exist
     foreach (var roleName in roleNames)
     {
         var roleExist = await roleManager.RoleExistsAsync(roleName);
         if (!roleExist)
         {
-            roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+            await roleManager.CreateAsync(new IdentityRole(roleName));
         }
     }
 
-    // ✅ Create a default Admin User
-    string FullName = "Admin";
-    string adminEmail = "Admin413@gmail.com"; // 🔥 Put your admin email here
-    string adminPassword = "Admin@123";      // 🔥 Choose a strong password
+    // Admin user setup
+    string fullName = "Admin";
+    string adminEmail = "Admin413@gmail.com";
+    string adminPassword = "Admin@123";
 
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
@@ -71,7 +94,7 @@ async Task CreateRoles(IServiceProvider serviceProvider)
     {
         var newAdminUser = new ExploreEaseUser
         {
-            FullName = FullName,
+            FullName = fullName,
             UserName = adminEmail,
             Email = adminEmail,
             EmailConfirmed = true

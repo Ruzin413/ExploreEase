@@ -22,6 +22,68 @@ namespace ExploreEase.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DayHotel", b =>
+                {
+                    b.Property<int>("DayHotelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DayHotelId"));
+
+                    b.Property<int>("DayNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HotelDescription")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("HotelLocation")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("HotelName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("TourPackageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DayHotelId");
+
+                    b.HasIndex("TourPackageId");
+
+                    b.ToTable("dayHotels");
+                });
+
+            modelBuilder.Entity("HotelImage", b =>
+                {
+                    b.Property<int>("HotelImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HotelImageId"));
+
+                    b.Property<int>("DayHotelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("HotelImageId");
+
+                    b.HasIndex("DayHotelId");
+
+                    b.ToTable("hotelImage");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -228,6 +290,55 @@ namespace ExploreEase.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Models.Models.TourPackage", b =>
+                {
+                    b.Property<int>("TourPackageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TourPackageId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Rating")
+                        .HasMaxLength(100)
+                        .HasColumnType("int");
+
+                    b.HasKey("TourPackageId");
+
+                    b.ToTable("TourPackage");
+                });
+
+            modelBuilder.Entity("DayHotel", b =>
+                {
+                    b.HasOne("Models.Models.TourPackage", "TourPackage")
+                        .WithMany("DayHotels")
+                        .HasForeignKey("TourPackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TourPackage");
+                });
+
+            modelBuilder.Entity("HotelImage", b =>
+                {
+                    b.HasOne("DayHotel", "DayHotel")
+                        .WithMany("HotelImages")
+                        .HasForeignKey("DayHotelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DayHotel");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -277,6 +388,16 @@ namespace ExploreEase.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DayHotel", b =>
+                {
+                    b.Navigation("HotelImages");
+                });
+
+            modelBuilder.Entity("Models.Models.TourPackage", b =>
+                {
+                    b.Navigation("DayHotels");
                 });
 #pragma warning restore 612, 618
         }
