@@ -63,19 +63,13 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await CreateRoles(services);
 }
-// Mapping Razor Pages
 app.MapRazorPages();
-// Run the app
 app.Run();
 async Task CreateRoles(IServiceProvider serviceProvider)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = serviceProvider.GetRequiredService<UserManager<ExploreEaseUser>>();
-
-    // Define roles
     string[] roleNames = { "Admin", "Manager", "User" };
-
-    // Create roles if they don't exist
     foreach (var roleName in roleNames)
     {
         var roleExist = await roleManager.RoleExistsAsync(roleName);
@@ -84,14 +78,10 @@ async Task CreateRoles(IServiceProvider serviceProvider)
             await roleManager.CreateAsync(new IdentityRole(roleName));
         }
     }
-
-    // Admin user setup
     string fullName = "Admin";
     string adminEmail = "Admin413@gmail.com";
     string adminPassword = "Admin@123";
-
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
     if (adminUser == null)
     {
         var newAdminUser = new ExploreEaseUser
@@ -101,7 +91,6 @@ async Task CreateRoles(IServiceProvider serviceProvider)
             Email = adminEmail,
             EmailConfirmed = true
         };
-
         var createUserResult = await userManager.CreateAsync(newAdminUser, adminPassword);
 
         if (createUserResult.Succeeded)
@@ -111,7 +100,6 @@ async Task CreateRoles(IServiceProvider serviceProvider)
     }
     else
     {
-        // If user exists but is not in Admin role
         var isInRole = await userManager.IsInRoleAsync(adminUser, "Admin");
         if (!isInRole)
         {

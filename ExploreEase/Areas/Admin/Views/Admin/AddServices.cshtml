@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Tour Package</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <script>
         function generateHotelFields() {
             var dayNumber = document.querySelector('input[name="DayNumber"]:checked')?.value;
@@ -14,53 +15,69 @@
             // If a day number is selected, generate the corresponding fields
             if (dayNumber) {
                 for (let i = 1; i <= dayNumber; i++) {
+                    const hotelCard = document.createElement("div");
+                    hotelCard.className = "bg-white rounded-lg shadow-md p-6 mb-6";
+
                     // Create day header
                     var dayHeader = document.createElement("h3");
+                    dayHeader.className = "text-xl font-semibold text-indigo-700 mb-4";
                     dayHeader.innerText = `Day ${i} Hotel Details`;
-                    hotelFieldsContainer.appendChild(dayHeader);
+                    hotelCard.appendChild(dayHeader);
 
                     // Hotel Name
+                    const hotelNameGroup = document.createElement("div");
+                    hotelNameGroup.className = "mb-4";
+
                     var hotelNameLabel = document.createElement("label");
                     hotelNameLabel.setAttribute("for", `HotelName_${i}`);
+                    hotelNameLabel.className = "block text-gray-700 text-sm font-medium mb-2";
                     hotelNameLabel.innerText = `Hotel Name for Day ${i}:`;
+
                     var hotelNameInput = document.createElement("input");
                     hotelNameInput.setAttribute("type", "text");
                     hotelNameInput.setAttribute("id", `HotelName_${i}`);
                     hotelNameInput.setAttribute("name", `HotelName_${i}`);
                     hotelNameInput.setAttribute("required", "");
                     hotelNameInput.setAttribute("maxlength", "100");
-                    hotelFieldsContainer.appendChild(hotelNameLabel);
-                    hotelFieldsContainer.appendChild(hotelNameInput);
-                    hotelFieldsContainer.appendChild(document.createElement("br"));
-
-                    // Hotel Description
+                    hotelNameInput.className = "w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500";
+                    hotelNameGroup.appendChild(hotelNameLabel);
+                    hotelNameGroup.appendChild(hotelNameInput);
+                    hotelCard.appendChild(hotelNameGroup);
+                    const hotelDescGroup = document.createElement("div");
+                    hotelDescGroup.className = "mb-4";
                     var hotelDescriptionLabel = document.createElement("label");
                     hotelDescriptionLabel.setAttribute("for", `HotelDescription_${i}`);
+                    hotelDescriptionLabel.className = "block text-gray-700 text-sm font-medium mb-2";
                     hotelDescriptionLabel.innerText = `Hotel Description for Day ${i}:`;
                     var hotelDescriptionTextarea = document.createElement("textarea");
                     hotelDescriptionTextarea.setAttribute("id", `HotelDescription_${i}`);
                     hotelDescriptionTextarea.setAttribute("name", `HotelDescription_${i}`);
                     hotelDescriptionTextarea.setAttribute("maxlength", "1000");
-                    hotelFieldsContainer.appendChild(hotelDescriptionLabel);
-                    hotelFieldsContainer.appendChild(hotelDescriptionTextarea);
-                    hotelFieldsContainer.appendChild(document.createElement("br"));
-
-                    // Hotel Location
+                    hotelDescriptionTextarea.setAttribute("rows", "3");
+                    hotelDescriptionTextarea.className = "w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500";
+                    hotelDescGroup.appendChild(hotelDescriptionLabel);
+                    hotelDescGroup.appendChild(hotelDescriptionTextarea);
+                    hotelCard.appendChild(hotelDescGroup);
+                    const hotelLocGroup = document.createElement("div");
+                    hotelLocGroup.className = "mb-4";
                     var hotelLocationLabel = document.createElement("label");
                     hotelLocationLabel.setAttribute("for", `HotelLocation_${i}`);
+                    hotelLocationLabel.className = "block text-gray-700 text-sm font-medium mb-2";
                     hotelLocationLabel.innerText = `Hotel Location for Day ${i}:`;
                     var hotelLocationInput = document.createElement("input");
                     hotelLocationInput.setAttribute("type", "text");
                     hotelLocationInput.setAttribute("id", `HotelLocation_${i}`);
                     hotelLocationInput.setAttribute("name", `HotelLocation_${i}`);
                     hotelLocationInput.setAttribute("maxlength", "200");
-                    hotelFieldsContainer.appendChild(hotelLocationLabel);
-                    hotelFieldsContainer.appendChild(hotelLocationInput);
-                    hotelFieldsContainer.appendChild(document.createElement("br"));
-
-                    // Hotel Image
+                    hotelLocationInput.className = "w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500";
+                    hotelLocGroup.appendChild(hotelLocationLabel);
+                    hotelLocGroup.appendChild(hotelLocationInput);
+                    hotelCard.appendChild(hotelLocGroup);
+                    const hotelImgGroup = document.createElement("div");
+                    hotelImgGroup.className = "mb-2";
                     var hotelImageLabel = document.createElement("label");
                     hotelImageLabel.setAttribute("for", `HotelImage_${i}`);
+                    hotelImageLabel.className = "block text-gray-700 text-sm font-medium mb-2";
                     hotelImageLabel.innerText = `Hotel Images for Day ${i}:`;
                     var hotelImageInput = document.createElement("input");
                     hotelImageInput.setAttribute("type", "file");
@@ -68,14 +85,16 @@
                     hotelImageInput.setAttribute("name", `HotelImage_${i}[]`);
                     hotelImageInput.setAttribute("accept", "image/*");
                     hotelImageInput.setAttribute("multiple", "multiple");
-                    hotelFieldsContainer.appendChild(hotelImageLabel);
-                    hotelFieldsContainer.appendChild(hotelImageInput);
-                    hotelFieldsContainer.appendChild(document.createElement("br"));
+                    hotelImageInput.className = "w-full text-gray-700 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500";
+
+                    hotelImgGroup.appendChild(hotelImageLabel);
+                    hotelImgGroup.appendChild(hotelImageInput);
+                    hotelCard.appendChild(hotelImgGroup);
+
+                    hotelFieldsContainer.appendChild(hotelCard);
                 }
             }
         }
-
-        // Extra validation to prevent negative numbers
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('tourPackageForm').addEventListener('submit', function (e) {
                 var price = parseFloat(document.getElementById('Price').value);
@@ -84,50 +103,92 @@
 
                 if (price < 0 || latitude < 0 || longitude < 0) {
                     alert('Price, Latitude, and Longitude must be positive numbers!');
-                    e.preventDefault(); // Stop form submission
+                    e.preventDefault(); 
                 }
             });
         });
     </script>
 </head>
-<body>
-    <div class="horizontal-scroll"  name="alertbox"id="alertbox">
-    <h1>Create Tour Package</h1>
-    <form id="tourPackageForm" method="post" enctype="multipart/form-data">
-        <!-- Tour Package Name -->
-        <label for="Name">Tour Package Name:</label>
-        <input type="text" id="Name" name="Name" required maxlength="100" /><br /><br/>
-        <!-- Tour Package Description -->
-        <label for="Description">Tour Package Description:</label>
-        <textarea id="Description" name="Description" maxlength="1000" required></textarea><br /><br/>
-        <!-- Destination Image -->
-        <label for="DestinationPicture">Choose a file to upload:</label>
-        <input type="file" id="DestinationImage" name="DestinationImage">
-        <!-- Price -->
-        <label for="Price">Price:</label>
-        <input type="number" id="Price" name="Price" required min="0" step="0.01" /><br /><br />
-        <!--Destination-->
-        <label for="Destination">Destination:</label>
-        <input type="text" id="Destination" name="Destination" required maxlength="200" /><br /><br />
-        <!-- Latitude -->
-        <label for="Latitude">Latitude:</label>
-        <input type="number" id="Lat" name="Lat" required step="any" min="0" max="90" /><br /><br />
-        <!-- Longitude -->
-        <label for="Longitude">Longitude:</label>
-        <input type="number" id="Long" name="Long" required step="any" min="0" max="180" /><br /><br />
-        <!-- Day Number (Radio Buttons) -->
-        <label>Day Number:</label><br>
-        <div>
-            <label><input type="radio" name="DayNumber" value="1" onclick="generateHotelFields()" /> Day 1</label><br />
-            <label><input type="radio" name="DayNumber" value="3" onclick="generateHotelFields()" /> Day 3</label><br />
-            <label><input type="radio" name="DayNumber" value="7" onclick="generateHotelFields()" /> Day 7</label><br />
-            <!-- Add more day options as needed -->
-        </div><br />
-        <!-- Container for dynamically generated hotel fields -->
-        <div id="hotelFieldsContainer"></div><br />
-        <!-- Submit Button -->
-        <button type="submit">Submit</button>
-    </form>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="bg-indigo-600 px-6 py-4">
+                    <h1 class="text-2xl font-bold text-white">Create Tour Package</h1>
+                </div>
+                <div class="p-6">
+                    <form id="tourPackageForm" method="post" enctype="multipart/form-data" class="space-y-6">
+                        <div class="space-y-1">
+                            <label for="Name" class="block text-gray-700 font-medium">Tour Package Name:</label>
+                            <input type="text" id="Name" name="Name" required maxlength="100"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        </div>
+                        <div class="space-y-1">
+                            <label for="Description" class="block text-gray-700 font-medium">Tour Package Description:</label>
+                            <textarea id="Description" name="Description" maxlength="1000" required rows="4"
+                                      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                        </div>
+                        <div class="space-y-1">
+                            <label for="DestinationImage" class="block text-gray-700 font-medium">Destination Image:</label>
+                            <input type="file" id="DestinationImage" name="DestinationImage"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-1">
+                                <label for="Price" class="block text-gray-700 font-medium">Price ($):</label>
+                                <input type="number" id="Price" name="Price" required min="0" step="0.01"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                            </div>
+                            <div class="space-y-1">
+                                <label for="Destination" class="block text-gray-700 font-medium">Destination:</label>
+                                <input type="text" id="Destination" name="Destination" required maxlength="200"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-1">
+                                <label for="Lat" class="block text-gray-700 font-medium">Latitude:</label>
+                                <input type="number" id="Lat" name="Lat" required step="any" min="0" max="90"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                            </div>
+                            <div class="space-y-1">
+                                <label for="Long" class="block text-gray-700 font-medium">Longitude:</label>
+                                <input type="number" id="Long" name="Long" required step="any" min="0" max="180"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-gray-700 font-medium mb-2">Trip Duration:</label>
+                            <div class="flex flex-wrap gap-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="DayNumber" value="1" onclick="generateHotelFields()"
+                                           class="form-radio h-5 w-5 text-indigo-600" />
+                                    <span class="ml-2 text-gray-700">1 Day</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="DayNumber" value="3" onclick="generateHotelFields()"
+                                           class="form-radio h-5 w-5 text-indigo-600" />
+                                    <span class="ml-2 text-gray-700">3 Days</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="DayNumber" value="7" onclick="generateHotelFields()"
+                                           class="form-radio h-5 w-5 text-indigo-600" />
+                                    <span class="ml-2 text-gray-700">7 Days</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="hotelFieldsContainer" class="space-y-4"></div>
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                    class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors">
+                                Create Tour Package
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="~/js/AddServices.js"></script>
 </body>
 </html>

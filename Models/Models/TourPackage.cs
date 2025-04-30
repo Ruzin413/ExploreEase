@@ -9,12 +9,11 @@ namespace Models.Models
     public class TourPackage
     {
         public int TourPackageId { get; set; }
-
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
         [Required]
-        [StringLength(1000)]
+        [StringLength(1000000)]
         public string Description { get; set; }
         [Required]
         public float Rating { get; set; } 

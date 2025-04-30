@@ -19,8 +19,6 @@
                             </div>`;
             });
             $('#packageContainer').html(html);
-
-            // Add explicit hover handlers for browsers that might need it
             $('.tour-card').hover(
                 function () {
                     $(this).find('.description').css({
@@ -37,6 +35,9 @@
                     });
                 }
             );
+
+            // Initialize scroll buttons
+            initScrollButtons();
         },
         error: function () {
             $('#packageContainer').html('<div class="alert alert-danger">Could not load tour packages.</div>');
@@ -48,7 +49,44 @@
         const now = new Date();
         $('#clock').text(now.toLocaleTimeString());
     }
-
     updateClock();
     setInterval(updateClock, 1000);
+
+    // Scroll functionality
+    function initScrollButtons() {
+        const container = document.getElementById('packageContainer');
+        const scrollLeftBtn = document.getElementById('scrollLeft');
+        const scrollRightBtn = document.getElementById('scrollRight');
+
+        // Calculate scroll amount (approx width of one card including margin)
+        const cardWidth = 320; // 300px width + 20px margin
+        const scrollAmount = cardWidth * 4; // Scroll 4 cards at a time
+
+        // Initial button state
+        updateButtonState();
+
+        // Scroll left
+        scrollLeftBtn.addEventListener('click', function () {
+            container.scrollLeft -= scrollAmount;
+            updateButtonState();
+        });
+
+        // Scroll right
+        scrollRightBtn.addEventListener('click', function () {
+            container.scrollLeft += scrollAmount;
+            updateButtonState();
+        });
+
+        // Update button state based on scroll position
+        container.addEventListener('scroll', updateButtonState);
+
+        function updateButtonState() {
+            // Check if can scroll left
+            scrollLeftBtn.disabled = container.scrollLeft <= 0;
+
+            // Check if can scroll right
+            const maxScrollLeft = container.scrollWidth - container.clientWidth;
+            scrollRightBtn.disabled = Math.abs(container.scrollLeft - maxScrollLeft) < 10;
+        }
+    }
 });
