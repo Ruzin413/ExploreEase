@@ -17,8 +17,19 @@ namespace Models.Models
         [StringLength(1000)]
         public string Description { get; set; }
         [Required]
+        public float Rating { get; set; } 
+        [Required]
+        public int price { get; set; }
+        [Required]
+        public float Lat { get; set; }
+        [Required]
+        public float Long { get; set; }
+        [Required]
         [StringLength(100)]
-        public int Rating { get; set; } 
+        public  string Destination {  get; set; }
+        [Required]
+        [StringLength(100)]
+        public string DestinationImage { get; set; }
         public ICollection<DayHotel> DayHotels { get; set; }
     }
 

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Models.Models;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -24,5 +26,4 @@ namespace Services.Services
             return Path.Combine("/images", folderName, uniqueFileName).Replace("\\", "/");
         }
     }
-
 }

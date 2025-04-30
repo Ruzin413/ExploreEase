@@ -31,7 +31,7 @@ namespace ExploreEase.Areas.Admin.Controllers
         {
             GetUser u1 = new GetUser(_userManager);
             var users = u1.GetUsers();
-            
+  
             return View(users); 
         }
         [HttpPost]
@@ -52,7 +52,6 @@ namespace ExploreEase.Areas.Admin.Controllers
         public async Task<IActionResult> AddServices(IFormCollection form)
         {
             var result = await _tourServices.InsertAllAsync(form);
-
             if (result.IsSuccess)
             {
                 return Json(new { success = true, message = result.Message });

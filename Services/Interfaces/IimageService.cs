@@ -9,7 +9,6 @@ namespace Services.Interfaces
 {
     public interface IimageService
     {
-
         Task<string> SaveImageAsync(IFormFile file, string folderName);
     }
 }

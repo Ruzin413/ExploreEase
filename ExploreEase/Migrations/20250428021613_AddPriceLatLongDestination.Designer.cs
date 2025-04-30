@@ -4,6 +4,7 @@ using DataAcessLayer.DataAcess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExploreEase.Migrations
 {
     [DbContext(typeof(ExploreEaseDbContext))]
-    partial class ExploreEaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250428021613_AddPriceLatLongDestination")]
+    partial class AddPriceLatLongDestination
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -308,11 +311,6 @@ namespace ExploreEase.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("DestinationImage")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<float>("Lat")
                         .HasMaxLength(100)
                         .HasColumnType("real");
@@ -326,9 +324,9 @@ namespace ExploreEase.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<float>("Rating")
+                    b.Property<int>("Rating")
                         .HasMaxLength(100)
-                        .HasColumnType("real");
+                        .HasColumnType("int");
 
                     b.Property<int>("price")
                         .HasMaxLength(100)

@@ -22,6 +22,8 @@ builder.Services.AddDefaultIdentity<ExploreEaseUser>(options => options.SignIn.R
 builder.Services.AddScoped<ImageSaveService>(); // Register ImageSaveService
 builder.Services.AddScoped<TourRepository>(); // Register TourRepository
 builder.Services.AddScoped<TourServices>(); // Register ITourServices and its implementation
+builder.Services.AddScoped<GetServicesRepository>();
+builder.Services.AddScoped<GetServices>();
 builder.Logging.AddConsole();
 // Adding MVC support (controllers with views)
 builder.Services.AddControllersWithViews();

@@ -22,17 +22,17 @@ namespace Repository.Repository
         public async Task InsertTourPackageWithHotelsAsync(TourPackage tourPackage, List<DayHotel> dayHotels, List<HotelImage> hotelImages)
         {
             await _dbContext.TourPackage.AddAsync(tourPackage);
-            await _dbContext.SaveChangesAsync(); // Save to get TourPackageId
+            await _dbContext.SaveChangesAsync();
 
             foreach (var dayHotel in dayHotels)
             {
-                dayHotel.TourPackageId = tourPackage.TourPackageId; // Set foreign key
+                dayHotel.TourPackageId = tourPackage.TourPackageId; 
                 await _dbContext.dayHotels.AddAsync(dayHotel);
-                await _dbContext.SaveChangesAsync(); // Save to get DayHotelId
+                await _dbContext.SaveChangesAsync(); 
 
                 foreach (var hotelImage in hotelImages.Where(h => h.DayNumber == dayHotel.DayNumber))
                 {
-                    hotelImage.DayHotelId = dayHotel.DayHotelId; // Set foreign key
+                    hotelImage.DayHotelId = dayHotel.DayHotelId; 
                     await _dbContext.hotelImage.AddAsync(hotelImage);
                 }
             }

@@ -28,11 +28,27 @@ namespace Services.Services
                 var name = form["Name"];
                 var description = form["Description"];
                 var dayNumber = Convert.ToInt32(form["DayNumber"]);
+                var price = Convert.ToInt32(form["Price"]);
+                var destination = form["Destination"];
+                var latitude = Convert.ToDouble(form["Lat"]);
+                var longitude = Convert.ToDouble(form["Long"]);
+                var DestinationImage = form.Files["DestinationImage"];
+                var Rate = 1.0f;
+                string imagePath = null;
+                if (DestinationImage != null && DestinationImage.Length > 0)
+                {
+                    imagePath = await _imageSaveService.SaveImageAsync(DestinationImage, "DestinationImage");
+                }
                 var tourPackage = new TourPackage
                 {
                     Name = name,
                     Description = description,
-                    Rating  = 1 
+                    Rating = Rate,
+                    price = price,
+                    Lat = (float)latitude,
+                    Long = (float)longitude,
+                    Destination = description,
+                    DestinationImage = imagePath
                 };
                 var dayHotels = new List<DayHotel>();
                 var hotelImages = new List<HotelImage>();

@@ -8,7 +8,6 @@
         function generateHotelFields() {
             var dayNumber = document.querySelector('input[name="DayNumber"]:checked')?.value;
             var hotelFieldsContainer = document.getElementById("hotelFieldsContainer");
-
             // Clear any previously generated fields
             hotelFieldsContainer.innerHTML = "";
 
@@ -59,50 +58,76 @@
                     hotelFieldsContainer.appendChild(hotelLocationInput);
                     hotelFieldsContainer.appendChild(document.createElement("br"));
 
-                   
-                // Hotel Image
+                    // Hotel Image
                     var hotelImageLabel = document.createElement("label");
                     hotelImageLabel.setAttribute("for", `HotelImage_${i}`);
                     hotelImageLabel.innerText = `Hotel Images for Day ${i}:`;
                     var hotelImageInput = document.createElement("input");
                     hotelImageInput.setAttribute("type", "file");
                     hotelImageInput.setAttribute("id", `HotelImage_${i}`);
-                    hotelImageInput.setAttribute("name", `HotelImage_${i}[]`); // notice []
+                    hotelImageInput.setAttribute("name", `HotelImage_${i}[]`);
                     hotelImageInput.setAttribute("accept", "image/*");
                     hotelImageInput.setAttribute("multiple", "multiple");
                     hotelFieldsContainer.appendChild(hotelImageLabel);
                     hotelFieldsContainer.appendChild(hotelImageInput);
                     hotelFieldsContainer.appendChild(document.createElement("br"));
-
                 }
             }
         }
+
+        // Extra validation to prevent negative numbers
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('tourPackageForm').addEventListener('submit', function (e) {
+                var price = parseFloat(document.getElementById('Price').value);
+                var latitude = parseFloat(document.getElementById('Latitude').value);
+                var longitude = parseFloat(document.getElementById('Longitude').value);
+
+                if (price < 0 || latitude < 0 || longitude < 0) {
+                    alert('Price, Latitude, and Longitude must be positive numbers!');
+                    e.preventDefault(); // Stop form submission
+                }
+            });
+        });
     </script>
 </head>
 <body>
+    <div class="horizontal-scroll"  name="alertbox"id="alertbox">
     <h1>Create Tour Package</h1>
-    <form id="tourPackageForm"  method="post" enctype="multipart/form-data">
+    <form id="tourPackageForm" method="post" enctype="multipart/form-data">
         <!-- Tour Package Name -->
         <label for="Name">Tour Package Name:</label>
-        <input type="text" id="Name" name="Name" required maxlength="100" /><br /><br />
-
+        <input type="text" id="Name" name="Name" required maxlength="100" /><br /><br/>
         <!-- Tour Package Description -->
         <label for="Description">Tour Package Description:</label>
-        <textarea id="Description" name="Description" maxlength="1000"></textarea><br /><br />
-
+        <textarea id="Description" name="Description" maxlength="1000" required></textarea><br /><br/>
+        <!-- Destination Image -->
+        <label for="DestinationPicture">Choose a file to upload:</label>
+        <input type="file" id="DestinationImage" name="DestinationImage">
+        <!-- Price -->
+        <label for="Price">Price:</label>
+        <input type="number" id="Price" name="Price" required min="0" step="0.01" /><br /><br />
+        <!--Destination-->
+        <label for="Destination">Destination:</label>
+        <input type="text" id="Destination" name="Destination" required maxlength="200" /><br /><br />
+        <!-- Latitude -->
+        <label for="Latitude">Latitude:</label>
+        <input type="number" id="Lat" name="Lat" required step="any" min="0" max="90" /><br /><br />
+        <!-- Longitude -->
+        <label for="Longitude">Longitude:</label>
+        <input type="number" id="Long" name="Long" required step="any" min="0" max="180" /><br /><br />
         <!-- Day Number (Radio Buttons) -->
         <label>Day Number:</label><br>
         <div>
-            <label><input type="radio" name="DayNumber" value="1" onclick="generateHotelFields()" /> Day 1</label><br />   
+            <label><input type="radio" name="DayNumber" value="1" onclick="generateHotelFields()" /> Day 1</label><br />
             <label><input type="radio" name="DayNumber" value="3" onclick="generateHotelFields()" /> Day 3</label><br />
             <label><input type="radio" name="DayNumber" value="7" onclick="generateHotelFields()" /> Day 7</label><br />
-            <!-- Add more day options as needed, up to Day 30 -->
+            <!-- Add more day options as needed -->
         </div><br />
         <!-- Container for dynamically generated hotel fields -->
         <div id="hotelFieldsContainer"></div><br />
-
         <!-- Submit Button -->
         <button type="submit">Submit</button>
     </form>
+    <script src="~/js/AddServices.js"></script>
 </body>
 </html>
