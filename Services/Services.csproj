@@ -12,7 +12,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DataAcessLayer\DataAcessLayer.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />

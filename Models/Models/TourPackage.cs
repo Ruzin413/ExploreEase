@@ -29,6 +29,8 @@ namespace Models.Models
         [Required]
         [StringLength(100)]
         public string DestinationImage { get; set; }
+        [Required]
+        public int NumberOfDays {  get; set; }
         public ICollection<DayHotel> DayHotels { get; set; }
     }
 

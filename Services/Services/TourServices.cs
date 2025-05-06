@@ -34,6 +34,7 @@ namespace Services.Services
                 var longitude = Convert.ToDouble(form["Long"]);
                 var DestinationImage = form.Files["DestinationImage"];
                 var Rate = 1.0f;
+                var NumberOfDays = Convert.ToInt32(form["DayNumber"]);
                 string imagePath = null;
                 if (DestinationImage != null && DestinationImage.Length > 0)
                 {
@@ -48,7 +49,8 @@ namespace Services.Services
                     Lat = (float)latitude,
                     Long = (float)longitude,
                     Destination = description,
-                    DestinationImage = imagePath
+                    DestinationImage = imagePath,
+                    NumberOfDays = NumberOfDays
                 };
                 var dayHotels = new List<DayHotel>();
                 var hotelImages = new List<HotelImage>();

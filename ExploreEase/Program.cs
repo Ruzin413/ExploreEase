@@ -19,11 +19,13 @@ builder.Services.AddDefaultIdentity<ExploreEaseUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ExploreEaseDbContext>();
 // Registering services for DI
-builder.Services.AddScoped<ImageSaveService>(); // Register ImageSaveService
-builder.Services.AddScoped<TourRepository>(); // Register TourRepository
-builder.Services.AddScoped<TourServices>(); // Register ITourServices and its implementation
-builder.Services.AddScoped<GetServicesRepository>();
-builder.Services.AddScoped<GetServices>();
+builder.Services.AddTransient<ImageSaveService>(); 
+builder.Services.AddTransient<TourRepository>(); 
+builder.Services.AddTransient<TourServices>(); 
+builder.Services.AddTransient<GetServicesRepository>();
+builder.Services.AddTransient<GetServices>();
+builder.Services.AddTransient<BookingDetailRepo>();
+builder.Services.AddTransient<BookingDetails>();
 builder.Logging.AddConsole();
 // Adding MVC support (controllers with views)
 builder.Services.AddControllersWithViews();
@@ -57,6 +59,10 @@ app.MapAreaControllerRoute(
     name: "Admin",
     areaName: "Admin",
     pattern: "{area=Admin}/{controller=Admin}/{action=Index}/{id?}");
+app.MapAreaControllerRoute(
+    name: "UserActivity",
+    areaName: "UserActivity",
+    pattern: "{area=UserActivity}/{controller=User}/{action=Index}/{id?}");
 // Role and User initialization
 using (var scope = app.Services.CreateScope())
 {

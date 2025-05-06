@@ -1,0 +1,252 @@
+﻿/* Rating stars */
+.badge .bi-star-fill,
+.badge .bi-star-half,
+.badge .bi-star {
+    color: #ffc107 !important;
+    margin-right: 2px;
+    font-size: 0.9rem;
+}
+
+.badge.bg-warning {
+    background-color: #fff3cd !important;
+    border: 1px solid #ffc107;
+    padding: 0.55em 0.8em;
+}
+/* Form styling */
+.d-inline-block {
+    margin-right: 10px;
+}
+
+    .d-inline-block:last-child {
+        margin-right: 0;
+    }
+/* Booking Details Page Styles */
+
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* Tour Package Card Styles */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+    .card-header.bg-primary {
+        background: linear-gradient(135deg, #1e88e5, #0d47a1) !important;
+    }
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.5em 0.8em;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+/* Day Card Styles - Replacing Accordion */
+.day-card {
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.day-header {
+    background: linear-gradient(135deg, #1e88e5, #0d47a1);
+    color: white;
+    padding: 12px 20px;
+}
+
+    .day-header h4 {
+        margin-bottom: 0;
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+/* Hotel Cards */
+.hotel-card {
+    border-left: 4px solid #1e88e5;
+    margin-bottom: 20px;
+}
+
+    .hotel-card .card-header {
+        background-color: #f1f8fe;
+        border-bottom: 1px solid #e3f2fd;
+    }
+
+        .hotel-card .card-header h5 {
+            margin-bottom: 0;
+            color: #0d47a1;
+            font-size: 1.1rem;
+        }
+
+/* Hotel Images */
+.hotel-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+    .hotel-image:hover {
+        transform: scale(1.05);
+    }
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, #1e88e5, #0d47a1);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 6px rgba(13, 71, 161, 0.2);
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #0d47a1, #1a237e);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(13, 71, 161, 0.3);
+    }
+
+/* Location Button */
+.btn-location {
+    background: linear-gradient(135deg, #ffd54f, #f9a825);
+    border: none;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(249, 168, 37, 0.2);
+}
+
+    .btn-location:hover {
+        background: linear-gradient(135deg, #f9a825, #ff8f00);
+        box-shadow: 0 6px 8px rgba(249, 168, 37, 0.3);
+        color: #333;
+    }
+
+/* Review Button */
+.btn-review {
+    background: linear-gradient(135deg, #e53935, #b71c1c);
+    border: none;
+    box-shadow: 0 4px 6px rgba(183, 28, 28, 0.2);
+}
+
+    .btn-review:hover {
+        background: linear-gradient(135deg, #c62828, #7f0000);
+        box-shadow: 0 6px 8px rgba(183, 28, 28, 0.3);
+    }
+
+/* Book Now Button */
+.btn-book-now {
+    background: linear-gradient(135deg, #66bb6a, #43a047);
+    border: none;
+    box-shadow: 0 4px 6px rgba(102, 187, 106, 0.25);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+    .btn-book-now:hover {
+        background: linear-gradient(135deg, #4caf50, #388e3c);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(102, 187, 106, 0.35);
+    }
+
+/* Book Now Button */
+.btn-lg {
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+}
+
+.book-now-container {
+    margin-top: -20px;
+    margin-bottom: 30px;
+    border: none;
+    box-shadow: none;
+}
+
+/* Tour Package Image */
+.card img.img-fluid.rounded {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    max-height: 350px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Icons */
+.bi {
+    margin-right: 5px;
+}
+
+.bi-geo-alt, .bi-geo-alt-fill {
+    color: #e53935;
+}
+
+.bi-star-fill {
+    color: #ffc107;
+}
+
+/* Title styling */
+h3.mb-3 {
+    color: #0d47a1;
+    font-weight: 600;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #bbdefb;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+/* Description text styling */
+p {
+    line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .badge {
+        margin-bottom: 0.5rem;
+    }
+
+    .hotel-image {
+        height: 120px;
+    }
+}
+
+@media (max-width: 576px) {
+    .day-header h4 {
+        font-size: 1rem;
+    }
+
+    .hotel-image {
+        height: 100px;
+    }
+}
