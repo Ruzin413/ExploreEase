@@ -1,49 +1,29 @@
 ﻿@{
-    ViewData["Title"] = "ShowLocation";
-    var lat = ViewBag.Latitude;
-    var lng = ViewBag.Longitude;
+    ViewData["Title"] = "Show Location";
+    var lat = ViewData["Latitude"];
+    var longi = ViewData["Longitude"];
+    var destination = ViewData["Destination"];
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>Map Location</title>
+<h2>@ViewData["Title"]</h2>
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        #map {
-            height: 500px;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
+<div id="map" style="height: 500px;"></div>
 
-    <div class="container">
-        <h2>Location Map</h2>
-        <div id="map"></div>
-    </div>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    var lat = parseFloat("@lat");
+    var longi = parseFloat("@longi");
+    var destination = "@destination".replace(/"/g, '\\"');
 
-    <script>
-        var latitude = @lat;
-        var longitude = @lng;
+    var map = L.map('map').setView([lat, longi], 5);
 
-        var map = L.map('map').setView([latitude, longitude], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        L.marker([latitude, longitude]).addTo(map)
-            .bindPopup('You are here')
-            .openPopup();
-    </script>
-
-</body>
-</html>
+    L.marker([lat, longi]).addTo(map)
+        .bindPopup(destination)
+        .openPopup();
+</script>

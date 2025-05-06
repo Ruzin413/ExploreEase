@@ -19,9 +19,9 @@ builder.Services.AddDefaultIdentity<ExploreEaseUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ExploreEaseDbContext>();
 // Registering services for DI
-builder.Services.AddTransient<ImageSaveService>(); 
-builder.Services.AddTransient<TourRepository>(); 
-builder.Services.AddTransient<TourServices>(); 
+builder.Services.AddTransient<ImageSaveService>();
+builder.Services.AddTransient<TourRepository>();
+builder.Services.AddTransient<TourServices>();
 builder.Services.AddTransient<GetServicesRepository>();
 builder.Services.AddTransient<GetServices>();
 builder.Services.AddTransient<BookingDetailRepo>();

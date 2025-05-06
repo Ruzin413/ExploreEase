@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Models.Models;
 using Services.Services;
 
 namespace ExploreEase.Areas.UserActivity.Controllers
@@ -21,12 +22,22 @@ namespace ExploreEase.Areas.UserActivity.Controllers
             var model = _bookingDetails.GetTourPackages(id);
             return View(model);
         }
-        [HttpPost]
-        public IActionResult ShowLocation(double lat, double @long)
-        { 
-            ViewBag.Latitude = lat;
-            ViewBag.Longitude = @long;
+        public IActionResult ShowLocation()
+        {
+
             return View();
         }
+
+        [HttpPost]
+        [Area("UserActivity")]
+        public IActionResult ShowLocation(double lat, double longi, string destination)
+        {
+            ViewData["Latitude"] = lat;
+            ViewData["Longitude"] = longi;
+            ViewData["Destination"] = destination;
+            return View();
+        }
+
+
     }
 }

@@ -52,7 +52,25 @@ namespace ExploreEase.Areas.Admin.Controllers
         public async Task<IActionResult> AddServices(IFormCollection form)
         {
             var result = await _tourServices.InsertAllAsync(form);
-            return Json(new { success = true, message = result.Message });
+
+            if (result.IsSuccess)
+            {
+                // Redirect to a temporary success page that will animate and redirect back
+                return RedirectToAction("AddServises");
+            }
+
+            // Handle failure (e.g., redisplay form with error)
+            TempData["Error"] = result.Message;
+            return RedirectToAction("AddServices");
+        }
+
+        public IActionResult AddServises()
+        {
+            return View();
+        }
+        public IActionResult ErrorAddServices()
+        {
+            return View();
         }
     } 
 }
