@@ -16,13 +16,13 @@ public class DayHotel
     public int DayNumber { get; set; }
 
     [Required]
-    [StringLength(100)]
+    [StringLength(10000)]
     public string HotelName { get; set; }
 
-    [StringLength(1000)]
+    [StringLength(10000000)]
     public string HotelDescription { get; set; }
 
-    [StringLength(200)]
+    [StringLength(20000)]
     public string HotelLocation { get; set; }
 
     public ICollection<HotelImage> HotelImages { get; set; }

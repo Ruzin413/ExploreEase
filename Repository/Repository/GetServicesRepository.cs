@@ -17,15 +17,24 @@ namespace Repository.Repository
         {
             _exploreEaseDbContext =  exploreEaseDbContext;
         }
-
-        public Task<DayHotel> GetDayHotel()
+        public async Task<TourPackage?> GetTourPackageById(int id)
         {
-            throw new NotImplementedException();
+            return await _exploreEaseDbContext.TourPackage.FirstOrDefaultAsync(x => x.TourPackageId == id);
         }
-
-        public Task<HotelImage> GetHotelImage()
+        public async Task<List<PaymentModel>> GetOrder()
         {
-            throw new NotImplementedException();
+            return await _exploreEaseDbContext.Paymentdb.ToListAsync();
+        }
+        public bool DeleteOrderById(int id)
+        {
+            var order = _exploreEaseDbContext.Paymentdb.FirstOrDefault(x => x.id == id);
+            if (order != null)
+            {
+                _exploreEaseDbContext.Paymentdb.Remove(order);
+                _exploreEaseDbContext.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public async Task<List<TourPackage>> GetTourPackages()

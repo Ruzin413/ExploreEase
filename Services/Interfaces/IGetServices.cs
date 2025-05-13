@@ -10,7 +10,7 @@ namespace Services.Interfaces
     public interface IGetServices
     {
           Task<List<TourPackage>> GetTourPackages();
-          Task<DayHotel> GetDayHotel();
-          Task<HotelImage> GetHotelImage();
+        Task<TourPackage> GetTourPackageById(int id);
+
     }
 }

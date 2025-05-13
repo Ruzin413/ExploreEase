@@ -35,18 +35,18 @@ namespace ExploreEase.Migrations
 
                     b.Property<string>("HotelDescription")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(10000000)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HotelLocation")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(20000)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HotelName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(10000)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TourPackageId")
                         .HasColumnType("int");
@@ -290,6 +290,53 @@ namespace ExploreEase.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Models.Models.PaymentModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<float>("Latitude")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Longitude")
+                        .HasColumnType("real");
+
+                    b.Property<int>("NumberOfPeople")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Rating")
+                        .HasColumnType("real");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("TotalPrice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Tourpackageid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Paymentdb");
+                });
+
             modelBuilder.Entity("Models.Models.TourPackage", b =>
                 {
                     b.Property<int>("TourPackageId")
@@ -305,8 +352,8 @@ namespace ExploreEase.Migrations
 
                     b.Property<string>("Destination")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(100000)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DestinationImage")
                         .IsRequired()
@@ -321,8 +368,8 @@ namespace ExploreEase.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(100000)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfDays")
                         .HasColumnType("int");

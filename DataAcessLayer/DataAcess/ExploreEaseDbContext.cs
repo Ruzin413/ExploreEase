@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace DataAcessLayer.DataAcess
 {
     public class ExploreEaseDbContext : IdentityDbContext<ExploreEaseUser> , IExploreEaseUserDbContext
@@ -30,7 +29,8 @@ namespace DataAcessLayer.DataAcess
         public DbSet<ExploreEaseUser> ExploreEaseUser { get; set; }
         public DbSet<TourPackage> TourPackage { get; set; }
         public DbSet<DayHotel> dayHotels { get; set; }
-        public  DbSet<HotelImage> hotelImage { get; set; }
-        
+        public  DbSet<HotelImage> hotelImage { get; set; }  
+        public DbSet<PaymentModel> Paymentdb {  get; set; }
+
     }
 }

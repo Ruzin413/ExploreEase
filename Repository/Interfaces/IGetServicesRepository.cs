@@ -10,7 +10,6 @@ namespace Repository.Interfaces
     public  interface IGetServicesRepository
     {
         Task<List<TourPackage>> GetTourPackages();
-        Task<DayHotel> GetDayHotel();
-        Task<HotelImage> GetHotelImage();
+        Task<TourPackage?> GetTourPackageById(int id);
     }
 }

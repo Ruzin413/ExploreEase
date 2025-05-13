@@ -13,11 +13,14 @@ namespace ExploreEase.Areas.Admin.Controllers
     {
         private readonly UserManager<ExploreEaseUser> _userManager;
         private readonly TourServices _tourServices;
-
-        public AdminController(UserManager<ExploreEaseUser> userManager, TourServices tourServices)
+        private readonly GetServices _getServices;
+        private readonly OrderDetailServices _orderDetailServices;
+        public AdminController(UserManager<ExploreEaseUser> userManager, TourServices tourServices, GetServices getServices,OrderDetailServices orderDetailServices)
         {
             _userManager = userManager;
             _tourServices = tourServices;
+            _getServices = getServices;
+            _orderDetailServices = orderDetailServices;
         }
         public IActionResult Index()
         {
@@ -48,22 +51,43 @@ namespace ExploreEase.Areas.Admin.Controllers
         public IActionResult AddServices() {
             return View();
         }
+       
         [HttpPost]
         public async Task<IActionResult> AddServices(IFormCollection form)
         {
             var result = await _tourServices.InsertAllAsync(form);
-
             if (result.IsSuccess)
             {
-                // Redirect to a temporary success page that will animate and redirect back
                 return RedirectToAction("AddServises");
             }
-
-            // Handle failure (e.g., redisplay form with error)
-            TempData["Error"] = result.Message;
-            return RedirectToAction("AddServices");
+            else
+            {
+                return RedirectToAction("ErrorAddServices");
+            }
         }
-
+        public IActionResult OrderList()
+        {
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> OrderList1()
+        {
+            var model = await _getServices.GetOrder();
+            var model1 = await _getServices.GetOrder();
+            return Json(model1);
+        }
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            var result = _getServices.DeleteOrderById(id);
+            if (result)
+                return Ok(); 
+            return BadRequest("Delete failed.");
+        }
+        public async  Task<IActionResult> OrderDetail(int id)
+        {
+            var model = await _orderDetailServices.GetOrderDetail(id);
+            return View(model);
+        }
         public IActionResult AddServises()
         {
             return View();
@@ -72,6 +96,7 @@ namespace ExploreEase.Areas.Admin.Controllers
         {
             return View();
         }
+
     } 
 }
     

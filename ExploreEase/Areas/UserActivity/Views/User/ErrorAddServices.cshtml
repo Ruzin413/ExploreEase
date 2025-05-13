@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "DeleteUser";
+    Layout = "";
+}
+<DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Animation</title>
+        <link href="~/css/error.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container" id="statusBox">
+        <div class="loader"></div>
+        <div class="message">Inserting..</div>
+    </div>
+
+    <script>
+        // Simulate validation, then show error
+        setTimeout(() => {
+          const box = document.getElementById("statusBox");
+          box.innerHTML = `
+            <div class="error-icon">✖</div>
+            <div class="message">Something went wrong. Please try again.</div>
+          `;
+        }, 2000);
+
+        // Optional: redirect back after 5 seconds
+            setTimeout(() => {
+              window.location.href = "/Admin/Admin/AddServices"; // Change to your target page
+            }, 3000);
+    </script>
+
+</body>
+</html>

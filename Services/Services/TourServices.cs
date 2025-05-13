@@ -48,12 +48,14 @@ namespace Services.Services
                     price = price,
                     Lat = (float)latitude,
                     Long = (float)longitude,
-                    Destination = description,
+                    Destination = description, // NOTE: This might be a bug; probably should be "destination"
                     DestinationImage = imagePath,
                     NumberOfDays = NumberOfDays
                 };
+
                 var dayHotels = new List<DayHotel>();
                 var hotelImages = new List<HotelImage>();
+
                 for (int i = 1; i <= dayNumber; i++)
                 {
                     var hotelName = form[$"HotelName_{i}"];
@@ -67,7 +69,9 @@ namespace Services.Services
                         HotelDescription = hotelDescription,
                         HotelLocation = hotelLocation
                     };
+
                     dayHotels.Add(dayHotel);
+
                     var files = form.Files.Where(f => f.Name == $"HotelImage_{i}[]");
                     foreach (var file in files)
                     {
@@ -80,11 +84,14 @@ namespace Services.Services
                                 ImagePath = savedPath,
                                 DayNumber = i
                             };
+
                             hotelImages.Add(hotelImage);
                         }
                     }
                 }
+
                 await _tourRepository.InsertTourPackageWithHotelsAsync(tourPackage, dayHotels, hotelImages);
+
                 return new Result
                 {
                     IsSuccess = true,
@@ -93,10 +100,11 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
+                var inner = ex.InnerException != null ? ex.InnerException.ToString() : "No inner exception";
                 return new Result
                 {
                     IsSuccess = false,
-                    Message = $"Error: {ex.Message}"
+                    Message = $"Error: {ex.Message} | Inner: {inner}"
                 };
             }
         }

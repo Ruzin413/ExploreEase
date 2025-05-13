@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Services.Services
 {
     public class GetServices : IGetServices
@@ -16,17 +15,18 @@ namespace Services.Services
         public GetServices(GetServicesRepository getServicesRepository){
             _getServicesRepository = getServicesRepository;
         }
-
-        public Task<DayHotel> GetDayHotel()
+        public Task<List<PaymentModel>> GetOrder()
         {
-            throw new NotImplementedException();
+            return _getServicesRepository.GetOrder();
         }
-
-        public Task<HotelImage> GetHotelImage()
+        public Task<TourPackage> GetTourPackageById(int id)
         {
-            throw new NotImplementedException();
+            return _getServicesRepository.GetTourPackageById(id);
         }
-
+        public bool DeleteOrderById(int id)
+        {
+            return _getServicesRepository.DeleteOrderById(id);
+        }
         public async Task<List<TourPackage>> GetTourPackages()
         {
             return await _getServicesRepository.GetTourPackages();

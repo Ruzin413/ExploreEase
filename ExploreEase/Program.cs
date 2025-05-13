@@ -26,13 +26,22 @@ builder.Services.AddTransient<GetServicesRepository>();
 builder.Services.AddTransient<GetServices>();
 builder.Services.AddTransient<BookingDetailRepo>();
 builder.Services.AddTransient<BookingDetails>();
+builder.Services.AddScoped<KhaltiService>();
+builder.Services.AddScoped<PaymentRepo>();
+builder.Services.AddScoped<PaymentService>();
+builder.Services.AddScoped<RecommendationRepo>();
+builder.Services.AddScoped<RecommendationService>();
+builder.Services.AddScoped<OrderDetailRepo>();
+builder.Services.AddScoped<OrderDetailServices>();
 builder.Logging.AddConsole();
 // Adding MVC support (controllers with views)
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 104857600; // 100 MB
-});
+}); 
+builder.Services.AddHttpClient();
+// ... other service registrations ...
 // Build the app after services registration
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

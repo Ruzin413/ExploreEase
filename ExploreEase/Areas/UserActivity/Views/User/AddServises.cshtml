@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "DeleteUser";
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buffering Animation</title>
+    <link href="~/css/buffer.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container" id="statusBox">
+        <div class="loader"></div>
+        <div class="message">Inserting</div>
+    </div>
+
+    <script>
+        // After 2 seconds, replace spinner with tick and update message
+        setTimeout(() => {
+          const box = document.getElementById("statusBox");
+          box.innerHTML = `
+            <div class="tick">✓</div>
+            <div class="message">Done!.</div>
+          `;
+        }, 2000);
+
+        // Redirect after 5 seconds
+        setTimeout(() => {
+          window.location.href = ""; // Change to your target page
+        }, 3000);
+    </script>
+
+</body>
+</html>

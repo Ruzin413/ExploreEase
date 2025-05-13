@@ -1,8 +1,13 @@
-﻿@model Models.Models.BookingServices ;
+﻿@using Microsoft.AspNetCore.Identity
+@using Models.Models
+@model Models.Models.BookingServices ;
+@inject SignInManager<ExploreEaseUser> SignInManager
+@inject UserManager<ExploreEaseUser> UserManager
 @{
     ViewData["Title"] = "Booking";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="~/css/booking.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -73,26 +78,26 @@
             </div>
         </div>
     </div>
-
     <!-- Full-width Book Now Button -->
     <div class="card mb-4 book-now-container">
         <div class="card-body p-0">
-            <form asp-action="BookTour" method="post" class="w-100">
-                <input type="hidden" name="tourPackageId" value="@Model.TourPackages[0].TourPackageId" />
-                <button type="submit" class="btn btn-book-now btn-lg w-100 py-3">Book Now</button>
+            @* <form asp-action="BookServices" method="post" class="w-100"> *@
+            <form asp-action="OrderPackage" asp-controller="User" asp-area="UserActivity" method="post" class="w-100">
+                <input type="hidden" name="tourPackageId" value="@Model.TourPackages[0].TourPackageId"/>
+                @* <input type="hidden" name="NumberOfDays" value="@Model.TourPackages[0].NumberOfDays" /> *@
+                @* <input type="hidden" name="Description" value="@Model.TourPackages[0].Description" /> *@
+                @* <input type="hidden" name="DestinationImage" value="@Model.TourPackages[0].DestinationImage" /> *@
+                <button type="submit" class="btn btn-book-now btn-lg w-100 py-3" id="khaltiPayBtn">Book Now</button>
             </form>
         </div>
     </div>
 </div>
-
 <!-- Day by Day Itinerary with Hotels - No Accordion -->
 <h3 class="mb-3">Day by Day Itinerary</h3>
-
 @{
     // Group hotels by day number
     var hotelsByDay = Model.DayHotels.GroupBy(h => h.DayNumber).OrderBy(g => g.Key);
 }
-
 @foreach (var dayGroup in hotelsByDay)
 {
     <div class="card day-card mb-4">
@@ -108,9 +113,9 @@
                     </div>
                     <div class="card-body">
                         <p>@hotel.HotelDescription</p>
-                        <p><i class="bi bi-geo-alt"></i> @hotel.HotelLocation</p>
 
                         @{
+                            <p><i class="bi bi-geo-alt"></i> @hotel.HotelLocation</p>
                             // Get images for this specific hotel
                             var hotelImages = Model.HotelImages.Where(img => img.DayHotelId == hotel.DayHotelId && img.DayNumber == hotel.DayNumber).ToList();
                         }
@@ -138,4 +143,23 @@
 }
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@* <script> *@
+@*     document.getElementById("khaltiPayBtn").addEventListener("click", async function () { *@
+@*         const tourPackageId = "@Model.TourPackages[0].TourPackageId"; *@
+@*         const price = "@Model.TourPackages[0].price"; *@
+@*         const packageName = "@Model.TourPackages[0].Name"; *@
+@*         const response = await fetch("/UserActivity/User/InitiateKhaltiPayment", { *@
+@*             method: "POST", *@
+@*             headers: { "Content-Type": "application/json" }, *@
+@*             body: JSON.stringify({ *@
+@*                 TourPackageId: tourPackageId, *@
+@*                 Price: price, *@
+@*                 PackageName: packageName, *@
+@*             }) *@
+@*         }); *@
+@*         const result = await response.json(); *@
+@*         if (result.payment_url) { *@
+@*             window.location.href = result.payment_url; *@
+@*         } *@
+@*     });</script> *@
 <script src="~/js/booking.js"></script>

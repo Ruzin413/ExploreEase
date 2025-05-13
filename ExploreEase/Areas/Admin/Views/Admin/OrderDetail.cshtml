@@ -1,0 +1,91 @@
+﻿@model Models.Models.OrderDetailModel
+<div class="container mt-4">
+    <div class="card mb-4 position-relative">
+        <div class="card-header bg-primary text-white">
+            <h4>Payment Details</h4>
+            <span class="badge bg-success position-absolute top-0 end-0 m-2">PAID</span>
+        </div>
+        <div class="card-body">
+            @foreach (var payment in Model.PaymentModel)
+            {
+                <p><strong>Payment ID:</strong> @payment.id</p>
+                <p><strong>Username:</strong> @payment.username</p>
+                <p><strong>Amount Paid:</strong> Rs. @payment.price</p>
+                <p><strong>Rating:</strong> @payment.Rating</p>
+                <p><strong>Number of people:</strong> @payment.NumberOfPeople</p>
+                <p><strong>Total Price:</strong> @payment.TotalPrice</p>
+                <p><strong>Booking Start Date:</strong> @payment.StartDate.ToString("dd MMM yyyy")</p>
+                <p><strong>Booking End Date:</strong> @payment.EndDate.ToString("dd MMM yyyy")</p>
+                <p><strong>Booking Date:</strong> @payment.BookingDate.ToString("dd MMM yyyy")</p>
+            }
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h4>Tour Package Details</h4>
+        </div>
+        <div class="card-body">
+            @foreach (var tourPackage in Model.TourPackages)
+            {
+                <h5>@tourPackage.Name</h5>
+                <p><strong>Destination:</strong> @tourPackage.Destination</p>
+                <p><strong>Description:</strong> @tourPackage.Description</p>
+                <p><strong>Price:</strong> Rs. @tourPackage.price</p>
+                <p><strong>Number of Days:</strong> @tourPackage.NumberOfDays</p>
+                <p><strong>Rating:</strong> @tourPackage.Rating</p>
+                <img src="@tourPackage.DestinationImage" alt="@tourPackage.Name" class="img-fluid rounded">
+            }
+        </div>
+    </div>
+
+    <h3 class="mb-3">Day by Day Itinerary</h3>
+    @{
+        var hotelsByDay = Model.DayHotels.GroupBy(h => h.DayNumber).OrderBy(g => g.Key);
+    }
+
+    @foreach (var dayGroup in hotelsByDay)
+    {
+        <div class="card day-card mb-4">
+            <div class="card-header day-header">
+                <h4>Day @dayGroup.Key</h4>
+            </div>
+            <div class="card-body">
+                @foreach (var hotel in dayGroup)
+                {
+                    <div class="card hotel-card mb-3">
+                        <div class="card-header">
+                            <h5>@hotel.HotelName</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>@hotel.HotelDescription</p>
+                            <p><i class="bi bi-geo-alt"></i> @hotel.HotelLocation</p>
+
+                            @{
+                                var hotelImages = Model.HotelImages
+                                .Where(img => img.DayHotelId == hotel.DayHotelId && img.DayNumber == hotel.DayNumber)
+                                .ToList();
+                            }
+
+                            @if (hotelImages.Any())
+                            {
+                                <div class="row">
+                                    @foreach (var image in hotelImages)
+                                    {
+                                        <div class="col-md-4 mb-2">
+                                            <img src="@image.ImagePath" alt="Hotel Image" class="img-fluid rounded hotel-image" />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p>No images available for this hotel.</p>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

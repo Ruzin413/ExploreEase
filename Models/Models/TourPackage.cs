@@ -10,7 +10,7 @@ namespace Models.Models
     {
         public int TourPackageId { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(100000)]
         public string Name { get; set; }
         [Required]
         [StringLength(1000000)]
@@ -24,7 +24,7 @@ namespace Models.Models
         [Required]
         public float Long { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(100000)]
         public  string Destination {  get; set; }
         [Required]
         [StringLength(100)]
@@ -33,5 +33,4 @@ namespace Models.Models
         public int NumberOfDays {  get; set; }
         public ICollection<DayHotel> DayHotels { get; set; }
     }
-
 }

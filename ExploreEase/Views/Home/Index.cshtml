@@ -1,4 +1,145 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<partial name="_partialTourPackage"/>
+@* <partial name="_partialRecommendationTourPackage"/> *@
+@* <partial name="_partialTourPackage"/> *@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/css/HomeIndex.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Recommendations Section -->
+    <div class="container mt-4" id="recommendationSection">
+        <h2 class="mb-3">Recommendations</h2>
+        <div class="tour-container">
+            <button class="scroll-btn scroll-left" id="recScrollLeft" disabled>&lt;</button>
+            <div class="horizontal-scroll" id="recPackageContainer"></div>
+            <button class="scroll-btn scroll-right" id="recScrollRight">&gt;</button>
+        </div>
+    </div>
+
+    <!-- Tour Packages Section -->
+    <div class="container mt-5">
+        <h2 class="mb-3">Tour Packages</h2>
+        <div class="tour-container">
+            <button class="scroll-btn scroll-left" id="pkgScrollLeft" disabled>&lt;</button>
+            <div class="horizontal-scroll" id="pkgPackageContainer"></div>
+            <button class="scroll-btn scroll-right" id="pkgScrollRight">&gt;</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            // -------------------- Recommendations --------------------
+            function fetchRecommendedPackages() {
+                $.ajax({
+                    url: '/Home/GetRecommendationsForCurrentUser',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        let html = '';
+                        if (Array.isArray(data) && data.length > 0) {
+                            data.forEach(function (pkg) {
+                                html += `
+                                    <div class="tour-card shadow" data-id="${pkg.tourPackageId}" style="cursor:pointer;">
+                                        <img src="${pkg.destinationImage}" class="card-img-top" alt="${pkg.name}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${pkg.name}</h5>
+                                            <h5 class="card-title">${pkg.numberOfDays} days</h5>
+                                            <div class="description">${pkg.description.substring(0, 80)}...</div>
+                                            <p class="card-text"><strong>Destination:</strong> ${pkg.destination}</p>
+                                            <p class="card-text"><strong>Rating:</strong> ${pkg.rating}</p>
+                                            <p class="card-text"><strong>Price:</strong> Rs${pkg.price}</p>
+                                        </div>
+                                    </div>`;
+                            });
+                            $('#recommendationSection').show();
+                        } else {
+                            $('#recommendationSection').hide();
+                        }
+                        $('#recPackageContainer').html(html);
+                    },
+                    error: function () {
+                        $('#recommendationSection').hide();
+                        $('#recPackageContainer').html('<div class="alert alert-danger">Could not load recommendations.</div>');
+                    }
+                });
+            }
+
+            // -------------------- Tour Packages --------------------
+            function fetchTourPackages() {
+                $.ajax({
+                    url: '/Home/TourPackage',
+                    method: 'GET',
+                    success: function (data) {
+                        let html = '';
+                        data.forEach(function (pkg) {
+                            html += `
+                                <div class="tour-card shadow" data-id="${pkg.tourPackageId}" style="cursor:pointer;">
+                                    <img src="${pkg.destinationImage}" class="card-img-top" alt="${pkg.name}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${pkg.name}</h5>
+                                        <h5 class="card-title">${pkg.numberOfDays} days</h5>
+                                        <div class="description">${pkg.description.substring(0, 80)}...</div>
+                                        <p class="card-text"><strong>Destination:</strong> ${pkg.destination}</p>
+                                        <p class="card-text"><strong>Rating:</strong> ${pkg.rating}</p>
+                                        <p class="card-text"><strong>Price:</strong> Rs${pkg.price}</p>
+                                    </div>
+                                </div>`;
+                        });
+                        $('#pkgPackageContainer').html(html);
+                        initScrollButtons('pkg');
+                    },
+                    error: function () {
+                        $('#pkgPackageContainer').html('<div class="alert alert-danger">Could not load tour packages.</div>');
+                    }
+                });
+            }
+
+            // -------------------- Scroll Button Initializer --------------------
+            function initScrollButtons(prefix) {
+                const container = document.getElementById(`${prefix}PackageContainer`);
+                const scrollLeftBtn = document.getElementById(`${prefix}ScrollLeft`);
+                const scrollRightBtn = document.getElementById(`${prefix}ScrollRight`);
+
+                if (!container || !scrollLeftBtn || !scrollRightBtn) return;
+
+                const cardWidth = 320;
+                const scrollAmount = cardWidth * 3;
+
+                scrollLeftBtn.addEventListener('click', function () {
+                    container.scrollLeft -= scrollAmount;
+                    updateButtonState();
+                });
+
+                scrollRightBtn.addEventListener('click', function () {
+                    container.scrollLeft += scrollAmount;
+                    updateButtonState();
+                });
+
+                container.addEventListener('scroll', updateButtonState);
+
+                function updateButtonState() {
+                    scrollLeftBtn.disabled = container.scrollLeft <= 0;
+                    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                    scrollRightBtn.disabled = Math.abs(container.scrollLeft - maxScrollLeft) < 10;
+                }
+
+                updateButtonState();
+            }
+            // -------------------- Shared Click Event --------------------
+            $(document).on('click', '.tour-card', function () {
+                const id = $(this).data('id');
+                window.location.href = `/UserActivity/User/Booking?id=${id}`;
+            });
+
+            // Initial load
+            fetchRecommendedPackages();
+            fetchTourPackages();
+        });
+    </script>
+</body>
+</html>
