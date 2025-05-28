@@ -51,7 +51,12 @@ namespace ExploreEase.Areas.Admin.Controllers
         public IActionResult AddServices() {
             return View();
         }
-       
+        [HttpPost]
+        public async Task<IActionResult> DeletePackage(int tourPackageId)
+        {
+            var resutlt = _getServices.DeletePackageById(tourPackageId);
+            return Ok();
+        }
         [HttpPost]
         public async Task<IActionResult> AddServices(IFormCollection form)
         {
@@ -65,9 +70,19 @@ namespace ExploreEase.Areas.Admin.Controllers
                 return RedirectToAction("ErrorAddServices");
             }
         }
+        public IActionResult ManageServices()
+        {
+            return View();
+        }
         public IActionResult OrderList()
         {
             return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> AllPackages()
+        {
+            var model = await _getServices.GetTourPackages();
+            return Json(model);
         }
         [HttpGet]
         public async Task<IActionResult> OrderList1()
@@ -82,6 +97,13 @@ namespace ExploreEase.Areas.Admin.Controllers
             if (result)
                 return Ok(); 
             return BadRequest("Delete failed.");
+        }
+        public async Task<IActionResult> UpdatePackagePrice(int tourPackageId, int updatedPrice)
+        {
+            var result =  _getServices.UpdatePackagePrice(tourPackageId, updatedPrice);
+            if(result)
+                return Ok();
+            return BadRequest("Update Failed");
         }
         public async  Task<IActionResult> OrderDetail(int id)
         {

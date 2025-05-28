@@ -18,7 +18,7 @@ namespace Models.Models
         [Required]
         public float Rating { get; set; } 
         [Required]
-        public int price { get; set; }
+        public float price { get; set; }
         [Required]
         public float Lat { get; set; }
         [Required]

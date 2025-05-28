@@ -18,22 +18,13 @@ namespace Repository.Repository
         {
             _context = context;
         }
-
-        /// <summary>
-        /// Fetches all payments for a specific username from the database.
-        /// Orders the results by BookingDate in descending order.
-        /// </summary>
-        /// <param name="username">The username to filter payments by.</param>
-        /// <returns>An enumerable collection of PaymentModel objects.</returns>
         public async Task<IEnumerable<PaymentModel>> GetPaymentsByUsernameAsync(string username)
         {
-            // Use AsNoTracking() for read-only operations to improve performance
-            // by not tracking changes to the entities.
-            // Ordering by BookingDate here ensures the latest payment is the first in the list.
+
             return await _context.Paymentdb
-                                  .Where(p => p.username.ToLower() == username.ToLower()) // Corrected for translatable case-insensitive comparison
+                                  .Where(p => p.email.ToLower() == username.ToLower()) 
                                   .OrderByDescending(p => p.BookingDate)
-                                  .AsNoTracking() // Good practice for read operations
+                                  .AsNoTracking() 
                                   .ToListAsync();
         }
 

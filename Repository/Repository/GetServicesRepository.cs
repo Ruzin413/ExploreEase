@@ -1,5 +1,6 @@
 ﻿using DataAcessLayer.DataAcess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models.Models;
 using Repository.Interfaces;
 using System;
@@ -36,7 +37,33 @@ namespace Repository.Repository
             }
             return false;
         }
+        public bool UpdatePackagePrice(int tourpackageid, float price)
+        {
+            var result = _exploreEaseDbContext.TourPackage.FirstOrDefault(x => x.TourPackageId == tourpackageid);
+            if (result != null)
+            {
+                result.price = price;
+                _exploreEaseDbContext.SaveChanges();
+                return true;
+            }
+            return false;
+        }
 
+        public bool DeletePackageById(int tourPackageId)
+        {
+            var result = _exploreEaseDbContext.TourPackage.FirstOrDefault(x => x.TourPackageId == tourPackageId);
+            if (result != null)
+            {
+                _exploreEaseDbContext.TourPackage.Remove(result);
+                _exploreEaseDbContext.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        public Task<List<PaymentModel>> getPastPaymentByEmail(string email)
+        {
+            return _exploreEaseDbContext.Paymentdb.Where(x => x.email == email).ToListAsync();
+        }
         public async Task<List<TourPackage>> GetTourPackages()
         {
             return await _exploreEaseDbContext.TourPackage.ToListAsync();

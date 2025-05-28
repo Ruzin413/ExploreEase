@@ -1,92 +1,89 @@
 ﻿@using Models.Models
 @{
     ViewData["Title"] = "OrderPackage";
+
+    string disableStart = ViewBag.StartDate != null ? Convert.ToDateTime(ViewBag.StartDate).ToString("yyyy-MM-dd") : null;
+    string disableEnd = ViewBag.EndDate != null ? Convert.ToDateTime(ViewBag.EndDate).ToString("yyyy-MM-dd") : null;
 }
+
+<!-- CSS Links -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
 <style>
+    body {
+        background-color: #f7f7f7;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
     .tour-card {
-        border-radius: 15px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .tour-image {
-        height: 250px;
-        object-fit: cover;
         width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: cover;
+        border-bottom: 1px solid #ddd;
     }
 
     .tour-details {
-        padding: 20px;
-    }
-
-    .price-tag {
-        background-color: #28a745;
-        color: white;
-        font-weight: bold;
-        padding: 8px 15px;
-        border-radius: 25px;
-        display: inline-block;
-    }
-
-    .btn-book-now {
-        background-color: #ff6b6b;
-        color: white;
-        border: none;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-        .btn-book-now:hover {
-            background-color: #ff5252;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-    .tour-description {
-        margin: 20px 0;
-        line-height: 1.6;
-    }
-
-    .tour-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-
-    .days-badge {
-        background-color: #e9ecef;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-weight: 500;
+        padding: 24px;
     }
 
     .destination-badge {
-        display: inline-flex;
-        align-items: center;
-        background-color: #e7f5ff;
-        color: #0d6efd;
+        background-color: #007bff;
+        color: white;
+        padding: 6px 12px;
+        display: inline-block;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    .price-tag {
+        font-size: 24px;
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .days-badge {
+        background-color: #ffc107;
+        color: #212529;
         padding: 5px 10px;
-        border-radius: 5px;
-        font-weight: 500;
-        margin-top: 10px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
     }
 
-    .form-label {
-        font-weight: 500;
-    }
-
-    .date-input {
-        margin-bottom: 20px;
+    .tour-description {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #555;
     }
 
     .total-price {
-        font-size: 1.1rem;
-        font-weight: bold;
-        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 10px;
     }
+
+    .btn-book-now {
+        background-color: #007bff;
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        transition: background-color 0.3s;
+    }
+
+        .btn-book-now:hover {
+            background-color: #0056b3;
+        }
 </style>
 
 <body>
@@ -94,48 +91,35 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="tour-card">
-                    <!-- Destination image -->
                     <img src="@Model.DestinationImage" alt="@Model.Destination" class="tour-image" id="destinationImage">
-
                     <div class="tour-details">
-                        <!-- Tour name -->
                         <h2 class="mb-3" id="tourName">@Model.Name</h2>
 
-                        <div class="destination-badge">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-geo-alt me-2" viewBox="0 0 16 16">
-                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
-                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                            </svg>
-                            @Model.Destination
-                        </div>
+                        <div class="destination-badge">@Model.Destination</div>
 
-                        <div class="tour-meta mt-3">
+                        <div class="tour-meta mt-3 d-flex justify-content-between">
                             <div class="price-tag" id="tourPrice">Rs @Model.price</div>
-                            <div>
-                                <span class="days-badge" id="tourDays">
-                                    @Model.NumberOfDays Days
-                                </span>
-                            </div>
+                            <div><span class="days-badge" id="tourDays">@Model.NumberOfDays Days</span></div>
                         </div>
 
-                        <div class="tour-description" id="tourDescription">
-                            @Model.Description
-                        </div>
+                        <div class="tour-description" id="tourDescription">@Model.Description</div>
 
                         <!-- Booking form -->
-                        <form asp-action="Payment" method="post" class="w-100">
-                            <!-- Date input -->
-                            <div class="date-input">
-                                <label for="tourDate" class="form-label">Select Travel Date</label>
-                                <input type="date" id="tourDate" name="TourDate" class="form-control" required />
-                                <div id="tourDateError" class="text-danger mt-1" style="display:none;"></div>
-                            </div>
-
-                            <!-- Number of People -->
-                            <div class="mb-3">
-                                <label for="numberOfPeople" class="form-label">Number of People</label>
-                                <input type="number" id="numberOfPeople" name="NumberOfPeople" class="form-control" min="1" max="15" value="1" required />
+                        <form asp-action="Payment" method="post" class="w-100 mt-4">
+                            <!-- Date & People in same row -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="tourDate" class="form-label">Select Travel Date</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                                        <input type="text" id="tourDate" name="TourDate" class="form-control" placeholder="Select date" required />
+                                    </div>
+                                    <div id="tourDateError" class="text-danger mt-1" style="display:none;"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="numberOfPeople" class="form-label">Number of People</label>
+                                    <input type="number" id="numberOfPeople" name="NumberOfPeople" class="form-control" min="1" max="15" value="1" required />
+                                </div>
                             </div>
 
                             <!-- Total price -->
@@ -152,8 +136,8 @@
                             <input type="hidden" name="NumberOfDays" value="@Model.NumberOfDays" />
                             <input type="hidden" name="Latitude" value="@Model.Lat" />
                             <input type="hidden" name="Longitude" value="@Model.Long" />
-
-                            <button type="submit" class="btn btn-book-now btn-lg w-100 py-3" id="PayBtn">Book Now</button>
+ 
+                            <button type="submit" class="btn btn-book-now btn-lg w-100 py-3 mt-3" id="PayBtn">Book Now</button>
                         </form>
                     </div>
                 </div>
@@ -161,41 +145,60 @@
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const tourDateInput = document.getElementById('tourDate');
-            const payBtn = document.getElementById('PayBtn');
-            const errorDiv = document.getElementById('tourDateError');
+            const today = new Date();
+            today.setDate(today.getDate() + 1);
+            const minAllowed = today.toISOString().split('T')[0];
+
+            const maxDate = new Date();
+            maxDate.setMonth(maxDate.getMonth() + 3);
+            const maxAllowed = maxDate.toISOString().split('T')[0];
+
+            const flatpickrOptions = {
+                minDate: minAllowed,
+                maxDate: maxAllowed,
+                dateFormat: "Y-m-d"
+            };
+
+            const disableStart = "@(disableStart ?? "")";
+            const disableEnd = "@(disableEnd ?? "")";
+
+            if (disableStart && disableEnd) {
+                flatpickrOptions.disable = [{
+                    from: disableStart,
+                    to: disableEnd
+                }];
+            }
+
+            flatpickr("#tourDate", flatpickrOptions);
+
+            const basePrice = @Model.price;
             const peopleInput = document.getElementById('numberOfPeople');
             const totalPriceDiv = document.getElementById('totalPrice');
-            const basePrice = @Model.price;
 
-            // Set min date to tomorrow
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const minDateStr = tomorrow.toISOString().split('T')[0];
-            tourDateInput.setAttribute('min', minDateStr);
+            peopleInput.addEventListener('input', function () {
+                const peopleCount = parseInt(this.value) || 1;
+                const total = basePrice * peopleCount;
+                totalPriceDiv.textContent = `Total Price: Rs ${total}`;
+            });
 
-            // Validate date before submitting
+            const payBtn = document.getElementById('PayBtn');
+            const tourDateInput = document.getElementById('tourDate');
+            const errorDiv = document.getElementById('tourDateError');
+
             payBtn.addEventListener('click', function (event) {
                 const selectedDate = tourDateInput.value;
-                if (!selectedDate || selectedDate <= today.toISOString().split('T')[0]) {
-                    errorDiv.textContent = 'Please select a date after today.';
+                if (!selectedDate || selectedDate < minAllowed || selectedDate > maxAllowed) {
+                    errorDiv.textContent = 'Please select a date between tomorrow and 3 months from now.';
                     errorDiv.style.display = 'block';
                     event.preventDefault();
                 } else {
                     errorDiv.style.display = 'none';
                 }
             });
-
-            // Update total price when number of people changes
-            peopleInput.addEventListener('input', function () {
-                const peopleCount = parseInt(peopleInput.value) || 1;
-                const total = basePrice * peopleCount;
-                totalPriceDiv.textContent = `Total Price: Rs ${total}`;
-            });
         });
     </script>
 </body>
-</html>

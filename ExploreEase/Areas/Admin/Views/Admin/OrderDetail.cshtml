@@ -10,6 +10,7 @@
             {
                 <p><strong>Payment ID:</strong> @payment.id</p>
                 <p><strong>Username:</strong> @payment.username</p>
+                <p><strong>email:</strong> @payment.email</p>
                 <p><strong>Amount Paid:</strong> Rs. @payment.price</p>
                 <p><strong>Rating:</strong> @payment.Rating</p>
                 <p><strong>Number of people:</strong> @payment.NumberOfPeople</p>
@@ -20,7 +21,6 @@
             }
         </div>
     </div>
-
     <div class="card mb-4">
         <div class="card-header bg-secondary text-white">
             <h4>Tour Package Details</h4>
@@ -38,7 +38,6 @@
             }
         </div>
     </div>
-
     <h3 class="mb-3">Day by Day Itinerary</h3>
     @{
         var hotelsByDay = Model.DayHotels.GroupBy(h => h.DayNumber).OrderBy(g => g.Key);
@@ -60,13 +59,11 @@
                         <div class="card-body">
                             <p>@hotel.HotelDescription</p>
                             <p><i class="bi bi-geo-alt"></i> @hotel.HotelLocation</p>
-
                             @{
                                 var hotelImages = Model.HotelImages
                                 .Where(img => img.DayHotelId == hotel.DayHotelId && img.DayNumber == hotel.DayNumber)
                                 .ToList();
                             }
-
                             @if (hotelImages.Any())
                             {
                                 <div class="row">

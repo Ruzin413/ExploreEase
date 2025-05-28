@@ -12,11 +12,14 @@ namespace Models.Models
             [Required]
             public int id { get; set; }
             [Required]
-            public string username { get; set; }
+        public string username { get; set; }
+            [Required]
+            public string email { get; set; }
+
             [Required]
             public int Tourpackageid { get; set; }
             [Required]
-            public int price { get; set; }
+            public float price { get; set; }
             [Required]
             public float Rating { get; set; }
             [Required]
@@ -32,7 +35,7 @@ namespace Models.Models
         [Required]
         public int NumberOfPeople { get; set; }
         [Required]
-        public int TotalPrice { get; set; }
+        public float TotalPrice { get; set; }
     }
 }
 

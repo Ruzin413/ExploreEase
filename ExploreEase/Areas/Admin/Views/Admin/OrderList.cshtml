@@ -1,22 +1,39 @@
-﻿<div class="container mx-auto p-4">
-    <h2 class="text-xl font-bold mb-4">Order List</h2>
-    <table class="min-w-full bg-white border" id="orderTable">
-        <thead>
-            <tr>
-                <th class="py-2 border">Username</th>
-                <th class="py-2 border">Price</th>
-                <th class="py-2 border">Start Date</th>
-                <th class="py-2 border">End Date</th>
-                <th class="py-2 border">Booking Date</th>
-                <th class="py-2 border">Number of people</th>
-                <th class="py-2 border">Total price</th>
-                <th class="py-2 border">Delete</th>
-                <th class="py-2 border">Detail</th>
-            </tr>
-        </thead>
-        <tbody id="orderData">
-        </tbody>
-    </table>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="~/js/orderlist.js"></script>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Order List</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/orderlist.js"></script>
+    <link href="~/css/orderlist.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Order Management</h2>
+        </div>
+
+        <div class="table-container">
+            <table class="order-table" id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Price</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Booking Date</th>
+                        <th>Number of people</th>
+                        <th>Total price</th>
+                        <th>Delete</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody id="orderData">
+                    <!-- Order data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

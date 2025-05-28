@@ -59,6 +59,24 @@ namespace ExploreEase.Areas.UserActivity.Controllers
         [Area("UserActivity")]
         public async Task<IActionResult> OrderPackage(int tourPackageId)
         {
+            var user = await _userManager.GetUserAsync(User);
+            var email = user?.Email;
+            
+            var pastPayments = await _getServices.getPastPaymentByEmail(email);
+            var latestPayment = pastPayments
+        .OrderByDescending(p => p.StartDate)
+        .FirstOrDefault();
+
+            if (latestPayment != null)
+            {
+                ViewBag.StartDate = latestPayment.StartDate.ToString("yyyy-MM-dd");
+                ViewBag.EndDate = latestPayment.EndDate.ToString("yyyy-MM-dd");
+            }
+            else
+            {
+                ViewBag.StartDate = null;
+                ViewBag.EndDate = null;
+            }
             var model = await _getServices.GetTourPackageById(tourPackageId);
             return View(model);
         }
@@ -74,7 +92,8 @@ namespace ExploreEase.Areas.UserActivity.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var username = user?.FullName;
-            var result = await _paymentService.InsertIntoPayment(Form, username);
+            var email = user?.Email;   
+            var result = await _paymentService.InsertIntoPayment(Form, username,email);
             if (result)
             {
                 return View("PaymentSucess");

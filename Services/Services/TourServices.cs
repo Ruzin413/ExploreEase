@@ -28,7 +28,7 @@ namespace Services.Services
                 var name = form["Name"];
                 var description = form["Description"];
                 var dayNumber = Convert.ToInt32(form["DayNumber"]);
-                var price = Convert.ToInt32(form["Price"]);
+                var price = Convert.ToDouble(form["Price"]);
                 var destination = form["Destination"];
                 var latitude = Convert.ToDouble(form["Lat"]);
                 var longitude = Convert.ToDouble(form["Long"]);
@@ -45,7 +45,7 @@ namespace Services.Services
                     Name = name,
                     Description = description,
                     Rating = Rate,
-                    price = price,
+                    price = (float)price,
                     Lat = (float)latitude,
                     Long = (float)longitude,
                     Destination = description, // NOTE: This might be a bug; probably should be "destination"

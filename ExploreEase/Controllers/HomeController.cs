@@ -46,7 +46,7 @@ namespace ExploreEase.Controllers
                 return Unauthorized("User not authenticated or FullName not available.");
             }
 
-            var username = user.FullName;
+            var username = user.Email;
             var recommendations = await _recommendationService.GetRecommendedTourPackagesAsync(username);
 
             if (recommendations == null || !recommendations.Any())

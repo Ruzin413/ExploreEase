@@ -27,6 +27,18 @@ namespace Services.Services
         {
             return _getServicesRepository.DeleteOrderById(id);
         }
+        public bool UpdatePackagePrice(int tourpackageId,int price)
+        {
+           return  _getServicesRepository.UpdatePackagePrice(tourpackageId, price);
+        }
+        public bool DeletePackageById(int tourPackageId)
+        {
+            return _getServicesRepository.DeletePackageById(tourPackageId);
+        }
+        public async Task<List<PaymentModel>> getPastPaymentByEmail(string email)
+        {
+            return await _getServicesRepository.getPastPaymentByEmail(email);
+        }
         public async Task<List<TourPackage>> GetTourPackages()
         {
             return await _getServicesRepository.GetTourPackages();

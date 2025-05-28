@@ -5,6 +5,10 @@
     {
       "library": "tailwindcss@2.2.19",
       "destination": "wwwroot/tailwindcss/"
+    },
+    {
+      "library": "flatpickr@4.6.13",
+      "destination": "wwwroot/flatpickr/"
     }
   ]
 }

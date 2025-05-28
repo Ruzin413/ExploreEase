@@ -319,14 +319,18 @@ namespace ExploreEase.Migrations
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("TotalPrice")
-                        .HasColumnType("int");
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
 
                     b.Property<int>("Tourpackageid")
                         .HasColumnType("int");
 
-                    b.Property<int>("price")
-                        .HasColumnType("int");
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("price")
+                        .HasColumnType("real");
 
                     b.Property<string>("username")
                         .IsRequired()
@@ -377,8 +381,8 @@ namespace ExploreEase.Migrations
                     b.Property<float>("Rating")
                         .HasColumnType("real");
 
-                    b.Property<int>("price")
-                        .HasColumnType("int");
+                    b.Property<float>("price")
+                        .HasColumnType("real");
 
                     b.HasKey("TourPackageId");
 
