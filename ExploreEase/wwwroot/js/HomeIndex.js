@@ -64,7 +64,6 @@
             }
         });
     }
-
     // -------------------- Scroll Button Initializer --------------------
     function initScrollButtons(prefix) {
         const container = document.getElementById(`${prefix}PackageContainer`);

@@ -23,6 +23,11 @@ namespace Services.Services
         {
             return _getServicesRepository.GetTourPackageById(id);
         }
+        public Task<List<PaymentModel>> GetorderByEmail(string email)
+        {
+            var data =  _getServicesRepository.GetorderByEmail(email);
+            return data;
+        }
         public bool DeleteOrderById(int id)
         {
             return _getServicesRepository.DeleteOrderById(id);

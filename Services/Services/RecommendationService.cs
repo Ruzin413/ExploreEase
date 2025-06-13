@@ -15,7 +15,6 @@ namespace Services.Services
         {
             _repository = repository;
         }
-        /// <param name="username"
         public async Task<IEnumerable<TourPackage>> GetRecommendedTourPackagesAsync(string username)
         {
             var payments = await _repository.GetPaymentsByUsernameAsync(username);

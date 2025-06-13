@@ -15,6 +15,31 @@ namespace Services.Services
         public PaymentService(PaymentRepo repo){
             _repo = repo;   
         }
+        public async Task<bool> ExtendDate(int id,int numb)
+        {
+            try
+            {
+                await _repo.ExtendDate(id, numb);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+           
+        }
+        public async Task<bool> UpdateReview(int id )
+        {
+            try
+            {
+               await  _repo.UpdateReview(id);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public async Task<bool> InsertIntoPayment(IFormCollection form, string username ,string email)
         {
             try
@@ -37,7 +62,9 @@ namespace Services.Services
                     Latitude = float.Parse(form["Latitude"]),
                     Longitude = float.Parse(form["Longitude"]),
                     NumberOfPeople = numberOfPeople,
-                    TotalPrice = (float)totalPrice 
+                    TotalPrice = (float)totalPrice ,
+                    extendedDate =false,
+                    Reviewed = false
                 };
                 return await _repo.InsertIntoDB(data);
             }

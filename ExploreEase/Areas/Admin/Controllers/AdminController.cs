@@ -46,7 +46,7 @@ namespace ExploreEase.Areas.Admin.Controllers
             {
                 result = await _userManager.DeleteAsync(user);
             }
-            return Json(result);
+            return View(Users);
         }
         public IActionResult AddServices() {
             return View();

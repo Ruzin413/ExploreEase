@@ -37,6 +37,11 @@ namespace Repository.Repository
             }
             return false;
         }
+        public async  Task<List<PaymentModel>> GetorderByEmail(String email)
+        {
+            return await _exploreEaseDbContext.Paymentdb.Where(x => x.email == email).ToListAsync();
+
+        }
         public bool UpdatePackagePrice(int tourpackageid, float price)
         {
             var result = _exploreEaseDbContext.TourPackage.FirstOrDefault(x => x.TourPackageId == tourpackageid);

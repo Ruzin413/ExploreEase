@@ -36,6 +36,8 @@ namespace Models.Models
         public int NumberOfPeople { get; set; }
         [Required]
         public float TotalPrice { get; set; }
+        public bool extendedDate { get; set; }
+        public bool Reviewed { get; set; }
     }
 }
 

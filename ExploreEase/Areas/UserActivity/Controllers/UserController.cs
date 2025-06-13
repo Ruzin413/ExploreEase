@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Models;
 using Newtonsoft.Json;
@@ -14,19 +15,22 @@ namespace ExploreEase.Areas.UserActivity.Controllers
         private readonly UserManager<ExploreEaseUser> _userManager;
         private readonly KhaltiService _khaltiService;
         private readonly PaymentService _paymentService;
-        public UserController(BookingDetails bookingDetails, GetServices getServices, UserManager<ExploreEaseUser> userManager, KhaltiService khaltiService,PaymentService paymentService)
+        private readonly ReviewServices _reviewServices;
+        public UserController(BookingDetails bookingDetails, GetServices getServices, UserManager<ExploreEaseUser> userManager, KhaltiService khaltiService,PaymentService paymentService, ReviewServices reviewServices)
         {
             _bookingDetails = bookingDetails;
             _getServices = getServices;
             _userManager = userManager;
             _khaltiService = khaltiService;
             _paymentService = paymentService;
+            _reviewServices = reviewServices;
         }
         public IActionResult Index()
         {
 
             return View();
         }
+        
         public IActionResult Booking(int id)
         {
             var model = _bookingDetails.GetTourPackages(id);
@@ -57,6 +61,7 @@ namespace ExploreEase.Areas.UserActivity.Controllers
         }
         [HttpPost]
         [Area("UserActivity")]
+        //[Authorize(Roles = "User")]
         public async Task<IActionResult> OrderPackage(int tourPackageId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -80,14 +85,17 @@ namespace ExploreEase.Areas.UserActivity.Controllers
             var model = await _getServices.GetTourPackageById(tourPackageId);
             return View(model);
         }
+        //[Authorize(Roles = "User")]
         public IActionResult PaymentSucess(){
             return View();
         }
+        [Authorize(Roles = "User")]
         public IActionResult PaymentError()
         {
             return View();
         }
         [HttpPost]
+        //[Authorize(Roles = "User")]
         public async Task<IActionResult> Payment(IFormCollection Form)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -103,6 +111,56 @@ namespace ExploreEase.Areas.UserActivity.Controllers
                 return View("PaymentError");
             }
         }
+        public async Task<IActionResult> UserOrder()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var email = user?.Email;
+           var model = await _getServices.GetorderByEmail(email);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async  Task<bool> ExtendDate(int TourPackageId, int id)
+        {
+           var data = await _getServices.GetTourPackageById(TourPackageId);
+            var numb = data.NumberOfDays;
+            var sucess = await  _paymentService.ExtendDate(id,numb);
+            return sucess;
+        }
+        [HttpPost]
+        public async Task<IActionResult> SubmitReview(int id, int packageId, int rating, string reviewText)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Json(new { success = false, error = "User not found" });
+
+            var email = user.Email;
+            var name = user.UserName;
+
+            try
+            {
+                // Insert review first
+                var inserted = await _reviewServices.Insertintodb(id, name, email, packageId, rating, reviewText);
+                if (!inserted)
+                    return Json(new { success = false, error = "Failed to insert review" });
+
+                // Update package rating
+                var updatedRating = await _reviewServices.UpdateTourPackageRatingAsync(packageId);
+                if (!updatedRating)
+                    return Json(new { success = false, error = "Failed to update rating" });
+
+                // Mark payment as reviewed
+                await _paymentService.UpdateReview(id);
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // Log ex
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> InitiateKhaltiPayment([FromBody] KhaltiBookingDTO dto)
         {

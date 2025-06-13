@@ -33,7 +33,7 @@ namespace Services.Services
                 var latitude = Convert.ToDouble(form["Lat"]);
                 var longitude = Convert.ToDouble(form["Long"]);
                 var DestinationImage = form.Files["DestinationImage"];
-                var Rate = 1.0f;
+                var Rate = 0.0f;
                 var NumberOfDays = Convert.ToInt32(form["DayNumber"]);
                 string imagePath = null;
                 if (DestinationImage != null && DestinationImage.Length > 0)

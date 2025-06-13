@@ -33,6 +33,8 @@ builder.Services.AddScoped<RecommendationRepo>();
 builder.Services.AddScoped<RecommendationService>();
 builder.Services.AddScoped<OrderDetailRepo>();
 builder.Services.AddScoped<OrderDetailServices>();
+builder.Services.AddScoped<ReviewRepository>();
+builder.Services.AddScoped<ReviewServices>();
 builder.Logging.AddConsole();
 // Adding MVC support (controllers with views)
 builder.Services.AddControllersWithViews();
