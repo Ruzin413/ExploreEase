@@ -111,6 +111,12 @@ namespace ExploreEase.Areas.UserActivity.Controllers
                 return View("PaymentError");
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> ShowReview(int Tourpackageid)
+        {
+            var model = await _reviewServices.GetReviewfromtourpackageid(Tourpackageid);
+            return Json(model);
+        }
         public async Task<IActionResult> UserOrder()
         {
             var user = await _userManager.GetUserAsync(User);

@@ -66,13 +66,9 @@
                                 <i class="bi bi-geo-alt-fill"></i> Location
                             </button>
                         </form>
-
-                        <form asp-action="ShowReviews" method="post" class="d-inline-block">
-                            <input type="hidden" name="tourPackageId" value="@Model.TourPackages[0].TourPackageId" />
-                            <button type="submit" class="btn btn-review">
+                            <button type="button" class="btn btn-review" onclick="loadReviews(@Model.TourPackages[0].TourPackageId)">
                                 <i class="bi bi-star-fill"></i> Reviews
                             </button>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -142,7 +138,26 @@
     </div>
 }
 </div>
+<!-- Reviews Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel">Tour Package Reviews</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body" id="reviewModalBody">
+                <p class="text-muted">Loading reviews...</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @* <script> *@
 @*     document.getElementById("khaltiPayBtn").addEventListener("click", async function () { *@
 @*         const tourPackageId = "@Model.TourPackages[0].TourPackageId"; *@

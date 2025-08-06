@@ -27,6 +27,11 @@ namespace Services.Services
                 return false;
             }
         }
+        public async Task<List<ReviewModel>> GetReviewfromtourpackageid(int tid)
+        {
+            var data = await _repo.GetReviewsByTourPackageIdAsync(tid);
+            return data;
+        }
         public async Task<bool> UpdateTourPackageRatingAsync(int packageId)
         {
             try
