@@ -90,5 +90,28 @@ namespace Repository.Repository
 
             return await data.ToListAsync();
         }
+        public async Task<int> GetOrdersCountAsync()
+        {
+            return await _exploreEaseDbContext.Paymentdb.CountAsync();
+        }
+
+        public async Task<float> GetTotalRevenueAsync()
+        {
+            return await _exploreEaseDbContext.Paymentdb.SumAsync(o => o.TotalPrice);
+        }
+
+        // In TourServices
+        public async Task<int> GetToursCountAsync()
+        {
+            return await _exploreEaseDbContext.TourPackage.CountAsync();
+        }
+        public async Task<List<PaymentModel>> GetRecentOrdersAsync(int count = 10)
+        {
+            return await _exploreEaseDbContext.Paymentdb
+                .OrderByDescending(o => o.id)    // newest first
+                .Take(count)
+                .ToListAsync();
+        }
+
     }
 }

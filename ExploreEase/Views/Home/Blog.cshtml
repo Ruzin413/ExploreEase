@@ -1,0 +1,29 @@
+﻿<button onclick="document.getElementById('modal').showModal()">Add post</button>
+
+<dialog id="modal">
+    <form id="blogForm">
+        Text:<br>
+        <input type="text" name="text" required><br><br>
+        Image:<br>
+        <input type="file" name="image" accept="image/*" required><br><br>
+        <button type="submit" name="submit">Submit</button>
+        <button type="button" onclick="document.getElementById('modal').close()">Close</button>
+    </form>
+</dialog>
+<div id="blogsContainer"></div>
+
+<dialog id="commentModal">
+    <div id="modalContent">
+        <h3>Comments</h3>
+        <div id="commentsList" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
+        <form id="commentForm">
+            <input type="hidden" name="BlogId" id="commentBlogId" />
+            <textarea name="CommentText" placeholder="Write a comment..." required rows="3" style="width: 100%;"></textarea><br>
+            <button type="submit">Submit Comment</button>
+            <button type="button" onclick="document.getElementById('commentModal').close()">Close</button>
+        </form>
+    </div>
+</dialog>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/blog.js"></script>

@@ -35,7 +35,6 @@ namespace Services.Services
                     Distance = CalculateDistance(userLat, userLong, tp.Lat, tp.Long)
                 })
                 .ToList(); 
-
             var sortedRecommendations = recommendedPackagesWithDistance
                 .OrderBy(x => x.Distance)
                 .ThenByDescending(x => x.Package.Rating) 

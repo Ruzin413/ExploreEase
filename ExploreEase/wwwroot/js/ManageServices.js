@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     function fetchAllPackages() {
         $.ajax({
             url: '/Admin/Admin/AllPackages',

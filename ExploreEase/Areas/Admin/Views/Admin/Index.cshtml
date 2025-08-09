@@ -1,5 +1,103 @@
 ﻿@{
-    ViewData["Title"] = "Dashbaord";
+    ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>DashBoard</h1>
+
+
+<!-- Add Bootstrap CSS in your _Layout if not already included -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+<div class="container my-5">
+    <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard</h2>
+
+    <div class="row mb-4 g-3">
+        <!-- Total Users -->
+        <div class="col-md-3">
+            <div class="card text-white bg-primary h-100 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <i class="bi bi-people-fill fs-1 me-3"></i>
+                    <div>
+                        <h5>Total Users</h5>
+                        <h3>@ViewBag.TotalUsers</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Orders -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success h-100 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <i class="bi bi-basket-fill fs-1 me-3"></i>
+                    <div>
+                        <h5>Total Orders</h5>
+                        <h3>@ViewBag.TotalOrders</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Revenue -->
+        <div class="col-md-3">
+            <div class="card text-white bg-warning h-100 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <i class="bi bi-cash-stack fs-1 me-3"></i>
+                    <div>
+                        <h5>Total Revenue</h5>
+                        <h3>Rs @string.Format("{0:n0}", ViewBag.TotalRevenue)</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Tours -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info h-100 shadow-sm">
+                <div class="card-body d-flex align-items-center">
+                    <i class="bi bi-geo-alt-fill fs-1 me-3"></i>
+                    <div>
+                        <h5>Total Tours</h5>
+                        <h3>@ViewBag.TotalTours</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders / Bookings -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-secondary text-white d-flex align-items-center">
+            <i class="bi bi-clock-history fs-4 me-2"></i> Recent Orders / Bookings
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach (var order in (List<Models.Models.PaymentModel>)ViewBag.RecentOrders)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>Booking ID:</strong> @order.id<br />
+                        <strong>User:</strong> @order.username<br />
+                        <strong>Date:</strong> @order.BookingDate.ToString("g")
+                    </div>
+                    <span class="badge bg-primary rounded-pill fs-5">Rs @order.TotalPrice</span>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <!-- Recent Reviews -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white d-flex align-items-center">
+            <i class="bi bi-chat-left-text fs-4 me-2"></i> Recent Reviews
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach (var review in (List<Models.Models.ReviewModel>)ViewBag.RecentReviews)
+            {
+                <li class="list-group-item">
+                    <strong>@review.Name</strong> <small class="text-muted">(@review.Id)</small><br />
+                    <em>"@review.Comment"</em>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

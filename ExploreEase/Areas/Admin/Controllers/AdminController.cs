@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using Repository.Repository;
 using Services.Services;
@@ -15,17 +16,42 @@ namespace ExploreEase.Areas.Admin.Controllers
         private readonly TourServices _tourServices;
         private readonly GetServices _getServices;
         private readonly OrderDetailServices _orderDetailServices;
-        public AdminController(UserManager<ExploreEaseUser> userManager, TourServices tourServices, GetServices getServices,OrderDetailServices orderDetailServices)
+        private readonly ReviewServices _reviewServices;
+        public AdminController(UserManager<ExploreEaseUser> userManager, TourServices tourServices, GetServices getServices,OrderDetailServices orderDetailServices,ReviewServices reviewServices)
         {
             _userManager = userManager;
             _tourServices = tourServices;
             _getServices = getServices;
             _orderDetailServices = orderDetailServices;
+            _reviewServices = reviewServices;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            int totalUsers = await _userManager.Users.CountAsync();
+            int totalOrders = await _orderDetailServices.GetOrdersCountAsync(); // example using service
+            float totalRevenue = await _orderDetailServices.GetTotalRevenueAsync(); // example using service
+            int totalTours = await _orderDetailServices.GetToursCountAsync();
+            var recentOrders = await _orderDetailServices.GetRecentOrdersAsync();
+            var recentUsers = await GetRecentUsersByHighestIdAsync(5);
+            var recentReviews = await _reviewServices.GetRecentReviewsAsync();
+            ViewBag.RecentOrders = recentOrders;
+            ViewBag.RecentUsers = recentUsers;
+            ViewBag.RecentReviews = recentReviews;
+            ViewBag.TotalUsers = totalUsers;
+            ViewBag.TotalOrders = totalOrders;
+            ViewBag.TotalRevenue = totalRevenue;
+            ViewBag.TotalTours = totalTours;
             return View();
         }
+        public async Task<List<ExploreEaseUser>> GetRecentUsersByHighestIdAsync(int count)
+        {
+            return await _userManager.Users
+                .OrderByDescending(u => u.Id)  // highest ID = newest user assuming auto-increment
+                .Take(count)
+                .ToListAsync();
+        }
+
+
         public IActionResult Test()
         {
             return View();

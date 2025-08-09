@@ -1,39 +1,319 @@
-﻿@model IEnumerable<Models.Models.ExploreEaseUser>
+@model IEnumerable<Models.Models.ExploreEaseUser>
 
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "Users Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var serial = 1;
 }
-<h2>All Users</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Email</th>
-            <th>Full Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
+
+<style>
+    .admin-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .admin-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        text-align: center;
+    }
+    
+    .admin-subtitle {
+        text-align: center;
+        margin-top: 0.5rem;
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+    
+    .users-container {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .table-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 1.5rem;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .stats-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .user-count {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .search-box {
+        position: relative;
+        max-width: 300px;
+    }
+    
+    .search-input {
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+    
+    .users-table {
+        margin: 0;
+        background: white;
+    }
+    
+    .users-table thead th {
+        background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 1.25rem 1rem;
+        border: none;
+        font-size: 0.875rem;
+    }
+    
+    .users-table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    
+    .users-table tbody tr:hover {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .users-table tbody td {
+        padding: 1.25rem 1rem;
+        vertical-align: middle;
+        border: none;
+    }
+    
+    .serial-number {
+        background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+    
+    .user-email {
+        color: #495057;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .user-name {
+        color: #212529;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .delete-btn {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: none;
+        border-radius: 25px;
+        padding: 0.5rem 1.25rem;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .delete-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+</style>
+
+<div class="admin-header">
+    <div class="container">
+        <h1 class="admin-title">
+            <i class="fas fa-users me-3"></i>
+            Users Management
+        </h1>
+        <p class="admin-subtitle">Manage and monitor all registered users</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="users-container">
+        <div class="table-header">
+            <div class="stats-row">
+                <div class="user-count">
+                    <i class="fas fa-user-check"></i>
+                    <span id="userCount">@(Model?.Count(u => u.Email != "Admin413@gmail.com") ?? 0) Active Users</span>
+                </div>
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="form-control search-input" id="userSearch" placeholder="Search users...">
+                </div>
+            </div>
+        </div>
+        
+        @if (Model != null && Model.Any(u => u.Email != "Admin413@gmail.com"))
         {
-            if (user.Email == "Admin413@gmail.com")
-            {
-                continue;
-            }
-            <tr>
-                <td>@serial</td>
-                <td>@user.Email</td>
-                <td>@user.FullName</td>
-                <td>
-                    <form asp-area="Admin" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            serial++;
+            <table class="table users-table" id="usersTable">
+                <thead>
+                    <tr>
+                        <th width="80">
+                            <i class="fas fa-hashtag me-2"></i>No
+                        </th>
+                        <th>
+                            <i class="fas fa-envelope me-2"></i>Email Address
+                        </th>
+                        <th>
+                            <i class="fas fa-user me-2"></i>Full Name
+                        </th>
+                        <th width="120">
+                            <i class="fas fa-cogs me-2"></i>Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        if (user.Email == "Admin413@gmail.com")
+                        {
+                            continue;
+                        }
+                        <tr class="user-row">
+                            <td>
+                                <div class="serial-number">@serial</div>
+                            </td>
+                            <td>
+                                <div class="user-email">
+                                    <i class="fas fa-at text-muted"></i>
+                                    @user.Email
+                                </div>
+                            </td>
+                            <td>
+                                <div class="user-name">
+                                    <i class="fas fa-user-circle text-muted"></i>
+                                    @user.FullName
+                                </div>
+                            </td>
+                            <td>
+                                <form asp-area="Admin" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.Id" method="post" class="delete-form">
+                                    <button type="submit" class="btn delete-btn" onclick="return confirmDelete('@user.FullName')">
+                                        <i class="fas fa-trash-alt"></i>
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        serial++;
+                    }
+                </tbody>
+            </table>
         }
-    </tbody>
-</table>
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-users-slash"></i>
+                </div>
+                <h4>No Users Found</h4>
+                <p>There are currently no registered users in the system.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // Search functionality
+    document.getElementById('userSearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.user-row');
+        let visibleCount = 0;
+        
+        rows.forEach(row => {
+            const email = row.querySelector('.user-email').textContent.toLowerCase();
+            const name = row.querySelector('.user-name').textContent.toLowerCase();
+            
+            if (email.includes(searchTerm) || name.includes(searchTerm)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Update user count
+        document.getElementById('userCount').textContent = `${visibleCount} Active Users`;
+    });
+    
+    // Confirm delete function
+    function confirmDelete(userName) {
+        return confirm(`Are you sure you want to delete user "${userName}"? This action cannot be undone.`);
+    }
+    
+    // Add loading state to delete buttons
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const button = this.querySelector('.delete-btn');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+            button.disabled = true;
+        });
+    });
+</script>
+
 <script src="~/js/user.js"></script>

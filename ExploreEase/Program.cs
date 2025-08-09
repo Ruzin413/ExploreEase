@@ -35,6 +35,8 @@ builder.Services.AddScoped<OrderDetailRepo>();
 builder.Services.AddScoped<OrderDetailServices>();
 builder.Services.AddScoped<ReviewRepository>();
 builder.Services.AddScoped<ReviewServices>();
+builder.Services.AddScoped<BlogRepo>();
+builder.Services.AddScoped<BlogServices>();
 builder.Logging.AddConsole();
 // Adding MVC support (controllers with views)
 builder.Services.AddControllersWithViews();

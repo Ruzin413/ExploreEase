@@ -1,4 +1,5 @@
-﻿using Models.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Models.Models;
 using Repository.Repository;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,12 @@ namespace Services.Services
                 Console.WriteLine("Error in UpdateTourPackageRatingAsync: " + ex.Message);
                 return false;
             }
+
         }
+        public async Task<List<ReviewModel>> GetRecentReviewsAsync()
+        {
+          return await _repo.GetRecentReviewsAsync();
+        }
+
     }
 }

@@ -32,6 +32,8 @@ namespace DataAcessLayer.DataAcess
         public  DbSet<HotelImage> hotelImage { get; set; }  
         public DbSet<PaymentModel> Paymentdb {  get; set; }
         public DbSet<ReviewModel> Reviewdb { get; set; }
-
+        public DbSet<BlogModel> Blogdb { get; set; }
+        public DbSet<BlogLikes> BlogLikes { get; set; }
+        public DbSet<Commentmodel> commentdb { get; set; }
     }
 }

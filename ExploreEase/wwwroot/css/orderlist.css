@@ -1,6 +1,33 @@
-﻿/* Base styles */
+/* Navbar full width, no outside gaps */
+.navbar {
+    margin: 0 !important;
+    border-radius: 0 !important; /* Remove rounded corners */
+    width: 100% !important;
+}
+
+    /* Inside padding for links and logo */
+    .navbar .container,
+    .navbar .container-fluid {
+        margin: 0 !important;
+        padding: 0 20px !important; /* Left/right padding inside navbar */
+        max-width: 100% !important; /* Ensure full stretch */
+    }
+
+/* Remove any default top/bottom gap below navbar */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Make sure main content starts immediately after navbar */
+main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
     background-color: #f5f7fb;
     color: #333;
     line-height: 1.6;
@@ -8,54 +35,31 @@ body {
 
 .container {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    padding: 20px;
 }
 
-/* Header styles */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e2e8f0;
+h2 {
+    color: #2d3748;
+    margin-top: 2rem;
 }
 
-    .header h2 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #2d3748;
-        margin: 0;
-    }
-
-/* Table styles */
 .order-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 1rem;
-    border-radius: 4px;
-    overflow: hidden;
 }
 
     .order-table th {
         background-color: #4299e1;
         color: white;
-        font-weight: 600;
-        text-align: left;
-        padding: 0.75rem 1rem;
-        font-size: 0.875rem;
+        padding: 0.75rem;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 
     .order-table td {
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid #e2e8f0;
-        font-size: 0.875rem;
+        border: 1px solid #ccc;
+        padding: 0.75rem;
     }
 
     .order-table tr:nth-child(even) {
@@ -66,19 +70,12 @@ body {
         background-color: #ebf4ff;
     }
 
-/* Button styles */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
     padding: 0.5rem 1rem;
     border-radius: 4px;
-    font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    font-weight: 500;
     border: none;
-    font-size: 0.875rem;
 }
 
 .btn-delete {
@@ -99,43 +96,8 @@ body {
         background-color: #2f855a;
     }
 
-/* Loader animation */
-.loader {
-    width: 1rem;
-    height: 1rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.hidden {
-    display: none;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-    .container {
-        padding: 1rem;
-        margin: 1rem;
-    }
-
-    .order-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-}
-
-/* Empty state */
 .empty-state {
     text-align: center;
-    padding: 2rem;
+    padding: 1rem;
     color: #718096;
 }

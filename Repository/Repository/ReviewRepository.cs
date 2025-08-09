@@ -72,5 +72,13 @@ _exploreEaseDbContext.TourPackage.Update(tourPackage);
                 return false;
             }
         }
+        public async Task<List<ReviewModel>> GetRecentReviewsAsync(int count = 10)
+        {
+            return await _exploreEaseDbContext.Reviewdb
+                .OrderByDescending(r => r.Id)
+                .Take(count)
+                .ToListAsync();
+        }
+
     }
 }

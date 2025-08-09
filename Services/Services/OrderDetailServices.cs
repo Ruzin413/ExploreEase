@@ -1,10 +1,11 @@
-﻿using Repository.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using Models.Models;
+using Repository.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Models.Models;
 
 namespace Services.Services
 {
@@ -14,6 +15,24 @@ namespace Services.Services
         public OrderDetailServices(OrderDetailRepo orderDetailRepo)
         {
             _orderDetailRepo = orderDetailRepo;
+        }
+        public async Task<int> GetOrdersCountAsync()
+        {
+            return await _orderDetailRepo.GetOrdersCountAsync();
+        }
+
+        public async Task<float> GetTotalRevenueAsync()
+        {
+            return await _orderDetailRepo.GetTotalRevenueAsync();
+        }
+        public async Task<List<PaymentModel>> GetRecentOrdersAsync(int count = 10)
+        {
+            return await _orderDetailRepo.GetRecentOrdersAsync();
+        }
+        
+        public async Task<int> GetToursCountAsync()
+        {
+            return await _orderDetailRepo.GetToursCountAsync();
         }
         public async Task<OrderDetailModel> GetOrderDetail(int id)
         {

@@ -4,6 +4,7 @@ using DataAcessLayer.DataAcess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExploreEase.Migrations
 {
     [DbContext(typeof(ExploreEaseDbContext))]
-    partial class ExploreEaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250809164439_bloglikesmigration3")]
+    partial class bloglikesmigration3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,10 +235,8 @@ namespace ExploreEase.Migrations
                     b.Property<int>("Blogid")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("time")
                         .HasColumnType("datetime2");
@@ -276,43 +277,9 @@ namespace ExploreEase.Migrations
                         .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("likestatus")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.ToTable("Blogdb");
-                });
-
-            modelBuilder.Entity("Models.Models.Commentmodel", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int>("BlogId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("comment")
-                        .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("commentdb");
                 });
 
             modelBuilder.Entity("Models.Models.ExploreEaseUser", b =>

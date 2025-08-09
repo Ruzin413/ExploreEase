@@ -1,21 +1,36 @@
-﻿<!DOCTYPE html>
+@{
+    ViewData["Title"] = "Admin Order List";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Order List</title>
+    <title>@ViewData["Title"]</title>
+
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="~/js/orderlist.js"></script>
+
+    <!-- Flatpickr (for date range) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- Your CSS -->
     <link href="~/css/orderlist.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h2>Order Management</h2>
-        </div>
 
-        <div class="table-container">
-            <table class="order-table" id="orderTable">
+        <h1>Orders Management</h1>
+
+        <label for="dateRange">Filter by date range:</label>
+        <input id="dateRange" type="text" placeholder="Select date range"
+               style="margin-bottom: 20px; padding: 8px; width: 300px; border-radius: 6px; border: 1px solid #ccc;" />
+
+        <!-- Ongoing Orders -->
+        <section>
+            <h2 class="section-title">Ongoing Tours</h2>
+            <table class="order-table" id="ongoingOrdersTable">
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -23,17 +38,67 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Booking Date</th>
-                        <th>Number of people</th>
-                        <th>Total price</th>
+                        <th>Number of People</th>
+                        <th>Total Price</th>
                         <th>Delete</th>
                         <th>Detail</th>
                     </tr>
                 </thead>
-                <tbody id="orderData">
-                    <!-- Order data will be loaded here -->
+                <tbody id="ongoingOrdersBody">
+                    <tr><td colspan="9" class="empty-state">Loading...</td></tr>
                 </tbody>
             </table>
-        </div>
+        </section>
+
+        <!-- Upcoming Orders -->
+        <section>
+            <h2 class="section-title">Upcoming Tours</h2>
+            <table class="order-table" id="upcomingOrdersTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Price</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Booking Date</th>
+                        <th>Number of People</th>
+                        <th>Total Price</th>
+                        <th>Delete</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody id="upcomingOrdersBody">
+                    <tr><td colspan="9" class="empty-state">Loading...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Done Orders -->
+        <section>
+            <h2 class="section-title">Done Tours</h2>
+            <table class="order-table" id="doneOrdersTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Price</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Booking Date</th>
+                        <th>Number of People</th>
+                        <th>Total Price</th>
+                        <th>Delete</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody id="doneOrdersBody">
+                    <tr><td colspan="9" class="empty-state">Loading...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
     </div>
+
+    <!-- JS -->
+    <script src="~/js/orderlist.js"></script>
 </body>
 </html>
