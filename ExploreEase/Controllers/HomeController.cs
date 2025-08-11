@@ -108,14 +108,17 @@ namespace ExploreEase.Controllers
             }
             string userid = user.Email;
             bool result = await _blogservices.LikeUpdate(blogId, userid);
-            if (result)
-            {
-                return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false });
-            }
+            
+            // Get updated like count
+            var blog = await _blogservices.GetBlogs(userid);
+            var currentBlog = blog.FirstOrDefault(b => b.Id == blogId);
+            int likeCount = currentBlog?.Likes ?? 0;
+            
+            return Json(new { 
+                success = result, 
+                likes = likeCount,
+                liked = true
+            });
         }
         [HttpPost]
         public async Task<IActionResult> BlogUnlike(int blogId)
@@ -127,14 +130,17 @@ namespace ExploreEase.Controllers
             }
             string userid = user.Email;
             bool result = await _blogservices.unLikeUpdate(blogId, userid);
-            if (result)
-            {
-                return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false });
-            }
+            
+            // Get updated like count
+            var blog = await _blogservices.GetBlogs(userid);
+            var currentBlog = blog.FirstOrDefault(b => b.Id == blogId);
+            int likeCount = currentBlog?.Likes ?? 0;
+            
+            return Json(new { 
+                success = result, 
+                likes = likeCount,
+                liked = false
+            });
         }
         [HttpPost]
         public async Task<IActionResult> PostComment(int BlogId, string CommentText)
@@ -161,6 +167,18 @@ namespace ExploreEase.Controllers
         {
             var data = await _blogservices.GetComments(BlogId);
             return Json(data);  
+        }
+        [HttpGet]
+        public async Task<IActionResult> Search(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                // Show empty result or redirect to all packages page
+                return View(new List<TourPackage>());
+            }
+            var data = await _getServices.GetTourPackageByName(name);
+            ViewBag.SearchQuery = name;
+            return View(data);
         }
     }
 }

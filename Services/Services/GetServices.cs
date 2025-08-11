@@ -48,5 +48,9 @@ namespace Services.Services
         {
             return await _getServicesRepository.GetTourPackages();
         }
+        public async Task<List<TourPackage>> GetTourPackageByName(string name)
+        {
+            return await _getServicesRepository.GetAllByNameAsync(name);
+        }
     }
 }

@@ -1,0 +1,320 @@
+@model List<Models.Models.TourPackage>
+<link href="~/css/search.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<form class="searchbar-form"
+      id="searchForm"
+      method="get"
+      action="/Home/Search"
+      autocomplete="off"
+      role="search">
+    <div class="search-input-wrapper">
+        <i class="fas fa-map-marker-alt search-icon"></i>
+        <input type="text"
+               name="name"
+               class="searchbar-input"
+               id="searchInput"
+               placeholder="Where would you like to explore?"
+               aria-label="Search destinations" required />
+        <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+    <button type="submit" class="searchbar-btn" aria-label="Search">
+        <i class="fas fa-search"></i>
+        <span class="btn-text">Search</span>
+    </button>
+</form>
+    @if (Model != null && Model.Any())
+    {
+        <div class="search-grid">
+            @foreach (var pkg in Model)
+            {
+                <div class="tour-card" data-id="@pkg.TourPackageId">
+                    <img src="@pkg.DestinationImage" class="card-img-top" alt="@pkg.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@pkg.Name</h5>
+                        <div class="card-meta">
+                            <span class="duration">
+                                <i class="fas fa-calendar"></i>
+                                @pkg.NumberOfDays days
+                            </span>
+                            <span class="rating">
+                                <i class="fas fa-star"></i>
+                                @pkg.Rating
+                            </span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(pkg.Description))
+                        {
+                            <div class="description">
+                                @(pkg.Description.Length > 80 ? pkg.Description.Substring(0, 80) + "..." : pkg.Description)
+                            </div>
+                        }
+                        <div class="card-details">
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <strong>Destination:</strong> @pkg.Destination
+                            </p>
+                        </div>
+                        <div class="card-price">
+                            <span class="price">Rs.@pkg.price</span>
+                            <button class="view-details-btn">
+                                <i class="fas fa-eye"></i>
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="no-results">
+            <i class="fas fa-search no-results-icon"></i>
+            <h3>No tours found</h3>
+            <p>Try adjusting your search criteria or explore our other amazing destinations.</p>
+        </div>
+    }
+</div>
+
+<style>
+    /* Container Styles */
+    .search-results-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    /* Search Form Styles */
+    .searchbar-form {
+        max-width: 800px;
+        margin: 2rem auto 3rem;
+        width: 100%;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    .search-input-wrapper:focus-within {
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+        border-color: #a5b4fc;
+    }
+
+    .searchbar-input {
+        flex: 1;
+        padding: 1rem 1rem 1rem 3rem;
+        border: none;
+        font-size: 1rem;
+        color: #2d3748;
+        outline: none;
+        height: 56px;
+        background: transparent;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        color: #a0aec0;
+        font-size: 1.1rem;
+    }
+
+    .searchbar-btn {
+        background: #4f46e5;
+        color: white;
+        border: none;
+        padding: 0 1.5rem;
+        height: 56px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+    .searchbar-btn:hover {
+        background: #4338ca;
+    }
+
+    .search-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+    }
+
+    .search-suggestions.show {
+        display: block;
+    }
+
+    /* Results Title */
+    .search-results-title {
+        font-size: 2rem;
+        color: #2d3748;
+        margin: 0 auto 2rem;
+        font-weight: 700;
+        text-align: center;
+        max-width: 800px;
+    }
+
+    /* Grid Layout */
+    .search-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 0 auto 3rem;
+        max-width: 1200px;
+        padding: 0 1rem;
+    }
+
+    .tour-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .tour-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #2d3748;
+    }
+
+    .card-meta {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+        color: #4a5568;
+        font-size: 0.875rem;
+    }
+
+    .duration,
+    .rating {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .description {
+        color: #4a5568;
+        font-size: 0.9375rem;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .card-details {
+        margin-bottom: 1.25rem;
+    }
+
+    .card-text {
+        color: #4a5568;
+        font-size: 0.9375rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .card-price {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2d3748;
+    }
+
+    .view-details-btn {
+        background: #4f46e5;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: background-color 0.2s;
+    }
+
+    .view-details-btn:hover {
+        background: #4338ca;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        margin: 2rem 0;
+    }
+
+    .no-results-icon {
+        font-size: 3rem;
+        color: #a0aec0;
+        margin-bottom: 1rem;
+    }
+
+    .no-results h3 {
+        font-size: 1.5rem;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    .no-results p {
+        color: #4a5568;
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        $('.tour-card').on('click', function() {
+            const id = $(this).data('id');
+            window.location.href = `/UserActivity/User/Booking?id=${id}`;
+        });
+    });
+</script>

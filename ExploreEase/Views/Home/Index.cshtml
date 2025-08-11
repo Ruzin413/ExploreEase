@@ -5,34 +5,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Discover amazing destinations with ExploreEase - Your gateway to unforgettable travel experiences">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Discover amazing destinations with ExploreEase - Your gateway to unforgettable travel experiences" />
     <title>@ViewData["Title"] - ExploreEase</title>
     <link href="~/css/HomeIndex.css" rel="stylesheet" />
     <link href="~/tailwindcss/tailwind.min.css" rel="stylesheet" />
     <link href="~/tailwindcss/tailwind.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <!-- Enhanced Banner Section -->
+    <!-- Banner Section -->
     <section class="banner-section" aria-label="Search destinations">
         <div class="banner-image-container">
-            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80" alt="Beautiful mountain landscape with lake reflection" class="banner-image" />
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+                 alt="Beautiful mountain landscape with lake reflection"
+                 class="banner-image" />
             <div class="banner-gradient-overlay"></div>
             <div class="banner-content">
                 <div class="banner-text">
                     <h1 class="banner-title">Find Your Perfect Adventure</h1>
                     <p class="banner-subtitle">Discover breathtaking destinations and create unforgettable memories</p>
                 </div>
-                <form class="searchbar-form" id="searchForm" autocomplete="off" role="search">
+                <!-- Updated search form: method GET, input with name="name" -->
+                <form class="searchbar-form"
+                      id="searchForm"
+                      method="get"
+                      action="/Home/Search"
+                      autocomplete="off"
+                      role="search">
                     <div class="search-input-wrapper">
                         <i class="fas fa-map-marker-alt search-icon"></i>
-                        <input type="text" class="searchbar-input" id="searchInput" placeholder="Where would you like to explore?" aria-label="Search destinations" />
+                        <input type="text"
+                               name="name"
+                               class="searchbar-input"
+                               id="searchInput"
+                               placeholder="Where would you like to explore?"
+                               aria-label="Search destinations" />
                         <div class="search-suggestions" id="searchSuggestions"></div>
                     </div>
                     <button type="submit" class="searchbar-btn" aria-label="Search">
@@ -44,9 +57,7 @@
         </div>
     </section>
 
-
-
-    <!-- Enhanced Recommendations Section -->
+    <!-- Recommendations Section -->
     <section class="recommendations-section" id="recommendationSection" aria-label="Recommended tours">
         <div class="container">
             <div class="section-header">
@@ -58,13 +69,21 @@
                     <i class="fas fa-star section-icon"></i>
                     <h2>Recommended for You</h2>
                 </div>
-                <p class="section-subtitle">Handpicked destinations based on your travel preferences and interests</p>
+                <p class="section-subtitle">
+                    Handpicked destinations based on your travel preferences and interests
+                </p>
             </div>
             <div class="tour-container">
-                <button class="scroll-btn scroll-left" id="recScrollLeft" disabled aria-label="Scroll left">
+                <button class="scroll-btn scroll-left"
+                        id="recScrollLeft"
+                        disabled
+                        aria-label="Scroll left">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <div class="horizontal-scroll" id="recPackageContainer" role="region" aria-label="Recommended tour packages"></div>
+                <div class="horizontal-scroll"
+                     id="recPackageContainer"
+                     role="region"
+                     aria-label="Recommended tour packages"></div>
                 <button class="scroll-btn scroll-right" id="recScrollRight" aria-label="Scroll right">
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -72,7 +91,7 @@
         </div>
     </section>
 
-    <!-- Enhanced Tour Packages Section -->
+    <!-- Tour Packages Section -->
     <section class="packages-section" aria-label="All tour packages">
         <div class="container">
             <div class="section-header">
@@ -84,20 +103,27 @@
                     <i class="fas fa-compass section-icon"></i>
                     <h2>All Tour Packages</h2>
                 </div>
-                <p class="section-subtitle">Discover amazing destinations around the world with our comprehensive collection</p>
+                <p class="section-subtitle">
+                    Discover amazing destinations around the world with our comprehensive collection
+                </p>
                 <div class="section-filters">
                     <button class="filter-btn active" data-filter="all">
                         <i class="fas fa-th"></i>
                         All Packages
                     </button>
-                   
                 </div>
             </div>
             <div class="tour-container">
-                <button class="scroll-btn scroll-left" id="pkgScrollLeft" disabled aria-label="Scroll left">
+                <button class="scroll-btn scroll-left"
+                        id="pkgScrollLeft"
+                        disabled
+                        aria-label="Scroll left">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <div class="horizontal-scroll" id="pkgPackageContainer" role="region" aria-label="All tour packages"></div>
+                <div class="horizontal-scroll"
+                     id="pkgPackageContainer"
+                     role="region"
+                     aria-label="All tour packages"></div>
                 <button class="scroll-btn scroll-right" id="pkgScrollRight" aria-label="Scroll right">
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -119,92 +145,6 @@
             setTimeout(() => {
                 $('#loadingSpinner').fadeOut();
             }, 1000);
-
-            // -------------------- Enhanced Search Functionality --------------------
-            const searchInput = $('#searchInput');
-            const searchSuggestions = $('#searchSuggestions');
-            const searchForm = $('#searchForm');
-            
-            // Sample destinations for search suggestions
-            const destinations = ['Nepal', 'Kathmandu', 'Pokhara', 'Everest Base Camp', 'Annapurna', 'Chitwan', 'Lumbini', 'Bhaktapur', 'Patan', 'Bandipur', 'Gorkha', 'Mustang', 'Langtang', 'Manaslu'];
-            
-            // Search input functionality
-            searchInput.on('input', function() {
-                const query = $(this).val().toLowerCase().trim();
-                
-                if (query.length > 0) {
-                    const matches = destinations.filter(dest => 
-                        dest.toLowerCase().includes(query)
-                    ).slice(0, 5);
-                    
-                    if (matches.length > 0) {
-                        let suggestionsHtml = matches.map(match => 
-                            `<div class="suggestion-item" data-destination="${match}">${match}</div>`
-                        ).join('');
-                        
-                        searchSuggestions.html(suggestionsHtml).addClass('show');
-                    } else {
-                        searchSuggestions.removeClass('show');
-                    }
-                } else {
-                    searchSuggestions.removeClass('show');
-                }
-            });
-            
-            // Handle suggestion clicks
-            $(document).on('click', '.suggestion-item', function() {
-                const destination = $(this).data('destination');
-                searchInput.val(destination);
-                searchSuggestions.removeClass('show');
-                performSearch(destination);
-            });
-            
-            // Handle search form submission
-            searchForm.on('submit', function(e) {
-                e.preventDefault();
-                const query = searchInput.val().trim();
-                if (query) {
-                    performSearch(query);
-                    searchSuggestions.removeClass('show');
-                }
-            });
-            
-            // Hide suggestions when clicking outside
-            $(document).on('click', function(e) {
-                if (!$(e.target).closest('.search-input-wrapper').length) {
-                    searchSuggestions.removeClass('show');
-                }
-            });
-            
-            // Search functionality
-            function performSearch(query) {
-                // Add loading state to search button
-                const searchBtn = $('.searchbar-btn');
-                const originalText = searchBtn.find('.btn-text').text();
-                searchBtn.find('.btn-text').text('Searching...');
-                searchBtn.prop('disabled', true);
-                
-                // Filter tour packages based on search query
-                $('.tour-card').each(function() {
-                    const cardText = $(this).text().toLowerCase();
-                    if (cardText.includes(query.toLowerCase())) {
-                        $(this).fadeIn(300);
-                    } else {
-                        $(this).fadeOut(300);
-                    }
-                });
-                
-                // Reset search button after delay
-                setTimeout(() => {
-                    searchBtn.find('.btn-text').text(originalText);
-                    searchBtn.prop('disabled', false);
-                }, 1000);
-                
-                // Scroll to packages section
-                $('html, body').animate({
-                    scrollTop: $('.packages-section').offset().top - 100
-                }, 800);
-            }
 
             // -------------------- Recommendations --------------------
             function fetchRecommendedPackages() {
@@ -268,63 +208,61 @@
             }
 
             // -------------------- Tour Packages --------------------
-                  // -------------------- Tour Packages --------------------
-        function fetchTourPackages() {
-            $.ajax({
-                url: '/Home/TourPackage',
-                method: 'GET',
-                success: function (data) {
-                    // Sort data by rating (highest to lowest)
-                    data.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            function fetchTourPackages() {
+                $.ajax({
+                    url: '/Home/TourPackage',
+                    method: 'GET',
+                    success: function (data) {
+                        // Sort data by rating (highest to lowest)
+                        data.sort((a, b) => (b.rating || 0) - (a.rating || 0));
 
-                    let html = '';
-                    data.forEach(function (pkg) {
-                        html += `
-                            <div class="tour-card" data-id="${pkg.tourPackageId}" data-rating="${pkg.rating}" data-days="${pkg.numberOfDays}" style="cursor:pointer;">
-                                <img src="${pkg.destinationImage}" class="card-img-top" alt="${pkg.name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${pkg.name}</h5>
-                                    <div class="card-meta">
-                                        <span class="duration">
-                                            <i class="fas fa-calendar"></i>
-                                            ${pkg.numberOfDays} days
-                                        </span>
-                                        <span class="rating">
-                                            <i class="fas fa-star"></i>
-                                            ${pkg.rating}
-                                        </span>
+                        let html = '';
+                        data.forEach(function (pkg) {
+                            html += `
+                                <div class="tour-card" data-id="${pkg.tourPackageId}" data-rating="${pkg.rating}" data-days="${pkg.numberOfDays}" style="cursor:pointer;">
+                                    <img src="${pkg.destinationImage}" class="card-img-top" alt="${pkg.name}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${pkg.name}</h5>
+                                        <div class="card-meta">
+                                            <span class="duration">
+                                                <i class="fas fa-calendar"></i>
+                                                ${pkg.numberOfDays} days
+                                            </span>
+                                            <span class="rating">
+                                                <i class="fas fa-star"></i>
+                                                ${pkg.rating}
+                                            </span>
+                                        </div>
+                                        <div class="description">${pkg.description.substring(0, 80)}...</div>
+                                        <div class="card-details">
+                                            <p class="card-text">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <strong>Destination:</strong> ${pkg.destination}
+                                            </p>
+                                        </div>
+                                        <div class="card-price">
+                                            <span class="price">Rs${pkg.price}</span>
+                                            <button class="view-details-btn">
+                                                <i class="fas fa-eye"></i>
+                                                View Details
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="description">${pkg.description.substring(0, 80)}...</div>
-                                    <div class="card-details">
-                                        <p class="card-text">
-                                            <i class="fas fa-map-marker-alt"></i>
-                                            <strong>Destination:</strong> ${pkg.destination}
-                                        </p>
-                                    </div>
-                                    <div class="card-price">
-                                        <span class="price">Rs${pkg.price}</span>
-                                        <button class="view-details-btn">
-                                            <i class="fas fa-eye"></i>
-                                            View Details
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>`;
-                    });
-                    $('#pkgPackageContainer').html(html);
-                    initScrollButtons('pkg');
-                },
-                error: function () {
-                    $('#pkgPackageContainer').html(`
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <p>Could not load tour packages.</p>
-                        </div>
-                    `);
-                }
-            });
-        }
-
+                                </div>`;
+                        });
+                        $('#pkgPackageContainer').html(html);
+                        initScrollButtons('pkg');
+                    },
+                    error: function () {
+                        $('#pkgPackageContainer').html(`
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Could not load tour packages.</p>
+                            </div>
+                        `);
+                    }
+                });
+            }
 
             // -------------------- Scroll Button Initializer --------------------
             function initScrollButtons(prefix) {

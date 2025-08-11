@@ -73,5 +73,13 @@ namespace Repository.Repository
         {
             return await _exploreEaseDbContext.TourPackage.ToListAsync();
         }
+        public async Task<List<TourPackage>> GetAllByNameAsync(string name)
+        {
+            name = name.Trim().ToLower();
+            return await _exploreEaseDbContext.TourPackage
+                .Where(p => p.Name.ToLower().Contains(name))
+                .ToListAsync();
+        }
+
     }
 }
