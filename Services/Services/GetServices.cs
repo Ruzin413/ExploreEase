@@ -28,6 +28,10 @@ namespace Services.Services
             var data =  _getServicesRepository.GetorderByEmail(email);
             return data;
         }
+        public async Task<PaymentModel> GetorderById(int email)
+        {
+            return await  _getServicesRepository.GetorderById(email);
+        }
         public bool DeleteOrderById(int id)
         {
             return _getServicesRepository.DeleteOrderById(id);

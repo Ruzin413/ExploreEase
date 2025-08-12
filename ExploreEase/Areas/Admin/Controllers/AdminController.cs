@@ -64,15 +64,23 @@ namespace ExploreEase.Areas.Admin.Controllers
             return View(users);
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteUser(string id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequest request)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            var result = new IdentityResult();
-            if (user != null)
-            {
-                result = await _userManager.DeleteAsync(user);
-            }
-            return View(Users);
+            var user = await _userManager.FindByIdAsync(request.Id);
+            if (user == null)
+                return Json(new { success = false, message = "User not found." });
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+                return Json(new { success = true });
+
+            return Json(new { success = false, message = "Failed to delete user." });
+        }
+
+        public class DeleteUserRequest
+        {
+            public string Id { get; set; }
         }
         public IActionResult AddServices() {
             return View();

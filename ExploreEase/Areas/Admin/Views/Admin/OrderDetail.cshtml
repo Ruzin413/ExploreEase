@@ -1,32 +1,174 @@
-﻿ @model Models.Models.OrderDetailModel
+﻿@model Models.Models.OrderDetailModel
+@{
+    var tourPackage = Model.TourPackages.FirstOrDefault();
+}
+
+<style>
+    /* Container styling */
+    .container {
+        max-width: 900px;
+        margin: 40px auto 60px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+    }
+
+    h3 {
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        border-bottom: 3px solid #4299e1;
+        padding-bottom: 0.25rem;
+    }
+
+    .card-header {
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+
+        .card-header.bg-primary {
+            background-color: #4299e1 !important;
+        }
+
+        .card-header.bg-secondary {
+            background-color: #718096 !important;
+        }
+
+    .badge.bg-success {
+        font-size: 1rem;
+        padding: 0.4em 0.8em;
+        border-radius: 1rem;
+        font-weight: 600;
+    }
+
+    /* Payment Details text spacing */
+    .card-body p {
+        margin-bottom: 0.6rem;
+        font-size: 1rem;
+    }
+
+    /* Tour Package Image */
+    .card-body img {
+        max-height: 250px;
+        object-fit: cover;
+        margin-top: 0.75rem;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        width: 100%;
+    }
+
+    /* Day card */
+    .day-card {
+        border: 1.5px solid #e2e8f0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .day-card:hover {
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3);
+        }
+
+    .day-header {
+        background-color: #edf2f7;
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #cbd5e0;
+        padding: 0.5rem 1rem;
+    }
+
+    /* Hotel card */
+    .hotel-card {
+        border: 1px solid #cbd5e0;
+        border-radius: 6px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    }
+
+        .hotel-card .card-header {
+            background-color: #4299e1;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .hotel-card .card-body {
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+
+            .hotel-card .card-body p {
+                margin-bottom: 0.5rem;
+            }
+
+    .hotel-image {
+        max-height: 180px;
+        object-fit: cover;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Location icon */
+    .bi-geo-alt {
+        color: #4299e1;
+        margin-right: 6px;
+    }
+
+    /* Flex row for images */
+    .image-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+    }
+
+        .image-row img {
+            flex: 1 1 calc(33.333% - 8px);
+            max-width: calc(33.333% - 8px);
+        }
+
+    /* No images text */
+    .text-muted {
+        color: #6c757d;
+        font-style: italic;
+        margin-top: 0.5rem;
+    }
+</style>
+
 <div class="container mt-4">
-    <div class="card mb-4 position-relative">
-        <div class="card-header bg-primary text-white">
-            <h4>Payment Details</h4>
-            <span class="badge bg-success position-absolute top-0 end-0 m-2">PAID</span>
+    <div class="card mb-4 position-relative shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Payment Details</h4>
+            <span class="badge bg-success">PAID</span>
         </div>
         <div class="card-body">
             @foreach (var payment in Model.PaymentModel)
             {
                 <p><strong>Payment ID:</strong> @payment.id</p>
                 <p><strong>Username:</strong> @payment.username</p>
-                <p><strong>email:</strong> @payment.email</p>
+                <p><strong>Email:</strong> @payment.email</p>
                 <p><strong>Amount Paid:</strong> Rs. @payment.price</p>
                 <p><strong>Rating:</strong> @payment.Rating</p>
                 <p><strong>Number of people:</strong> @payment.NumberOfPeople</p>
-                <p><strong>Total Price:</strong> @payment.TotalPrice</p>
+                <p><strong>Total Price:</strong> Rs. @payment.TotalPrice</p>
                 <p><strong>Booking Start Date:</strong> @payment.StartDate.ToString("dd MMM yyyy")</p>
                 <p><strong>Booking End Date:</strong> @payment.EndDate.ToString("dd MMM yyyy")</p>
                 <p><strong>Booking Date:</strong> @payment.BookingDate.ToString("dd MMM yyyy")</p>
             }
         </div>
     </div>
-    <div class="card mb-4">
+
+    <div class="card mb-4 shadow-sm">
         <div class="card-header bg-secondary text-white">
-            <h4>Tour Package Details</h4>
+            <h4 class="mb-0">Tour Package Details</h4>
         </div>
         <div class="card-body">
-            @foreach (var tourPackage in Model.TourPackages)
+            @if (tourPackage != null)
             {
                 <h5>@tourPackage.Name</h5>
                 <p><strong>Destination:</strong> @tourPackage.Destination</p>
@@ -34,11 +176,17 @@
                 <p><strong>Price:</strong> Rs. @tourPackage.price</p>
                 <p><strong>Number of Days:</strong> @tourPackage.NumberOfDays</p>
                 <p><strong>Rating:</strong> @tourPackage.Rating</p>
-                <img src="@tourPackage.DestinationImage" alt="@tourPackage.Name" class="img-fluid rounded">
+                <img src="@tourPackage.DestinationImage" alt="@tourPackage.Name" class="img-fluid rounded" />
+            }
+            else
+            {
+                <p>No tour package details available.</p>
             }
         </div>
     </div>
-    <h3 class="mb-3">Day by Day Itinerary</h3>
+
+    <h3>Day by Day Itinerary</h3>
+
     @{
         var hotelsByDay = Model.DayHotels.GroupBy(h => h.DayNumber).OrderBy(g => g.Key);
     }
@@ -47,37 +195,37 @@
     {
         <div class="card day-card mb-4">
             <div class="card-header day-header">
-                <h4>Day @dayGroup.Key</h4>
+                <h4 class="mb-0">Day @dayGroup.Key</h4>
             </div>
             <div class="card-body">
                 @foreach (var hotel in dayGroup)
                 {
                     <div class="card hotel-card mb-3">
                         <div class="card-header">
-                            <h5>@hotel.HotelName</h5>
+                            <h5 class="mb-0">@hotel.HotelName</h5>
                         </div>
                         <div class="card-body">
                             <p>@hotel.HotelDescription</p>
                             <p><i class="bi bi-geo-alt"></i> @hotel.HotelLocation</p>
+
                             @{
                                 var hotelImages = Model.HotelImages
                                 .Where(img => img.DayHotelId == hotel.DayHotelId && img.DayNumber == hotel.DayNumber)
                                 .ToList();
                             }
+
                             @if (hotelImages.Any())
                             {
-                                <div class="row">
+                                <div class="image-row">
                                     @foreach (var image in hotelImages)
                                     {
-                                        <div class="col-md-4 mb-2">
-                                            <img src="@image.ImagePath" alt="Hotel Image" class="img-fluid rounded hotel-image" />
-                                        </div>
+                                        <img src="@image.ImagePath" alt="Hotel Image" class="hotel-image rounded" />
                                     }
                                 </div>
                             }
                             else
                             {
-                                <p>No images available for this hotel.</p>
+                                <p class="text-muted">No images available for this hotel.</p>
                             }
                         </div>
                     </div>

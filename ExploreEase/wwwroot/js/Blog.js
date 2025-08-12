@@ -313,11 +313,9 @@ $(document).ready(function () {
                     const commentTime = formatRelativeTime(comment.createdAt || new Date().toISOString());
                     const commentHtml = `
                         <div class="comment-item">
-                            <img src="/images/default-avatar.png" alt="${escapeHtml(comment.name || 'User')}" class="comment-avatar">
                             <div class="comment-content">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <h4 class="comment-username">${escapeHtml(comment.name || 'User')}</h4>
-                                    <span class="comment-time">${commentTime}</span>
                                 </div>
                                 <p class="comment-text">${escapeHtml(comment.comment || '')}</p>
                             </div>

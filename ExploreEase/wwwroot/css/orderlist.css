@@ -1,53 +1,84 @@
-/* Navbar full width, no outside gaps */
+/* ===== Navbar Fixes ===== */
 .navbar {
     margin: 0 !important;
-    border-radius: 0 !important; /* Remove rounded corners */
+    border-radius: 0 !important;
     width: 100% !important;
 }
 
-    /* Inside padding for links and logo */
     .navbar .container,
     .navbar .container-fluid {
         margin: 0 !important;
-        padding: 0 20px !important; /* Left/right padding inside navbar */
-        max-width: 100% !important; /* Ensure full stretch */
+        padding: 0 20px !important;
+        max-width: 100% !important;
     }
 
-/* Remove any default top/bottom gap below navbar */
 body {
     margin: 0 !important;
     padding-top: 0 !important;
-}
-
-/* Make sure main content starts immediately after navbar */
-main {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
-
-
-body {
     font-family: 'Segoe UI', Tahoma, sans-serif;
     background-color: #f5f7fb;
     color: #333;
     line-height: 1.6;
 }
 
+main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
 .container {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    margin: 20px auto;
+    padding: 0 20px 40px;
 }
 
-h2 {
+h1 {
     color: #2d3748;
-    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
+/* ===== Tabs ===== */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #718096;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    user-select: none;
+    border-radius: 6px 6px 0 0;
+    background: #edf2f7;
+}
+
+    .tab.active {
+        color: #2b6cb0;
+        border-color: #2b6cb0;
+        background: white;
+        box-shadow: 0 -2px 8px rgba(43,108,176,0.3);
+    }
+
+/* ===== Date Range Input ===== */
+#dateRange {
+    margin-bottom: 20px;
+    padding: 8px 12px;
+    width: 300px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+/* ===== Tables ===== */
 .order-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
     .order-table th {
@@ -55,11 +86,13 @@ h2 {
         color: white;
         padding: 0.75rem;
         text-transform: uppercase;
+        text-align: left;
     }
 
     .order-table td {
         border: 1px solid #ccc;
         padding: 0.75rem;
+        vertical-align: middle;
     }
 
     .order-table tr:nth-child(even) {
@@ -70,12 +103,15 @@ h2 {
         background-color: #ebf4ff;
     }
 
+/* ===== Buttons ===== */
 .btn {
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
     font-weight: 500;
     border: none;
+    font-size: 0.9rem;
+    transition: background-color 0.25s ease;
 }
 
 .btn-delete {
@@ -100,4 +136,17 @@ h2 {
     text-align: center;
     padding: 1rem;
     color: #718096;
+    font-style: italic;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+    .order-table th, .order-table td {
+        font-size: 0.85rem;
+        padding: 0.5rem;
+    }
+
+    #dateRange {
+        width: 100%;
+    }
 }

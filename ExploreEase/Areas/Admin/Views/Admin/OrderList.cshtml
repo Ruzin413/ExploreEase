@@ -4,33 +4,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"]</title>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Flatpickr (for date range) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr (date range picker) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <!-- Your CSS -->
-    <link href="~/css/orderlist.css" rel="stylesheet" />
+    <style>
+        /* ===== Navbar Fixes ===== */
+        .navbar {
+            margin: 0 !important;
+            border-radius: 0 !important;
+            width: 100% !important;
+        }
+
+            .navbar .container,
+            .navbar .container-fluid {
+                margin: 0 !important;
+                padding: 0 20px !important;
+                max-width: 100% !important;
+            }
+
+        body {
+            margin: 0 !important;
+            padding-top: 0 !important;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        main {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px 40px;
+        }
+
+        h1 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== Tabs ===== */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #718096;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            user-select: none;
+            border-radius: 6px 6px 0 0;
+            background: #edf2f7;
+        }
+
+            .tab.active {
+                color: #2b6cb0;
+                border-color: #2b6cb0;
+                background: white;
+                box-shadow: 0 -2px 8px rgba(43,108,176,0.3);
+            }
+
+        /* ===== Date Range Input ===== */
+        #dateRange {
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            width: 300px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        /* ===== Tables ===== */
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+            .order-table th {
+                background-color: #4299e1;
+                color: white;
+                padding: 0.75rem;
+                text-transform: uppercase;
+                text-align: left;
+            }
+
+            .order-table td {
+                border: 1px solid #ccc;
+                padding: 0.75rem;
+                vertical-align: middle;
+            }
+
+            .order-table tr:nth-child(even) {
+                background-color: #f7fafc;
+            }
+
+            .order-table tr:hover {
+                background-color: #ebf4ff;
+            }
+
+        /* ===== Buttons ===== */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            border: none;
+            font-size: 0.9rem;
+            transition: background-color 0.25s ease;
+        }
+
+        .btn-delete {
+            background-color: #f56565;
+            color: white;
+        }
+
+            .btn-delete:hover {
+                background-color: #e53e3e;
+            }
+
+        .btn-detail {
+            background-color: #38a169;
+            color: white;
+        }
+
+            .btn-detail:hover {
+                background-color: #2f855a;
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 1rem;
+            color: #718096;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-
         <h1>Orders Management</h1>
 
-        <label for="dateRange">Filter by date range:</label>
-        <input id="dateRange" type="text" placeholder="Select date range"
-               style="margin-bottom: 20px; padding: 8px; width: 300px; border-radius: 6px; border: 1px solid #ccc;" />
+        <input id="dateRange" type="text" placeholder="Filter by date range (optional)" aria-label="Filter orders by date range" />
 
-        <!-- Ongoing Orders -->
-        <section>
-            <h2 class="section-title">Ongoing Tours</h2>
-            <table class="order-table" id="ongoingOrdersTable">
+        <!-- Tabs -->
+        <div class="tabs" role="tablist" aria-label="Order status tabs">
+            <div class="tab active" role="tab" tabindex="0" aria-selected="true" aria-controls="ongoingTab" id="tab-ongoing">Ongoing Tours</div>
+            <div class="tab" role="tab" tabindex="-1" aria-selected="false" aria-controls="upcomingTab" id="tab-upcoming">Upcoming Tours</div>
+            <div class="tab" role="tab" tabindex="-1" aria-selected="false" aria-controls="doneTab" id="tab-done">Done Tours</div>
+        </div>
+
+        <!-- Tab Panels -->
+        <section id="ongoingTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-ongoing">
+            <table class="order-table" aria-describedby="ongoingDesc">
+                <caption id="ongoingDesc" class="sr-only">Ongoing tour orders</caption>
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -50,10 +194,9 @@
             </table>
         </section>
 
-        <!-- Upcoming Orders -->
-        <section>
-            <h2 class="section-title">Upcoming Tours</h2>
-            <table class="order-table" id="upcomingOrdersTable">
+        <section id="upcomingTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-upcoming" hidden>
+            <table class="order-table" aria-describedby="upcomingDesc">
+                <caption id="upcomingDesc" class="sr-only">Upcoming tour orders</caption>
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -73,10 +216,9 @@
             </table>
         </section>
 
-        <!-- Done Orders -->
-        <section>
-            <h2 class="section-title">Done Tours</h2>
-            <table class="order-table" id="doneOrdersTable">
+        <section id="doneTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-done" hidden>
+            <table class="order-table" aria-describedby="doneDesc">
+                <caption id="doneDesc" class="sr-only">Done tour orders</caption>
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -95,10 +237,162 @@
                 </tbody>
             </table>
         </section>
-
     </div>
 
-    <!-- JS -->
-    <script src="~/js/orderlist.js"></script>
+    <script>
+        $(function() {
+            let selectedRange = null;
+
+            // Initialize Flatpickr for date range selection
+            flatpickr("#dateRange", {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                onChange: function(selectedDates) {
+                    selectedRange = selectedDates.length === 2 ? selectedDates : null;
+                    fetchAndRenderOrders();
+                }
+            });
+
+            function formatDate(date) {
+                const d = new Date(date);
+                return d.toISOString().split('T')[0];
+            }
+
+            function isInRange(dateStr) {
+                if (!selectedRange) return true;
+                const date = new Date(dateStr);
+                return date >= selectedRange[0] && date <= selectedRange[1];
+            }
+
+            function renderOrders(orders, tbodySelector) {
+                const tbody = $(tbodySelector);
+                tbody.empty();
+
+                let count = 0;
+                orders.forEach(order => {
+                    // Check if order start or end date is in range filter
+                    if (!isInRange(order.startDate) && !isInRange(order.endDate)) return;
+
+                    const row = $(`
+                        <tr id="row-${order.id}">
+                            <td>${order.username}</td>
+                            <td>${order.price}</td>
+                            <td>${formatDate(order.startDate)}</td>
+                            <td>${formatDate(order.endDate)}</td>
+                            <td>${formatDate(order.bookingDate)}</td>
+                            <td>${order.numberOfPeople}</td>
+                            <td>${order.totalPrice}</td>
+                            <td><button class="btn btn-delete delete-btn" data-id="${order.id}">Delete</button></td>
+                            <td><button class="btn btn-detail detail-btn" data-id="${order.id}">Detail</button></td>
+                        </tr>
+                    `);
+                    tbody.append(row);
+                    count++;
+                });
+
+                if (count === 0) {
+                    tbody.html('<tr><td colspan="9" class="empty-state">No orders found</td></tr>');
+                }
+            }
+
+            function fetchAndRenderOrders() {
+                $.ajax({
+                    url: "/Admin/Admin/OrderList1",
+                    method: 'GET',
+                    success: function(data) {
+                        const now = new Date();
+                        const ongoing = [];
+                        const upcoming = [];
+                        const done = [];
+
+                        data.forEach(order => {
+                            const start = new Date(order.startDate);
+                            const end = new Date(order.endDate);
+
+                            if (start <= now && now <= end) {
+                                ongoing.push(order);
+                            } else if (start > now) {
+                                upcoming.push(order);
+                            } else {
+                                done.push(order);
+                            }
+                        });
+
+                        renderOrders(ongoing, '#ongoingOrdersBody');
+                        renderOrders(upcoming, '#upcomingOrdersBody');
+                        renderOrders(done, '#doneOrdersBody');
+                    },
+                    error: function() {
+                        $('.order-table tbody').html('<tr><td colspan="9" class="empty-state">Failed to load orders</td></tr>');
+                    }
+                });
+            }
+
+            // Initial fetch
+            fetchAndRenderOrders();
+
+            // Delete button
+            $(document).on('click', '.delete-btn', function() {
+                const orderId = $(this).data('id');
+                if (confirm('Are you sure you want to delete this order?')) {
+                    $.ajax({
+                        url: `/Admin/Admin/DeleteOrder/${orderId}`,
+                        method: 'DELETE',
+                        success: function() {
+                            $(`#row-${orderId}`).remove();
+                        },
+                        error: function() {
+                            alert('Failed to delete order');
+                        }
+                    });
+                }
+            });
+
+            // Detail button
+            $(document).on('click', '.detail-btn', function() {
+                const orderId = $(this).data('id');
+                window.location.href = `/Admin/Admin/OrderDetail/${orderId}`;
+            });
+
+            // Tabs switching logic
+            const tabs = $('.tab');
+            const panels = $('.tab-panel');
+
+            tabs.on('click keydown', function(e) {
+                if (e.type === 'click' || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '))) {
+                    e.preventDefault();
+
+                    const selectedTab = $(this);
+                    const targetId = selectedTab.attr('aria-controls');
+
+                    tabs.removeClass('active').attr({
+                        'aria-selected': 'false',
+                        tabindex: -1
+                    });
+                    panels.attr('hidden', true);
+
+                    selectedTab.addClass('active').attr({
+                        'aria-selected': 'true',
+                        tabindex: 0
+                    }).focus();
+                    $(`#${targetId}`).removeAttr('hidden');
+                }
+            });
+
+            // Keyboard navigation between tabs (Left/Right arrows)
+            tabs.on('keydown', function(e) {
+                const currentIndex = tabs.index(this);
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const nextIndex = (currentIndex + 1) % tabs.length;
+                    tabs.eq(nextIndex).focus();
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                    tabs.eq(prevIndex).focus();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

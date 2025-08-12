@@ -17,7 +17,7 @@
     var longi = parseFloat("@longi");
     var destination = "@destination".replace(/"/g, '\\"');
 
-    var map = L.map('map').setView([lat, longi], 5);
+    var map = L.map('map').setView([lat, longi], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'

@@ -1,0 +1,96 @@
+﻿
+@{
+    var paymentid = ViewBag.paymentid;
+    var startDate = ViewBag.Startdate;
+    var numberOfPeople = ViewBag.NumberOfPeople ?? 0;
+}
+
+<div class="order-details-container">
+    <div class="package-info">
+        <h2>@Model.TourPackage.Name</h2>
+        <img src="@Model.TourPackage.DestinationImage" alt="@Model.TourPackage.Name" class="package-image" />
+        <h2> <strong>Payment id : </strong> @paymentid</h2>
+        <p><strong>Destination:</strong> @Model.TourPackage.Destination</p>
+        <p><strong>Description:</strong> @Model.TourPackage.Description</p>
+    </div>
+
+    <hr />
+
+    <div class="booking-info">
+        <div>
+            <strong>Arrive at:</strong>
+                @startDate
+                <span> at 8 AM sharp</span>
+            <br />
+            <strong>Number of People:</strong> @numberOfPeople
+        </div>
+        <form method="post" asp-action="ShowLocation" asp-area="UserActivity" class="location-form">
+            <input type="hidden" name="lat" value="27.73530434735765" />
+            <input type="hidden" name="longi" value="85.31270427029207" />
+            <input type="hidden" name="destination" value="Arrive here" />
+            <button type="submit" class="btn-location">
+                In Location
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .order-details-container {
+        max-width: 650px;
+        margin: 2rem auto;
+        padding: 1.5rem 2rem;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    }
+
+    .package-info h2 {
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+    }
+
+    .package-image {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+    }
+
+    .package-info p {
+        margin: 0.3rem 0;
+        color: #444;
+    }
+
+    .booking-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1.5rem;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .location-form {
+        margin: 0;
+    }
+
+    .btn-location {
+        background-color: #4299e1;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-location:hover {
+            background-color: #2b6cb0;
+        }
+</style>

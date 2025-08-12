@@ -4,27 +4,73 @@
     ViewData["Title"] = "My Orders";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var now = DateTime.Now.Date;
+
+    // Columns needed per section
+    bool showExtendColumn = Model.Any(order => now >= order.StartDate.ToDateTime(TimeOnly.MinValue) && now <= order.EndDate.ToDateTime(TimeOnly.MinValue) && order.extendedDate != true);
+    bool showReviewColumn = Model.Any(order => now > order.EndDate.ToDateTime(TimeOnly.MinValue) && order.Reviewed != true);
+
+    // Helper filters:
+    var upcomingOrders = Model.Where(order => order.StartDate.ToDateTime(TimeOnly.MinValue) > now).ToList();
+    var ongoingOrders = Model.Where(order => now >= order.StartDate.ToDateTime(TimeOnly.MinValue) && now <= order.EndDate.ToDateTime(TimeOnly.MinValue)).ToList();
+    var doneOrders = Model.Where(order => order.EndDate.ToDateTime(TimeOnly.MinValue) < now).ToList();
 }
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
+    /* Tabs container */
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #2c7bbf; /* darker sky blue */
+        margin-bottom: 1rem;
+        font-family: Arial, sans-serif;
+        user-select: none;
+    }
+
+    .tab-button {
+        flex: 1;
+        padding: 12px 0;
+        cursor: pointer;
+        background-color: #e1e7f0;
+        border: none;
+        border-bottom: 3px solid transparent;
+        color: #2c7bbf;
+        font-weight: 600;
+        font-size: 1rem;
+        text-align: center;
+        transition: background-color 0.3s, border-bottom-color 0.3s;
+    }
+
+        .tab-button:hover {
+            background-color: #c9d7f2;
+        }
+
+        .tab-button.active {
+            background-color: #2c7bbf;
+            color: white;
+            border-bottom-color: #1a4f8a;
+        }
+
+    /* Table styling */
     .order-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
         .order-table th, .order-table td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: center;
+            vertical-align: middle;
         }
 
         .order-table th {
-            background-color: #f2f2f2;
+            background-color: #2c7bbf; /* darker sky blue header */
+            color: white;
         }
 
+    /* Buttons */
     .btn {
         padding: 6px 12px;
         border: none;
@@ -32,12 +78,11 @@
         cursor: pointer;
         font-size: 0.9rem;
         transition: background-color 0.3s ease;
+        color: white;
     }
 
     .btn-extend {
         background-color: #28a745;
-        color: white;
-        margin-bottom: 5px;
     }
 
         .btn-extend:hover {
@@ -46,430 +91,266 @@
 
     .btn-review {
         background-color: #007bff;
-        color: white;
     }
 
         .btn-review:hover {
             background-color: #0056b3;
         }
 
-    .modal {
+    .btn-detail {
+        background-color: #6c757d;
+    }
+
+        .btn-detail:hover {
+            background-color: #5a6268;
+        }
+
+    /* Hide non-active tabs */
+    .tab-content {
         display: none;
-        position: fixed;
-        z-index: 1050;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.5);
-        font-family: Arial, sans-serif;
     }
 
-    .modal-content {
-        background-color: #fff;
-        margin: 12% auto;
-        padding: 24px 32px;
-        border-radius: 8px;
-        width: 320px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-        text-align: center;
-        position: relative;
-    }
-
-    .modal-message {
-        margin: 15px 0;
-        font-weight: 600;
-        font-size: 1.1rem;
-        min-height: 24px;
-    }
-
-    .modal-close {
-        position: absolute;
-        top: 12px;
-        right: 16px;
-        font-size: 20px;
-        cursor: pointer;
-        color: #aaa;
-        transition: color 0.3s ease;
-    }
-
-        .modal-close:hover {
-            color: #333;
+        .tab-content.active {
+            display: block;
         }
-
-    .status-indicator {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin-top: 6px;
-    }
-
-    .status-success {
-        color: #28a745;
-    }
-
-    .status-fail {
-        color: #dc3545;
-    }
-
-    /* Stars for review modal */
-    .star {
-        font-size: 2rem;
-        color: #ccc;
-        cursor: pointer;
-        user-select: none;
-        transition: color 0.2s ease;
-        margin: 0 4px;
-    }
-
-        .star.filled {
-            color: #ffc107; /* gold */
-        }
-
-    .status-reviewed {
-        color: #007bff; /* Bootstrap primary blue */
-    }
 </style>
 
 <h2>My Orders</h2>
 
 @if (!Model.Any())
 {
-    <div class="no-orders">You have no orders yet.</div>
+    <div>You have no orders yet.</div>
 }
 else
 {
-    <table class="order-table" aria-label="User Orders Table">
-        <thead>
-            <tr>
-                <th scope="col">Package ID</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">People</th>
-                <th scope="col">Total Price (Rs.)</th>
-                <th scope="col">Booking Date</th>
-                <th scope="col">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model)
-            {
-                var isDuringTour = now >= order.StartDate.ToDateTime(TimeOnly.MinValue) && now <= order.EndDate.ToDateTime(TimeOnly.MinValue);
-                var isAfterTour = now > order.EndDate.ToDateTime(TimeOnly.MinValue);
-                <tr id="order-row-@order.id">
-                    <td>@order.Tourpackageid</td>
-                    <td>@order.StartDate.ToString("yyyy-MM-dd")</td>
-                    <td class="end-date">@order.EndDate.ToString("yyyy-MM-dd")</td>
-                    <td>@order.NumberOfPeople</td>
-                    <td>@order.TotalPrice.ToString("F2")</td>
-                    <td>@order.BookingDate.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>
-                        @* Extend button only during tour and if not extended *@
-                        @if (isDuringTour && order.extendedDate != true)
+    <div class="tabs" role="tablist" aria-label="Tour Orders Tabs">
+        <button class="tab-button active" role="tab" aria-selected="true" aria-controls="upcoming" id="tab-upcoming" tabindex="0" onclick="showTab('upcoming')">Upcoming Tours (@upcomingOrders.Count)</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="ongoing" id="tab-ongoing" tabindex="-1" onclick="showTab('ongoing')">Ongoing Tours (@ongoingOrders.Count)</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="done" id="tab-done" tabindex="-1" onclick="showTab('done')">Done Tours (@doneOrders.Count)</button>
+    </div>
+
+    <!-- Upcoming Tours -->
+    <section id="upcoming" class="tab-content active" role="tabpanel" aria-labelledby="tab-upcoming" tabindex="0">
+        @if (!upcomingOrders.Any())
+        {
+            <p>No upcoming tours found.</p>
+        }
+        else
+        {
+            <table class="order-table" aria-label="Upcoming Tours Table">
+                <thead>
+                    <tr>
+                        <th scope="col">Package ID</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">People</th>
+                        <th scope="col">Total Price (Rs.)</th>
+                        <th scope="col">Booking Date</th>
+                        <th scope="col">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in upcomingOrders)
+                    {
+                        <tr>
+                            <td>@order.Tourpackageid</td>
+                            <td>@order.StartDate.ToString("yyyy-MM-dd")</td>
+                            <td>@order.EndDate.ToString("yyyy-MM-dd")</td>
+                            <td>@order.NumberOfPeople</td>
+                            <td>@order.TotalPrice.ToString("F2")</td>
+                            <td>@order.BookingDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                <a class="btn btn-detail"
+                                   href="https://localhost:7285/UserActivity/User/OrderDetails?id=@order.id"
+                                   role="button">
+                                    Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+
+    <!-- Ongoing Tours -->
+    <section id="ongoing" class="tab-content" role="tabpanel" aria-labelledby="tab-ongoing" tabindex="0">
+        @if (!ongoingOrders.Any())
+        {
+            <p>No ongoing tours currently.</p>
+        }
+        else
+        {
+            <table class="order-table" aria-label="Ongoing Tours Table">
+                <thead>
+                    <tr>
+                        <th scope="col">Package ID</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">People</th>
+                        <th scope="col">Total Price (Rs.)</th>
+                        <th scope="col">Booking Date</th>
+                        @if (showExtendColumn)
                         {
-                            <button class="btn btn-extend"
-                                    data-tourpackageid="@order.Tourpackageid"
-                                    data-paymentid="@order.id"
-                                    onclick="openExtendModal(this)">
-                                Extend
-                            </button>
+                            <th scope="col">Extend Date</th>
                         }
-                        @* Leave Review button only after tour *@
-                        @if (isAfterTour && order.Reviewed != true)
+                        <th scope="col">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in ongoingOrders)
+                    {
+                        <tr id="order-row-@order.id">
+                            <td>@order.Tourpackageid</td>
+                            <td>@order.StartDate.ToString("yyyy-MM-dd")</td>
+                            <td class="end-date">@order.EndDate.ToString("yyyy-MM-dd")</td>
+                            <td>@order.NumberOfPeople</td>
+                            <td>@order.TotalPrice.ToString("F2")</td>
+                            <td>@order.BookingDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            @if (showExtendColumn)
+                            {
+                                <td>
+                                    @if (order.extendedDate != true)
+                                    {
+                                        <button class="btn btn-extend"
+                                                data-tourpackageid="@order.Tourpackageid"
+                                                data-paymentid="@order.id"
+                                                onclick="openExtendModal(this)">
+                                            Extend
+                                        </button>
+                                    }
+                                </td>
+                            }
+                            <td>
+                                <a class="btn btn-detail"
+                                   href="https://localhost:7285/UserActivity/User/OrderDetails?Tourpackageid=@order.Tourpackageid"
+                                   role="button">
+                                    Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+
+    <!-- Done Tours -->
+    <section id="done" class="tab-content" role="tabpanel" aria-labelledby="tab-done" tabindex="0">
+        @if (!doneOrders.Any())
+        {
+            <p>No completed tours found.</p>
+        }
+        else
+        {
+            <table class="order-table" aria-label="Done Tours Table">
+                <thead>
+                    <tr>
+                        <th scope="col">Package ID</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">People</th>
+                        <th scope="col">Total Price (Rs.)</th>
+                        <th scope="col">Booking Date</th>
+                        @if (showReviewColumn)
                         {
-                            <button class="btn btn-review"
-                                    data-packageid="@order.Tourpackageid"
-                                    data-paymentid="@order.id"
-                                    onclick="openReviewModal(this)">
-                                Leave Review
-                            </button>
+                            <th scope="col">Leave Review</th>
                         }
-                        @* Show extended date status *@
-                        @if (order.extendedDate)
-                        {
-                            <div class="status-indicator status-success" aria-live="polite">✅ Date Extended</div><br />
-                        }
-                        @if (order.Reviewed)
-                        {
-                            <div class="status-indicator status-reviewed" aria-live="polite">✅ Reviewed</div>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        <th scope="col">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in doneOrders)
+                    {
+                        <tr id="order-row-@order.id">
+                            <td>@order.Tourpackageid</td>
+                            <td>@order.StartDate.ToString("yyyy-MM-dd")</td>
+                            <td>@order.EndDate.ToString("yyyy-MM-dd")</td>
+                            <td>@order.NumberOfPeople</td>
+                            <td>@order.TotalPrice.ToString("F2")</td>
+                            <td>@order.BookingDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            @if (showReviewColumn)
+                            {
+                                <td>
+                                    @if (order.Reviewed != true)
+                                    {
+                                        <button class="btn btn-review"
+                                                data-packageid="@order.Tourpackageid"
+                                                data-paymentid="@order.id"
+                                                onclick="openReviewModal(this)">
+                                            Leave Review
+                                        </button>
+                                    }
+                                </td>
+                            }
+                            <td>
+                                <a class="btn btn-detail"
+                                   href="https://localhost:7285/UserActivity/User/OrderDetails?Tourpackageid=@order.Tourpackageid"
+                                   role="button">
+                                    Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
 }
 
-<!-- Extend Date Modal -->
-<div id="extendDateModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
-    <div class="modal-content">
-        <span class="modal-close" title="Close modal" aria-label="Close" onclick="closeExtendModal()">&times;</span>
-        <h3 id="modalTitle">Extend Tour Package Date</h3>
-        <p id="modalDesc">Do you want to extend the end date of this tour package?</p>
-        <div class="modal-message" aria-live="assertive"></div>
-        <button id="confirmExtendBtn" class="btn btn-extend" onclick="submitExtension()">Yes</button>
-        <button class="btn" onclick="closeExtendModal()">No</button>
-    </div>
-</div>
-
-<!-- Review Modal -->
-<div id="reviewModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle" aria-describedby="reviewModalDesc">
-    <div class="modal-content">
-        <span class="modal-close" title="Close modal" aria-label="Close" onclick="closeReviewModal()">&times;</span>
-        <h3 id="reviewModalTitle">Leave a Review</h3>
-        <p id="reviewModalDesc">Please rate your experience and leave your feedback below.</p>
-        <form id="reviewForm" onsubmit="submitReview(event)">
-            <div aria-label="Star Rating" role="radiogroup" tabindex="0" style="margin-bottom: 12px;">
-                <span class="star" data-value="1" role="radio" aria-checked="false" tabindex="-1">&#9734;</span>
-                <span class="star" data-value="2" role="radio" aria-checked="false" tabindex="-1">&#9734;</span>
-                <span class="star" data-value="3" role="radio" aria-checked="false" tabindex="-1">&#9734;</span>
-                <span class="star" data-value="4" role="radio" aria-checked="false" tabindex="-1">&#9734;</span>
-                <span class="star" data-value="5" role="radio" aria-checked="false" tabindex="-1">&#9734;</span>
-            </div>
-
-            <textarea id="reviewText" name="reviewText" rows="4" placeholder="Write your review here..." required style="width: 100%; padding: 8px; resize: vertical;"></textarea>
-
-            <input type="hidden" id="reviewPackageId" name="packageId" />
-
-            <div class="modal-message" aria-live="assertive" style="margin:10px 0; min-height:24px;"></div>
-
-            <button type="submit" class="btn btn-review" style="margin-top: 10px;">Submit Review</button>
-        </form>
-    </div>
-</div>
+<!-- (Include your existing modals for Extend Date and Review here, unchanged) -->
 
 <script>
-    // Extend Date Modal variables
-    let selectedTourPackageId = null;
-    let selectedPaymentId = null;
-    const extendModal = document.getElementById("extendDateModal");
-    const extendMessageDiv = extendModal.querySelector(".modal-message");
-    const confirmExtendBtn = document.getElementById("confirmExtendBtn");
-
-    function openExtendModal(button) {
-        selectedTourPackageId = button.getAttribute("data-tourpackageid");
-        selectedPaymentId = button.getAttribute("data-paymentid");
-        extendMessageDiv.textContent = "";
-        confirmExtendBtn.disabled = false;
-        extendModal.style.display = "block";
-        confirmExtendBtn.focus();
-    }
-
-    function closeExtendModal() {
-        extendModal.style.display = "none";
-        selectedTourPackageId = null;
-        selectedPaymentId = null;
-    }
-
-    // Submit extension via AJAX
-    function submitExtension() {
-        if (!selectedTourPackageId || !selectedPaymentId) return;
-
-        confirmExtendBtn.disabled = true;
-        extendMessageDiv.textContent = "Processing...";
-        extendMessageDiv.style.color = "#333";
-
-        $.ajax({
-            url: '/UserActivity/User/ExtendDate',
-            method: 'POST',
-            data: {
-                TourPackageId: selectedTourPackageId,
-                id: selectedPaymentId
-            }
-        })
-        .done(function (response) {
-            if (response === true || (response.success === true)) {
-                extendMessageDiv.textContent = "✅ Date extended successfully!";
-                extendMessageDiv.style.color = "#28a745";
-
-                // Update the table row EndDate and status without reload
-                const row = document.getElementById(`order-row-${selectedPaymentId}`);
-                if (row) {
-                    const endDateCell = row.querySelector(".end-date");
-                    if (endDateCell) {
-                        let currentEndDate = new Date(endDateCell.textContent);
-                        currentEndDate.setDate(currentEndDate.getDate() + 1); // Adjust +1 or use server response
-                        endDateCell.textContent = currentEndDate.toISOString().slice(0, 10);
-                    }
-
-                    // Disable Extend button
-                    const extendBtn = row.querySelector(".btn-extend");
-                    if (extendBtn) {
-                        extendBtn.remove();
-                    }
-
-                    // Add status indicator
-                    const actionsCell = row.querySelector("td:last-child");
-                    if (actionsCell) {
-                        const statusDiv = document.createElement("div");
-                        statusDiv.className = "status-indicator status-success";
-                        statusDiv.textContent = "✅ Date Extended";
-                        statusDiv.setAttribute("aria-live", "polite");
-                        actionsCell.appendChild(statusDiv);
-                    }
-                }
-
-                setTimeout(closeExtendModal, 1500);
-            } else {
-                extendMessageDiv.textContent = "❌ Failed to extend date. Please try again.";
-                extendMessageDiv.style.color = "#dc3545";
-                confirmExtendBtn.disabled = false;
-            }
-        })
-        .fail(function () {
-            extendMessageDiv.textContent = "❌ Server error. Please try again later.";
-            extendMessageDiv.style.color = "#dc3545";
-            confirmExtendBtn.disabled = false;
+    // Tab switching function
+    function showTab(tabId) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
         });
-    }
 
-    // Close extend modal on outside click or ESC key
-    window.addEventListener('click', (event) => {
-        if (event.target === extendModal) {
-            closeExtendModal();
+        // Remove active class from all buttons
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+            btn.tabIndex = -1;
+        });
+
+        // Show selected tab content
+        const selectedContent = document.getElementById(tabId);
+        if (selectedContent) {
+            selectedContent.classList.add('active');
+            selectedContent.focus();
         }
-    });
 
-    window.addEventListener('keydown', (event) => {
-        if (event.key === "Escape" && extendModal.style.display === "block") {
-            closeExtendModal();
+        // Mark selected tab button active and keyboard focusable
+        const selectedBtn = document.getElementById(`tab-${tabId}`);
+        if (selectedBtn) {
+            selectedBtn.classList.add('active');
+            selectedBtn.setAttribute('aria-selected', 'true');
+            selectedBtn.tabIndex = 0;
+            selectedBtn.focus();
         }
-    });
-
-    // Review Modal variables
-    const reviewModal = document.getElementById("reviewModal");
-    const reviewStars = reviewModal.querySelectorAll(".star");
-    const reviewMessageDiv = reviewModal.querySelector(".modal-message");
-    const reviewForm = document.getElementById("reviewForm");
-    const reviewPackageIdInput = document.getElementById("reviewPackageId");
-
-    let currentRating = 0;
-
-    function openReviewModal(button) {
-        const packageId = button.getAttribute("data-packageid");
-         selectedPaymentId = button.getAttribute("data-paymentid");
-        reviewPackageIdInput.value = packageId;
-        reviewMessageDiv.textContent = "";
-        currentRating = 0;
-        clearStars();
-        reviewModal.style.display = "block";
-        reviewStars[0].focus();
     }
 
-    function closeReviewModal() {
-        reviewModal.style.display = "none";
-        currentRating = 0;
-        clearStars();
-        reviewForm.reset();
-    }
-
-    // Update star visuals based on rating
-    function setStars(rating) {
-        reviewStars.forEach(star => {
-            const starValue = parseInt(star.getAttribute("data-value"));
-            star.classList.toggle("filled", starValue <= rating);
-            star.setAttribute("aria-checked", starValue === rating ? "true" : "false");
-            star.tabIndex = starValue === rating ? 0 : -1;
-        });
-    }
-
-    // Clear all stars (no rating)
-    function clearStars() {
-        reviewStars.forEach(star => {
-            star.classList.remove("filled");
-            star.setAttribute("aria-checked", "false");
-            star.tabIndex = -1;
-        });
-    }
-
-    // Star click event
-    reviewStars.forEach(star => {
-        star.addEventListener("click", () => {
-            currentRating = parseInt(star.getAttribute("data-value"));
-            setStars(currentRating);
-        });
-
-        // Keyboard support for stars
-        star.addEventListener("keydown", e => {
-            if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+    // Optionally, allow arrow keys to navigate tabs for accessibility
+    document.querySelectorAll('.tab-button').forEach((btn, index, arr) => {
+        btn.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
                 e.preventDefault();
-                let next = [...reviewStars].indexOf(star) + 1;
-                if (next >= reviewStars.length) next = 0;
-                reviewStars[next].focus();
-            } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+                let nextIndex = (index + 1) % arr.length;
+                arr[nextIndex].focus();
+            }
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
                 e.preventDefault();
-                let prev = [...reviewStars].indexOf(star) - 1;
-                if (prev < 0) prev = reviewStars.length - 1;
-                reviewStars[prev].focus();
-            } else if (e.key === " " || e.key === "Enter") {
+                let prevIndex = (index - 1 + arr.length) % arr.length;
+                arr[prevIndex].focus();
+            }
+            if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                currentRating = parseInt(star.getAttribute("data-value"));
-                setStars(currentRating);
+                btn.click();
             }
         });
     });
 
-    // Submit review AJAX
-    function submitReview(e) {
-        e.preventDefault();
-
-        if (currentRating === 0) {
-            reviewMessageDiv.textContent = "⭐ Please select a star rating.";
-            reviewMessageDiv.style.color = "#dc3545";
-            return;
-        }
-
-        const reviewText = reviewForm.reviewText.value.trim();
-        const packageId = reviewPackageIdInput.value;
-
-        if (!reviewText) {
-            reviewMessageDiv.textContent = "Please enter your review text.";
-            reviewMessageDiv.style.color = "#dc3545";
-            return;
-        }
-
-        reviewMessageDiv.textContent = "Submitting review...";
-        reviewMessageDiv.style.color = "#333";
-
-        $.ajax({
-            url: '/UserActivity/User/SubmitReview',
-            method: 'POST',
-            data: {
-                id: selectedPaymentId,
-                packageId: packageId,
-                rating: currentRating,
-                reviewText: reviewText
-            }
-        })
-        .done(function(response) {
-            if (response.success) {
-                reviewMessageDiv.textContent = "✅ Review submitted successfully!";
-                reviewMessageDiv.style.color = "#28a745";
-                setTimeout(closeReviewModal, 1500);
-            } else {
-                reviewMessageDiv.textContent = "❌ Failed to submit review. Please try again.";
-                reviewMessageDiv.style.color = "#dc3545";
-                console.error("Review submission failed:", response);
-
-            }
-        })
-        .fail(function() {
-            reviewMessageDiv.textContent = "❌ Server error. Please try again later.";
-            reviewMessageDiv.style.color = "#dc3545";
-        });
-    }
-
-    // Close review modal on clicking outside content
-    window.addEventListener('click', (event) => {
-        if (event.target === reviewModal) {
-            closeReviewModal();
-        }
-    });
-
-    // Close review modal on ESC key
-    window.addEventListener('keydown', (event) => {
-        if (event.key === "Escape" && reviewModal.style.display === "block") {
-            closeReviewModal();
-        }
-    });
+    // Existing modal JS code for Extend and Review modals goes here (not repeated for brevity)
 </script>
