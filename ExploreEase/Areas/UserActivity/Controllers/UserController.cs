@@ -63,7 +63,19 @@ namespace ExploreEase.Areas.UserActivity.Controllers
             ViewData["Destination"] = destination;
             return View();
         }
-
+        public IActionResult ShowLocation2()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Area("UserActivity")]
+        public IActionResult ShowLocation2(double lat, double longi, string destination)
+        {
+            ViewData["Latitude"] = lat;
+            ViewData["Longitude"] = longi;
+            ViewData["Destination"] = destination;
+            return View();
+        }
         [HttpPost]
         [Area("UserActivity")]
         public async Task<IActionResult> BookServices(int tourPackageId)

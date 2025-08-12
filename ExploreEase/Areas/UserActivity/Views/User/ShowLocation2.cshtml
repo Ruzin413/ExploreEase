@@ -5,9 +5,7 @@
     var destination = ViewData["Destination"];
 }
 
-
 <style>
-    <style >
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #f8f9fa, #e9ecef);
@@ -37,18 +35,22 @@
             transform: scale(1.01);
         }
 
-    /* Popup styling for destination */
     .leaflet-popup-content {
         font-size: 1.1rem;
         font-weight: 500;
         color: #495057;
     }
 </style>
-</style>
-<div id="map" style="height: 500px;"></div>
 
+<div id="map"></div>
+
+<!-- Leaflet CSS/JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Leaflet Routing Machine CSS/JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
 <script>
     var lat = parseFloat("@lat");
@@ -64,4 +66,25 @@
     L.marker([lat, longi]).addTo(map)
         .bindPopup(destination)
         .openPopup();
+
+    // Get user's current location
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var currentLat = position.coords.latitude;
+            var currentLong = position.coords.longitude;
+
+            // Add route from current location to destination
+            L.Routing.control({
+                waypoints: [
+                    L.latLng(currentLat, currentLong),
+                    L.latLng(lat, longi)
+                ],
+                routeWhileDragging: false
+            }).addTo(map);
+        }, function () {
+            alert("Could not get your location.");
+        });
+    } else {
+        alert("Geolocation is not supported by your browser.");
+    }
 </script>

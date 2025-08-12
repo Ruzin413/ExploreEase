@@ -37,6 +37,7 @@ builder.Services.AddScoped<ReviewRepository>();
 builder.Services.AddScoped<ReviewServices>();
 builder.Services.AddScoped<BlogRepo>();
 builder.Services.AddScoped<BlogServices>();
+builder.Services.AddScoped<EmailServices>();
 builder.Logging.AddConsole();
 // Adding MVC support (controllers with views)
 builder.Services.AddControllersWithViews();
