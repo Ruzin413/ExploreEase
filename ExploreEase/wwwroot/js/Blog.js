@@ -54,7 +54,6 @@ $(document).ready(function () {
                 $commentsList.html('<div class="no-comments">No comments yet. Be the first to comment!</div>');
                 return;
             }
-
             comments.forEach(comment => {
                 const commentHtml = `
                     <div class="comment-item">
@@ -87,9 +86,8 @@ $(document).ready(function () {
                     `);
                     return;
                 }
-
                 blogs.forEach(blog => {
-                    const isLiked = blog.likestatus === true || blog.likestatus === 'true';
+                    const isLiked = blog.likestatus;
                     const likeIcon = isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
                     const likeClass = isLiked ? 'liked' : '';
                     const likeCount = parseInt(blog.likes) || 0;

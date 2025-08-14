@@ -121,14 +121,11 @@ namespace ExploreEase.Controllers
                 TempData["Message"] = "Log in to like a blog.";
                 return Redirect("/Identity/Account/Login");
             }
-
             string userid = user.Email;
             bool result = await _blogservices.LikeUpdate(blogId, userid);
-
             var blog = await _blogservices.GetBlogs(userid);
             var currentBlog = blog.FirstOrDefault(b => b.Id == blogId);
             int likeCount = currentBlog?.Likes ?? 0;
-
             return Json(new
             {
                 success = result,

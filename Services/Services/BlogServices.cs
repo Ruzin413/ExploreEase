@@ -41,11 +41,11 @@ namespace Services.Services
                 Likes = 0,
                 likestatus = false
             };
-
             return await _blogRepo.PostBlog(blogModel);
         }
         public async Task<List<BlogModel>> GetBlogs(string name)
         {
+
             return await _blogRepo.GetBlogs(name);
         }
         public async Task<bool> LikeUpdate(int id,String username)

@@ -96,8 +96,8 @@
                 var latitude = parseFloat(document.getElementById('Lat').value);
                 var longitude = parseFloat(document.getElementById('Long').value);
 
-                if (isNaN(price) || isNaN(latitude) || isNaN(longitude) || price < 0 || latitude < 0 || longitude < 0) {
-                    alert('Price, Latitude, and Longitude must be valid positive numbers!');
+                if (isNaN(price) || isNaN(latitude) || isNaN(longitude) || price < 0 ) {
+                    alert('Price, Latitude, and Longitude must be valid  numbers!');
                     e.preventDefault();
                 }
             });

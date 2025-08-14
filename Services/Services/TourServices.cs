@@ -48,7 +48,7 @@ namespace Services.Services
                     price = (float)price,
                     Lat = (float)latitude,
                     Long = (float)longitude,
-                    Destination = description, // NOTE: This might be a bug; probably should be "destination"
+                    Destination = destination, // NOTE: This might be a bug; probably should be "destination"
                     DestinationImage = imagePath,
                     NumberOfDays = NumberOfDays
                 };

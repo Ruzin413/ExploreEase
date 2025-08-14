@@ -151,7 +151,7 @@
                     <ul class="navbar-nav">
                         @if (User.IsInRole("Admin"))
                         {
-                          
+
                             <li class="nav-item">
                                 <a class="nav-link-simple" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin Dashboard</a>
                             </li>
@@ -175,6 +175,9 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link-simple" asp-area="UserActivity" asp-controller="User" asp-action="UserOrder">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-simple" asp-area="UserActivity" asp-controller="User" asp-action="Bookmarks">Bookmarks</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link-simple" asp-area="" asp-controller="Home" asp-action="Blog">Blog</a>
@@ -221,7 +224,6 @@
             </div>
         </div>
     </footer>
-    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
