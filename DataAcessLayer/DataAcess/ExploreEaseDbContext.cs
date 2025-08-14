@@ -35,5 +35,6 @@ namespace DataAcessLayer.DataAcess
         public DbSet<BlogModel> Blogdb { get; set; }
         public DbSet<BlogLikes> BlogLikes { get; set; }
         public DbSet<Commentmodel> commentdb { get; set; }
+        public DbSet<BookmarkModel> Bookmarkdb {  get; set; }
     }
 }

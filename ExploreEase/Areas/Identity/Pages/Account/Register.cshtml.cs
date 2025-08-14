@@ -1,13 +1,5 @@
 ﻿#nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +9,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Models.Models;
+using Services.Services;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ExploreEase.Areas.Identity.Pages.Account
 {
@@ -27,18 +28,21 @@ namespace ExploreEase.Areas.Identity.Pages.Account
         private readonly IUserStore<ExploreEaseUser> _userStore;
         private readonly IUserEmailStore<ExploreEaseUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly EmailServices _emailServices;
 
         public RegisterModel(
             UserManager<ExploreEaseUser> userManager,
             IUserStore<ExploreEaseUser> userStore,
             SignInManager<ExploreEaseUser> signInManager,
-            ILogger<RegisterModel> logger)
+            ILogger<RegisterModel> logger, EmailServices emailServices)
         {
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _emailServices = emailServices;
+
         }
 
         [BindProperty]
@@ -101,6 +105,21 @@ namespace ExploreEase.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                // Check if email domain has MX record
+                if (!await _emailServices.DomainHasMxRecordAsync(Input.Email))
+                {
+                    ModelState.AddModelError("Input.Email", "Email domain is invalid or does not exist.");
+                    return Page();
+                }
+                // Check if email already exists
+                var existingUser = await _userManager.FindByEmailAsync(Input.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Input.Email", "Email is already registered.");
+                    return Page();
+                }
+
+                // Create user
                 var user = CreateUser();
                 user.FullName = Input.FullName;
 
@@ -113,15 +132,26 @@ namespace ExploreEase.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    // Assign default role
                     await _userManager.AddToRoleAsync(user, "User");
 
-                    // Automatically confirm email
+                    // Generate email confirmation token
                     var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     await _userManager.ConfirmEmailAsync(user, emailConfirmationToken);
 
-                    // Sign in the user
+                    // Send success email
+                    var subject = "Welcome to ExploreEase - Account Created Successfully";
+                    var body = $"<p>Hi {Input.FullName},</p><p>Your account has been successfully created.</p>";
+                    var emailSent = _emailServices.SendEmail(Input.Email, subject, body);
+
+                    if (!emailSent)
+                    {
+                        _logger.LogWarning($"Failed to send registration email to {Input.Email}");
+                        // Optionally add a message or retry mechanism
+                    }
+
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    TempData["SuccessMessage"] = "Account successfully created!";
                     return LocalRedirect(returnUrl);
                 }
 
@@ -130,6 +160,7 @@ namespace ExploreEase.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
 
             return Page();
         }

@@ -1,5 +1,6 @@
 ﻿using DataAcessLayer.DataAcess;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Models.Models;
 using Repository.Repository;
 using System;
@@ -92,5 +93,18 @@ namespace Services.Services
         {
             return await _blogRepo.GetComments(BlogId);
         }
+        public async Task<bool> DeleteBlog(int blogId)
+        {
+            var result = await _blogRepo.DeleteBlog(blogId); 
+            if (result) 
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

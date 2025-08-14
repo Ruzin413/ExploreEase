@@ -4,11 +4,9 @@
     ViewData["Title"] = "My Orders";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var now = DateTime.Now.Date;
-
     // Columns needed per section
     bool showExtendColumn = Model.Any(order => now >= order.StartDate.ToDateTime(TimeOnly.MinValue) && now <= order.EndDate.ToDateTime(TimeOnly.MinValue) && order.extendedDate != true);
     bool showReviewColumn = Model.Any(order => now > order.EndDate.ToDateTime(TimeOnly.MinValue) && order.Reviewed != true);
-
     // Helper filters:
     var upcomingOrders = Model.Where(order => order.StartDate.ToDateTime(TimeOnly.MinValue) > now).ToList();
     var ongoingOrders = Model.Where(order => now >= order.StartDate.ToDateTime(TimeOnly.MinValue) && now <= order.EndDate.ToDateTime(TimeOnly.MinValue)).ToList();
@@ -19,9 +17,33 @@
 
 <style>
     /* Tabs container */
+    .star-rating {
+        direction: rtl;
+        font-size: 1.8rem;
+        unicode-bidi: bidi-override;
+        display: inline-flex;
+    }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0 2px;
+        }
+
+            .star-rating label:hover,
+            .star-rating label:hover ~ label,
+            .star-rating input:checked ~ label {
+                color: #f5b301;
+            }
+
     .tabs {
         display: flex;
-        border-bottom: 2px solid #2c7bbf; /* darker sky blue */
+        border-bottom: 2px solid #2c7bbf;
         margin-bottom: 1rem;
         font-family: Arial, sans-serif;
         user-select: none;
@@ -51,7 +73,6 @@
             border-bottom-color: #1a4f8a;
         }
 
-    /* Table styling */
     .order-table {
         width: 100%;
         border-collapse: collapse;
@@ -66,11 +87,10 @@
         }
 
         .order-table th {
-            background-color: #2c7bbf; /* darker sky blue header */
+            background-color: #2c7bbf;
             color: white;
         }
 
-    /* Buttons */
     .btn {
         padding: 6px 12px;
         border: none;
@@ -105,7 +125,6 @@
             background-color: #5a6268;
         }
 
-    /* Hide non-active tabs */
     .tab-content {
         display: none;
     }
@@ -113,6 +132,11 @@
         .tab-content.active {
             display: block;
         }
+
+    .modal-message {
+        margin-top: 10px;
+        font-weight: 500;
+    }
 </style>
 
 <h2>My Orders</h2>
@@ -137,16 +161,16 @@ else
         }
         else
         {
-            <table class="order-table" aria-label="Upcoming Tours Table">
+            <table class="order-table">
                 <thead>
                     <tr>
-                        <th scope="col">Package ID</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
-                        <th scope="col">People</th>
-                        <th scope="col">Total Price (Rs.)</th>
-                        <th scope="col">Booking Date</th>
-                        <th scope="col">Details</th>
+                        <th>Package ID</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>People</th>
+                        <th>Total Price (Rs.)</th>
+                        <th>Booking Date</th>
+                        <th>Arriving Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,11 +184,7 @@ else
                             <td>@order.TotalPrice.ToString("F2")</td>
                             <td>@order.BookingDate.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>
-                                <a class="btn btn-detail"
-                                   href="https://localhost:7285/UserActivity/User/OrderDetails?id=@order.id"
-                                   role="button">
-                                    Details
-                                </a>
+                                <a class="btn btn-detail" href="https://localhost:7285/UserActivity/User/OrderDetails?id=@order.id">Details</a>
                             </td>
                         </tr>
                     }
@@ -172,8 +192,6 @@ else
             </table>
         }
     </section>
-
-    <!-- Ongoing Tours -->
     <section id="ongoing" class="tab-content" role="tabpanel" aria-labelledby="tab-ongoing" tabindex="0">
         @if (!ongoingOrders.Any())
         {
@@ -181,20 +199,20 @@ else
         }
         else
         {
-            <table class="order-table" aria-label="Ongoing Tours Table">
+            <table class="order-table">
                 <thead>
                     <tr>
-                        <th scope="col">Package ID</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
-                        <th scope="col">People</th>
-                        <th scope="col">Total Price (Rs.)</th>
-                        <th scope="col">Booking Date</th>
+                        <th>Package ID</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>People</th>
+                        <th>Total Price (Rs.)</th>
+                        <th>Booking Date</th>
                         @if (showExtendColumn)
                         {
-                            <th scope="col">Extend Date</th>
+                            <th>Extend Date</th>
                         }
-                        <th scope="col">Details</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -222,11 +240,7 @@ else
                                 </td>
                             }
                             <td>
-                                <a class="btn btn-detail"
-                                   href="https://localhost:7285/UserActivity/User/OrderDetails?Tourpackageid=@order.Tourpackageid"
-                                   role="button">
-                                    Details
-                                </a>
+                                <a class="btn btn-detail" href="https://localhost:7285/UserActivity/User/OrderDetails?id=@order.id">Details</a>
                             </td>
                         </tr>
                     }
@@ -234,8 +248,6 @@ else
             </table>
         }
     </section>
-
-    <!-- Done Tours -->
     <section id="done" class="tab-content" role="tabpanel" aria-labelledby="tab-done" tabindex="0">
         @if (!doneOrders.Any())
         {
@@ -243,20 +255,20 @@ else
         }
         else
         {
-            <table class="order-table" aria-label="Done Tours Table">
+            <table class="order-table">
                 <thead>
                     <tr>
-                        <th scope="col">Package ID</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
-                        <th scope="col">People</th>
-                        <th scope="col">Total Price (Rs.)</th>
-                        <th scope="col">Booking Date</th>
+                        <th>Package ID</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>People</th>
+                        <th>Total Price (Rs.)</th>
+                        <th>Booking Date</th>
                         @if (showReviewColumn)
                         {
-                            <th scope="col">Leave Review</th>
+                            <th>Leave Review</th>
                         }
-                        <th scope="col">Details</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -284,11 +296,7 @@ else
                                 </td>
                             }
                             <td>
-                                <a class="btn btn-detail"
-                                   href="https://localhost:7285/UserActivity/User/OrderDetails?Tourpackageid=@order.Tourpackageid"
-                                   role="button">
-                                    Details
-                                </a>
+                                <a class="btn btn-detail" href="https://localhost:7285/UserActivity/User/OrderDetails?id=@order.id">Details</a>
                             </td>
                         </tr>
                     }
@@ -297,60 +305,39 @@ else
         }
     </section>
 }
+<div id="extendModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+    <div style="background:white; margin:10% auto; padding:20px; width:300px; border-radius:8px; text-align:center;">
+        <h3>Extend Tour Date</h3>
+        <p>Are you sure you want to extend this tour?</p>
+        <input type="hidden" id="extend-paymentid">
+        <input type="hidden" id="extend-tourpackageid">
+        <button class="btn btn-extend" id="confirmExtend">Yes, Extend</button>
+        <button class="btn btn-detail" onclick="closeExtendModal()">Cancel</button>
+    </div>
+</div>
 
-<!-- (Include your existing modals for Extend Date and Review here, unchanged) -->
+<div id="reviewModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+    <div style="background:white; margin:5% auto; padding:20px; width:400px; border-radius:8px; position:relative;">
+        <span style="cursor:pointer; position:absolute; top:10px; right:15px; font-size:24px;" onclick="closeReviewModal()">&times;</span>
+        <h3>Leave Review</h3>
 
-<script>
-    // Tab switching function
-    function showTab(tabId) {
-        // Hide all tab contents
-        document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-        });
+        <input type="hidden" id="review-paymentid">
+        <input type="hidden" id="review-packageid">
 
-        // Remove active class from all buttons
-        document.querySelectorAll('.tab-button').forEach(btn => {
-            btn.classList.remove('active');
-            btn.setAttribute('aria-selected', 'false');
-            btn.tabIndex = -1;
-        });
+        <label>Rating:</label>
+        <div class="star-rating">
+            <input type="radio" name="rating" id="star5" value="5"><label for="star5">&#9733;</label>
+            <input type="radio" name="rating" id="star4" value="4"><label for="star4">&#9733;</label>
+            <input type="radio" name="rating" id="star3" value="3"><label for="star3">&#9733;</label>
+            <input type="radio" name="rating" id="star2" value="2"><label for="star2">&#9733;</label>
+            <input type="radio" name="rating" id="star1" value="1"><label for="star1">&#9733;</label>
+        </div>
 
-        // Show selected tab content
-        const selectedContent = document.getElementById(tabId);
-        if (selectedContent) {
-            selectedContent.classList.add('active');
-            selectedContent.focus();
-        }
+        <textarea id="review-text" rows="4" style="width:100%; margin-top:10px;"></textarea>
 
-        // Mark selected tab button active and keyboard focusable
-        const selectedBtn = document.getElementById(`tab-${tabId}`);
-        if (selectedBtn) {
-            selectedBtn.classList.add('active');
-            selectedBtn.setAttribute('aria-selected', 'true');
-            selectedBtn.tabIndex = 0;
-            selectedBtn.focus();
-        }
-    }
+        <button class="btn btn-review" id="submitReviewBtn" style="margin-top:10px;">Submit Review</button>
 
-    // Optionally, allow arrow keys to navigate tabs for accessibility
-    document.querySelectorAll('.tab-button').forEach((btn, index, arr) => {
-        btn.addEventListener('keydown', e => {
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                e.preventDefault();
-                let nextIndex = (index + 1) % arr.length;
-                arr[nextIndex].focus();
-            }
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                e.preventDefault();
-                let prevIndex = (index - 1 + arr.length) % arr.length;
-                arr[prevIndex].focus();
-            }
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                btn.click();
-            }
-        });
-    });
-
-    // Existing modal JS code for Extend and Review modals goes here (not repeated for brevity)
-</script>
+        <div id="reviewMessage" class="modal-message" style="display:none;"></div>
+    </div>
+</div>
+<script src="~/js/userorder.js"></script>

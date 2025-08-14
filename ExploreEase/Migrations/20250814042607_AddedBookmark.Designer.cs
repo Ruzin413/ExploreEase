@@ -4,6 +4,7 @@ using DataAcessLayer.DataAcess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExploreEase.Migrations
 {
     [DbContext(typeof(ExploreEaseDbContext))]
-    partial class ExploreEaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250814042607_AddedBookmark")]
+    partial class AddedBookmark
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,13 +296,10 @@ namespace ExploreEase.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("TourPackageId")
-                        .HasMaxLength(10000)
                         .HasColumnType("int");
 
-                    b.Property<string>("userEmail")
-                        .IsRequired()
-                        .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("userEmail")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

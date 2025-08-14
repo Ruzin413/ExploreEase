@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Models.Models
-@model Models.Models.BookingServices ;
+@model Models.Models.BookingServices
 @inject SignInManager<ExploreEaseUser> SignInManager
 @inject UserManager<ExploreEaseUser> UserManager
 @{
@@ -8,17 +8,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="~/css/booking.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <div class="container mt-4">
+
     <!-- Tour Package Details Section -->
-    <div class="card mb-4">
+    <div class="card mb-4 position-relative">
         <div class="card-header bg-primary text-white">
             <h2>@Model.TourPackages[0].Name</h2>
         </div>
-        <div class="card-body">
+
+        <div class="card-body position-relative">
+            <!-- Bookmark button at top-right inside card-body, only for logged-in users -->
+            @if (SignInManager.IsSignedIn(User))
+            {
+                var isBookmarked = ViewBag.Bookmarked as bool? ?? false;
+                <button id="bookmarkBtn"
+                        class="btn btn-sm position-absolute"
+                        style="top:15px; right:15px; border: 1px solid white; background: white; border-radius: 50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer;"
+                        data-bookmarked="@isBookmarked"
+                        data-packageid="@Model.TourPackages[0].TourPackageId"
+                        title="Bookmark">
+                    <i class="bi @(isBookmarked ? "bi-bookmark-fill text-primary" : "bi-bookmark")"></i>
+                </button>
+            }
             <div class="row">
                 <div class="col-md-5">
                     <img src="@Model.TourPackages[0].DestinationImage" alt="@Model.TourPackages[0].Destination" class="img-fluid rounded" />
@@ -66,115 +83,156 @@
                                 <i class="bi bi-geo-alt-fill"></i> Location
                             </button>
                         </form>
-                            <button type="button" class="btn btn-review" onclick="loadReviews(@Model.TourPackages[0].TourPackageId)">
-                                <i class="bi bi-star-fill"></i> Reviews
-                            </button>
+                        <button type="button" class="btn btn-review" onclick="loadReviews(@Model.TourPackages[0].TourPackageId)">
+                            <i class="bi bi-star-fill"></i> Reviews
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Full-width Book Now Button -->
     <div class="card mb-4 book-now-container">
         <div class="card-body p-0">
-            @* <form asp-action="BookServices" method="post" class="w-100"> *@
             <form asp-action="OrderPackage" asp-controller="User" asp-area="UserActivity" method="post" class="w-100">
-                <input type="hidden" name="tourPackageId" value="@Model.TourPackages[0].TourPackageId"/>
-                @* <input type="hidden" name="NumberOfDays" value="@Model.TourPackages[0].NumberOfDays" /> *@
-                @* <input type="hidden" name="Description" value="@Model.TourPackages[0].Description" /> *@
-                @* <input type="hidden" name="DestinationImage" value="@Model.TourPackages[0].DestinationImage" /> *@
+                <input type="hidden" name="tourPackageId" value="@Model.TourPackages[0].TourPackageId" />
                 <button type="submit" class="btn btn-book-now btn-lg w-100 py-3" id="khaltiPayBtn">Book Now</button>
             </form>
         </div>
     </div>
-</div>
-<!-- Day by Day Itinerary with Hotels - No Accordion -->
-<h3 class="mb-3">Day by Day Itinerary</h3>
-@{
-    // Group hotels by day number
-    var hotelsByDay = Model.DayHotels.GroupBy(h => h.DayNumber).OrderBy(g => g.Key);
-}
-@foreach (var dayGroup in hotelsByDay)
-{
-    <div class="card day-card mb-4">
-        <div class="card-header day-header">
-            <h4>Day @dayGroup.Key</h4>
-        </div>
-        <div class="card-body">
-            @foreach (var hotel in dayGroup)
-            {
-                <div class="card hotel-card mb-3">
-                    <div class="card-header">
-                        <h5>@hotel.HotelName</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>@hotel.HotelDescription</p>
 
-                        @{
+    <!-- Day by Day Itinerary -->
+    <h3 class="mb-3">Day by Day Itinerary</h3>
+    @{
+        var hotelsByDay = Model.DayHotels.GroupBy(h => h.DayNumber).OrderBy(g => g.Key);
+    }
+    @foreach (var dayGroup in hotelsByDay)
+    {
+        <div class="card day-card mb-4">
+            <div class="card-header day-header">
+                <h4>Day @dayGroup.Key</h4>
+            </div>
+            <div class="card-body">
+                @foreach (var hotel in dayGroup)
+                {
+                    <div class="card hotel-card mb-3">
+                        <div class="card-header">
+                            <h5>@hotel.HotelName</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>@hotel.HotelDescription</p>
                             <p><i class="bi bi-geo-alt"></i> @hotel.HotelLocation</p>
-                            // Get images for this specific hotel
-                            var hotelImages = Model.HotelImages.Where(img => img.DayHotelId == hotel.DayHotelId && img.DayNumber == hotel.DayNumber).ToList();
-                        }
-
-                        @if (hotelImages.Any())
-                        {
-                            <div class="row">
-                                @foreach (var image in hotelImages)
-                                {
-                                    <div class="col-md-4 mb-2">
-                                        <img src="@image.ImagePath" alt="Hotel Image" class="img-fluid rounded hotel-image" />
-                                    </div>
-                                }
-                            </div>
-                        }
-                        else
-                        {
-                            <p>No images available for this hotel.</p>
-                        }
+                            @{
+                                var hotelImages = Model.HotelImages.Where(img => img.DayHotelId == hotel.DayHotelId && img.DayNumber == hotel.DayNumber).ToList();
+                            }
+                            @if (hotelImages.Any())
+                            {
+                                <div class="row">
+                                    @foreach (var image in hotelImages)
+                                    {
+                                        <div class="col-md-4 mb-2">
+                                            <img src="@image.ImagePath" alt="Hotel Image" class="img-fluid rounded hotel-image" />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p>No images available for this hotel.</p>
+                            }
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
-    </div>
-}
+    }
 </div>
+
 <!-- Reviews Modal -->
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title" id="reviewModalLabel">Tour Package Reviews</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="modal-body" id="reviewModalBody">
                 <p class="text-muted">Loading reviews...</p>
             </div>
-
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-@* <script> *@
-@*     document.getElementById("khaltiPayBtn").addEventListener("click", async function () { *@
-@*         const tourPackageId = "@Model.TourPackages[0].TourPackageId"; *@
-@*         const price = "@Model.TourPackages[0].price"; *@
-@*         const packageName = "@Model.TourPackages[0].Name"; *@
-@*         const response = await fetch("/UserActivity/User/InitiateKhaltiPayment", { *@
-@*             method: "POST", *@
-@*             headers: { "Content-Type": "application/json" }, *@
-@*             body: JSON.stringify({ *@
-@*                 TourPackageId: tourPackageId, *@
-@*                 Price: price, *@
-@*                 PackageName: packageName, *@
-@*             }) *@
-@*         }); *@
-@*         const result = await response.json(); *@
-@*         if (result.payment_url) { *@
-@*             window.location.href = result.payment_url; *@
-@*         } *@
-@*     });</script> *@
-<script src="~/js/booking.js"></script>
+<!-- Toast notification for bookmark -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="bookmarkToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="bookmarkToastBody">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Bookmark toggle
+    $('#bookmarkBtn').on('click', function () {
+        const $btn = $(this);
+        const currentlyBookmarked = $btn.data('bookmarked');
+        const tourPackageId = $btn.data('packageid'); // read ID from button
+
+        const url = currentlyBookmarked ? '/UserActivity/User/RemoveBookmark' : '/UserActivity/User/AddBookmark';
+
+        $.post(url, { tourPackageId: tourPackageId })
+            .done(function (res) {
+                $btn.data('bookmarked', !currentlyBookmarked);
+                $btn.find('i').toggleClass('bi-bookmark bi-bookmark-fill text-primary');
+
+                const toastEl = document.getElementById('bookmarkToast');
+                const toastBody = document.getElementById('bookmarkToastBody');
+                toastBody.textContent = !currentlyBookmarked ? 'Added to bookmarks' : 'Removed from bookmarks';
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            })
+            .fail(function () {
+                const toastEl = document.getElementById('bookmarkToast');
+                const toastBody = document.getElementById('bookmarkToastBody');
+                toastBody.textContent = 'Failed to update bookmark';
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            });
+    });
+
+    // Load reviews
+    function loadReviews(tourPackageId) {
+        const modal = new bootstrap.Modal(document.getElementById('reviewModal'));
+        modal.show();
+        $('#reviewModalBody').html('<p class="text-muted">Loading reviews...</p>');
+
+        $.ajax({
+            url: '/UserActivity/User/ShowReview',
+            type: 'GET',
+            data: { Tourpackageid: tourPackageId },
+            success: function (data) {
+                if (data && data.length > 0) {
+                    let html = '<ul class="list-group">';
+                    data.forEach(function (review) {
+                        html += `<li class="list-group-item">
+                                        <strong>${review.name}</strong><br/>
+                                        <span>${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span><br/>
+                                        ${review.comment}
+                                     </li>`;
+                    });
+                    html += '</ul>';
+                    $('#reviewModalBody').html(html);
+                } else {
+                    $('#reviewModalBody').html('<p class="text-muted">No reviews found.</p>');
+                }
+            },
+            error: function () {
+                $('#reviewModalBody').html('<p class="text-danger">Failed to load reviews.</p>');
+            }
+        });
+    }
+</script>

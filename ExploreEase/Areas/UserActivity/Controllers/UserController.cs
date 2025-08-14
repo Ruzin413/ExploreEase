@@ -21,6 +21,7 @@ namespace ExploreEase.Areas.UserActivity.Controllers
         private readonly KhaltiService _khaltiService;
         private readonly PaymentService _paymentService;
         private readonly ReviewServices _reviewServices;
+        private readonly BookingServicess _bookingService;
 
         public UserController(
             BookingDetails bookingDetails,
@@ -28,7 +29,7 @@ namespace ExploreEase.Areas.UserActivity.Controllers
             UserManager<ExploreEaseUser> userManager,
             KhaltiService khaltiService,
             PaymentService paymentService,
-            ReviewServices reviewServices)
+            ReviewServices reviewServices,BookingServicess bookingService)
         {
             _bookingDetails = bookingDetails;
             _getServices = getServices;
@@ -36,6 +37,7 @@ namespace ExploreEase.Areas.UserActivity.Controllers
             _khaltiService = khaltiService;
             _paymentService = paymentService;
             _reviewServices = reviewServices;
+            _bookingService = bookingService;
         }
 
         public IActionResult Index()
@@ -43,11 +45,22 @@ namespace ExploreEase.Areas.UserActivity.Controllers
             return View();
         }
 
-        public IActionResult Booking(int id)
+        public async Task<IActionResult> Booking(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
+            var email = user?.Email;
+
+            // Check if bookmarked
+            ViewBag.Bookmarked = false;
+            if (!string.IsNullOrEmpty(email))
+            {
+                ViewBag.Bookmarked = await _bookingService.IsBookmarked(email, id);
+            }
+
             var model = _bookingDetails.GetTourPackages(id);
             return View(model);
         }
+
 
         public IActionResult ShowLocation()
         {
@@ -143,12 +156,12 @@ namespace ExploreEase.Areas.UserActivity.Controllers
                 TempData["Message"] = "Please log in to complete the payment.";
                 return Redirect("/Identity/Account/Login");
             }
-
             var username = user.FullName;
             var email = user.Email;
             var result = await _paymentService.InsertIntoPayment(Form, username, email);
             if (result)
             {
+
                 return View("PaymentSucess");
             }
             else
@@ -295,6 +308,48 @@ namespace ExploreEase.Areas.UserActivity.Controllers
             }
 
             return Json(new { payment_url = result?.payment_url?.ToString() });
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddBookmark(int tourPackageId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var email = user.Email;
+            var result = await _bookingService.AddBookmark( email, tourPackageId);
+            if (result)
+            {
+                return Json(new { success = true });
+            }
+            else { 
+                return Json(new
+                {
+                    success = false,
+                });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> RemoveBookmark(int tourPackageId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var email = user.Email;
+            var result = await _bookingService.RemoveBookmark(email, tourPackageId);
+            if (result)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new
+                {
+                    success = false,
+                });
+            }
+        }
+        public async  Task<IActionResult> Bookmarks()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var email = user.Email;
+            var Model =await _bookingService.GetBookmarkedTourPackages(email);
+            return View(Model);
         }
     }
 }

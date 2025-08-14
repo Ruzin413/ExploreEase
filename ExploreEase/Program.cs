@@ -38,6 +38,8 @@ builder.Services.AddScoped<ReviewServices>();
 builder.Services.AddScoped<BlogRepo>();
 builder.Services.AddScoped<BlogServices>();
 builder.Services.AddScoped<EmailServices>();
+builder.Services.AddScoped<BookingServicess>();
+builder.Services.AddScoped<BookingRepo>();
 builder.Logging.AddConsole();
 // Adding MVC support (controllers with views)
 builder.Services.AddControllersWithViews();

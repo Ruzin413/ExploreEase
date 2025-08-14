@@ -1,6 +1,7 @@
 using ExploreEase.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using Services.Services;
 using System.Diagnostics;
@@ -196,5 +197,22 @@ namespace ExploreEase.Controllers
             ViewBag.SearchQuery = name;
             return View(data);
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteBlog(int blogId)
+        {
+            var result = await _blogservices.DeleteBlog(blogId);
+            if (result)
+            {
+                return Json( new {  success = true} );
+            }
+            else
+            {
+                return Json(new
+                {
+                    success = false,
+                });
+            }
+        }
+
     }
 }

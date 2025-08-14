@@ -120,5 +120,15 @@ namespace Repository.Repository
         {
             return await _exploreEaseDbContext.commentdb.Where(x => x.BlogId == Blogid).ToListAsync();
         }
+        public async Task<bool> DeleteBlog(int blogId)
+        {
+            var blog = await _exploreEaseDbContext.Blogdb.FirstOrDefaultAsync(x => x.Id == blogId);
+            if (blog == null) return false;
+
+            _exploreEaseDbContext.Blogdb.Remove(blog);
+            var result = await _exploreEaseDbContext.SaveChangesAsync();
+
+            return result > 0;
+        }
     }
 }
