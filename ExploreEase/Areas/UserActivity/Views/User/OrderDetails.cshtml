@@ -11,7 +11,6 @@
         <img src="@Model.TourPackage.DestinationImage" alt="@Model.TourPackage.Name" class="package-image" />
         <h2> <strong>Payment id : </strong> @paymentid</h2>
         <p><strong>Destination:</strong> @Model.TourPackage.Destination</p>
-        <p><strong>Description:</strong> @Model.TourPackage.Description</p>
     </div>
 
     <hr />
@@ -30,7 +29,8 @@
             <input type="hidden" name="destination" value="Arrive here" />
             <button type="submit" class="btn-location">
                 In Location
-            </button>
+            </button><br/>
+            <p><strong> if you want to cancel this contact us at exploreease413@gmail.com</strong></p>
         </form>
     </div>
 </div>
@@ -39,58 +39,76 @@
     .order-details-container {
         max-width: 650px;
         margin: 2rem auto;
-        padding: 1.5rem 2rem;
+        padding: 2rem;
         border: 1px solid #ddd;
-        border-radius: 10px;
+        border-radius: 12px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #fff;
-        box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .package-info h2 {
         margin-bottom: 0.5rem;
         color: #2c3e50;
+        font-size: 1.8rem;
     }
 
     .package-image {
         width: 100%;
         max-height: 300px;
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: 10px;
         margin-bottom: 1rem;
-        box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
     .package-info p {
         margin: 0.3rem 0;
-        color: #444;
+        color: #555;
+        font-size: 1rem;
     }
 
     .booking-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 1.5rem;
+        margin-top: 2rem;
         font-size: 1rem;
         color: #333;
     }
 
+        .booking-info div {
+            margin-bottom: 1rem;
+        }
+
+        .booking-info strong {
+            color: #2c3e50;
+        }
+
     .location-form {
-        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-top: 1rem;
     }
 
     .btn-location {
         background-color: #4299e1;
         color: white;
         border: none;
-        padding: 0.6rem 1.2rem;
-        border-radius: 5px;
+        padding: 0.7rem 1.5rem;
+        border-radius: 6px;
         cursor: pointer;
         font-weight: 600;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
+        align-self: flex-start;
     }
 
         .btn-location:hover {
             background-color: #2b6cb0;
         }
+
+    .booking-info p {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
 </style>
