@@ -191,7 +191,7 @@
 
                 const toastEl = document.getElementById('bookmarkToast');
                 const toastBody = document.getElementById('bookmarkToastBody');
-                toastBody.textContent = !currentlyBookmarked ? 'Added to bookmarks' : 'Removed from bookmarks';
+                toastBody.textContent = !currentlyBookmarked ? 'Removed from bookmarks' : 'Added to bookmarks' ;
                 const toast = new bootstrap.Toast(toastEl);
                 toast.show();
             })

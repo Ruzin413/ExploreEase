@@ -309,10 +309,16 @@ namespace ExploreEase.Areas.UserActivity.Controllers
 
             return Json(new { payment_url = result?.payment_url?.ToString() });
         }
+        [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> AddBookmark(int tourPackageId)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                TempData["Message"] = "Please log in to add book mark.";
+                return Redirect("/Identity/Account/Login");
+            }
             var email = user.Email;
             var result = await _bookingService.AddBookmark( email, tourPackageId);
             if (result)
@@ -326,6 +332,7 @@ namespace ExploreEase.Areas.UserActivity.Controllers
                 });
             }
         }
+        [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> RemoveBookmark(int tourPackageId)
         {
