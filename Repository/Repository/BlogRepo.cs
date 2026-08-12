@@ -1,12 +1,13 @@
 ﻿using DataAcessLayer.DataAcess;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Repository.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Repository.Repository
 {
-    public class BlogRepo
+    public class BlogRepo : IBlogRepo
     {
         private readonly ExploreEaseDbContext _exploreEaseDbContext;
         public BlogRepo(ExploreEaseDbContext exploreEaseDbContext)

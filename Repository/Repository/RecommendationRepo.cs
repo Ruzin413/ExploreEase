@@ -1,6 +1,7 @@
 ﻿using DataAcessLayer.DataAcess;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repository
 {
-    public class RecommendationRepo
+    public class RecommendationRepo : IRecommendationRepo
     {
         private readonly ExploreEaseDbContext _context;
 

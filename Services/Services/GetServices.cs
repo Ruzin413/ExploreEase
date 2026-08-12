@@ -1,5 +1,6 @@
 ﻿using DataAcessLayer.DataAcess;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
 using Services.Interfaces;
 using System;
@@ -11,8 +12,8 @@ namespace Services.Services
 {
     public class GetServices : IGetServices
     {
-        private readonly GetServicesRepository _getServicesRepository;
-        public GetServices(GetServicesRepository getServicesRepository){
+        private readonly IGetServicesRepository _getServicesRepository;
+        public GetServices(IGetServicesRepository getServicesRepository){
             _getServicesRepository = getServicesRepository;
         }
         public Task<List<PaymentModel>> GetOrder()

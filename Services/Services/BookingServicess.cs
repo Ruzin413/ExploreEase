@@ -1,7 +1,9 @@
 ﻿using DataAcessLayer.DataAcess;
 using Microsoft.AspNetCore.Mvc;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class BookingServicess
+    public class BookingServicess : IBookingServices
     {
-        private readonly BookingRepo _repository;
-        public BookingServicess(BookingRepo bookingRepo)
+        private readonly IBookingRepo _repository;
+        public BookingServicess(IBookingRepo bookingRepo)
         {
             _repository = bookingRepo;
         }

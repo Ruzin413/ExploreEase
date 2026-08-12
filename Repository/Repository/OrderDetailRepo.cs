@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models.Models;
+using Repository.Interfaces;
 
 namespace Repository.Repository
 {
-    public class OrderDetailRepo
+    public class OrderDetailRepo : IOrderDetailRepo
     {
         private readonly ExploreEaseDbContext _exploreEaseDbContext;
         public OrderDetailRepo(ExploreEaseDbContext exploreEaseDbContext)

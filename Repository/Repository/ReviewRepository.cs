@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Repository.Interfaces;
 
 namespace Repository.Repository
 {
-    public class ReviewRepository
+    public class ReviewRepository : IReviewRepository
     {
         private ExploreEaseDbContext _exploreEaseDbContext;
         public ReviewRepository(ExploreEaseDbContext exploreEaseDbContext)

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class OrderDetailServices
+    public class OrderDetailServices : IOrderDetailServices
     {
-        private readonly OrderDetailRepo _orderDetailRepo;
-        public OrderDetailServices(OrderDetailRepo orderDetailRepo)
+        private readonly IOrderDetailRepo _orderDetailRepo;
+        public OrderDetailServices(IOrderDetailRepo orderDetailRepo)
         {
             _orderDetailRepo = orderDetailRepo;
         }

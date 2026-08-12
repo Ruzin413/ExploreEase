@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class BlogServices
+    public class BlogServices : IBlogServices
     {
-        private readonly BlogRepo _blogRepo;
-        private readonly ImageSaveService _imageSaveService;
-        public BlogServices(BlogRepo blogRepo, ImageSaveService imageSaveService)
+        private readonly IBlogRepo _blogRepo;
+        private readonly IimageService _imageSaveService;
+        public BlogServices(IBlogRepo blogRepo, IimageService imageSaveService)
         {
             _blogRepo = blogRepo;
             _imageSaveService = imageSaveService;

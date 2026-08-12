@@ -1,4 +1,4 @@
-﻿using Models.Models;
+using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Services.Interfaces
 {
-    public interface IBookingDetails
+    public interface IKhaltiService
     {
-        BookingServices GetTourPackages(int id);
+        Task<string> InitiatePaymentAsync(KhaltiRequest request);
     }
 }

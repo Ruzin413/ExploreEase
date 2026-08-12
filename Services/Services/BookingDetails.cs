@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class BookingDetails
+    public class BookingDetails : IBookingDetails
     {
-        private readonly BookingDetailRepo _bookingDetailRepo;
-        public BookingDetails(BookingDetailRepo bookingDetailRepo)
+        private readonly IBookingDetailRepo _bookingDetailRepo;
+        public BookingDetails(IBookingDetailRepo bookingDetailRepo)
         {
             _bookingDetailRepo = bookingDetailRepo; 
         }

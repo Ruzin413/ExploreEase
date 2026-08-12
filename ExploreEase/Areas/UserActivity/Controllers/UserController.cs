@@ -15,21 +15,21 @@ namespace ExploreEase.Areas.UserActivity.Controllers
     [Area("UserActivity")]
     public class UserController : Controller
     {
-        private readonly BookingDetails _bookingDetails;
-        private readonly GetServices _getServices;
+        private readonly IBookingDetails _bookingDetails;
+        private readonly IGetServices _getServices;
         private readonly UserManager<ExploreEaseUser> _userManager;
-        private readonly KhaltiService _khaltiService;
-        private readonly PaymentService _paymentService;
-        private readonly ReviewServices _reviewServices;
-        private readonly BookingServicess _bookingService;
+        private readonly IKhaltiService _khaltiService;
+        private readonly IPaymentService _paymentService;
+        private readonly IReviewServices _reviewServices;
+        private readonly IBookingServices _bookingService;
 
         public UserController(
-            BookingDetails bookingDetails,
-            GetServices getServices,
+            IBookingDetails bookingDetails,
+            IGetServices getServices,
             UserManager<ExploreEaseUser> userManager,
-            KhaltiService khaltiService,
-            PaymentService paymentService,
-            ReviewServices reviewServices,BookingServicess bookingService)
+            IKhaltiService khaltiService,
+            IPaymentService paymentService,
+            IReviewServices reviewServices,IBookingServices bookingService)
         {
             _bookingDetails = bookingDetails;
             _getServices = getServices;

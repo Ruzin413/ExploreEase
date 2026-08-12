@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class PaymentService
+    public class PaymentService : IPaymentService
     {
-        private readonly PaymentRepo _repo;
-        private readonly EmailServices _emailServices;  
-        public PaymentService(PaymentRepo repo,EmailServices emailServices){
+        private readonly IPaymentRepo _repo;
+        private readonly IEmailServices _emailServices;  
+        public PaymentService(IPaymentRepo repo,IEmailServices emailServices){
             _repo = repo;   
             _emailServices = emailServices;
 

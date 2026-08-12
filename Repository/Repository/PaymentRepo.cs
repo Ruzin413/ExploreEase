@@ -1,5 +1,6 @@
 ﻿using DataAcessLayer.DataAcess;
 using Models.Models;
+using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Repository.Repository
 {
-    public class PaymentRepo
+    public class PaymentRepo : IPaymentRepo
     {
         private readonly ExploreEaseDbContext _exploreEaseDbContext;
         public PaymentRepo(ExploreEaseDbContext exploreEaseDbContext)

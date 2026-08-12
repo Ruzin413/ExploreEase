@@ -1,5 +1,6 @@
 ﻿using DataAcessLayer.DataAcess;
 using Models.Models;
+using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repository
 {
-    public class BookingDetailRepo
+    public class BookingDetailRepo : IBookingDetailRepo
     {
         private readonly ExploreEaseDbContext _exploreEaseDbContext;
         public BookingDetailRepo(ExploreEaseDbContext exploreEaseDbContext)

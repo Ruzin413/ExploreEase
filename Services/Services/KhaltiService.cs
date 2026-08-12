@@ -1,5 +1,6 @@
 ﻿using Models.Models;
 using Newtonsoft.Json;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Services.Services
 {
-    public class KhaltiService
+    public class KhaltiService : IKhaltiService
     {
         private readonly HttpClient _httpClient;
 

@@ -1,4 +1,3 @@
-﻿using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Services.Interfaces
 {
-    public interface IBookingDetails
+    public interface IEmailServices
     {
-        BookingServices GetTourPackages(int id);
+        Task<bool> DomainHasMxRecordAsync(string email);
+        bool SendEmail(string toEmail, string subject, string body);
     }
 }

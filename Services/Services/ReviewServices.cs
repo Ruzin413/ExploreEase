@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class ReviewServices
+    public class ReviewServices : IReviewServices
     {
-        private readonly ReviewRepository _repo;
-        public ReviewServices(ReviewRepository repo)
+        private readonly IReviewRepository _repo;
+        public ReviewServices(IReviewRepository repo)
         {
             _repo = repo;
         }

@@ -1,5 +1,7 @@
 ﻿using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class RecommendationService
+    public class RecommendationService : IRecommendationService
     {
-        private readonly RecommendationRepo _repository;
-        public RecommendationService(RecommendationRepo repository)
+        private readonly IRecommendationRepo _repository;
+        public RecommendationService(IRecommendationRepo repository)
         {
             _repository = repository;
         }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Services.Interfaces;
 using Services.Services;
 using System.Diagnostics;
 
@@ -11,17 +12,17 @@ namespace ExploreEase.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly GetServices _getServices;
-        private readonly RecommendationService _recommendationService;
+        private readonly IGetServices _getServices;
+        private readonly IRecommendationService _recommendationService;
         private readonly UserManager<ExploreEaseUser> _userManager;
-        private readonly BlogServices _blogservices;
+        private readonly IBlogServices _blogservices;
 
         public HomeController(
             ILogger<HomeController> logger,
-            GetServices getServices,
-            RecommendationService recommendationService,
+            IGetServices getServices,
+            IRecommendationService recommendationService,
             UserManager<ExploreEaseUser> userManager,
-            BlogServices blogServices)
+            IBlogServices blogServices)
         {
             _logger = logger;
             _getServices = getServices;

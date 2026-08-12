@@ -1,4 +1,5 @@
 ﻿using DnsClient; 
+using Services.Interfaces;
 using System;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public class EmailServices
+    public class EmailServices : IEmailServices
     {
 
         public async Task<bool> DomainHasMxRecordAsync(string email)

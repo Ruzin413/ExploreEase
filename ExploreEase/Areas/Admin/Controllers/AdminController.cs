@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
+using Services.Interfaces;
 using Services.Services;
 using System.Diagnostics;
 namespace ExploreEase.Areas.Admin.Controllers
@@ -13,17 +15,19 @@ namespace ExploreEase.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<ExploreEaseUser> _userManager;
-        private readonly TourServices _tourServices;
-        private readonly GetServices _getServices;
-        private readonly OrderDetailServices _orderDetailServices;
-        private readonly ReviewServices _reviewServices;
-        public AdminController(UserManager<ExploreEaseUser> userManager, TourServices tourServices, GetServices getServices,OrderDetailServices orderDetailServices,ReviewServices reviewServices)
+        private readonly ITourServices _tourServices;
+        private readonly IGetServices _getServices;
+        private readonly IOrderDetailServices _orderDetailServices;
+        private readonly IReviewServices _reviewServices;
+        private readonly IGetUsers _getUsers;
+        public AdminController(UserManager<ExploreEaseUser> userManager, ITourServices tourServices, IGetServices getServices,IOrderDetailServices orderDetailServices,IReviewServices reviewServices, IGetUsers getUsers)
         {
             _userManager = userManager;
             _tourServices = tourServices;
             _getServices = getServices;
             _orderDetailServices = orderDetailServices;
             _reviewServices = reviewServices;
+            _getUsers = getUsers;
         }
         public async Task<IActionResult> Index()
         {
@@ -58,8 +62,7 @@ namespace ExploreEase.Areas.Admin.Controllers
         }
         public IActionResult Users()
         {
-            GetUser u1 = new GetUser(_userManager);
-            var users = u1.GetUsers();
+            var users = _getUsers.GetUsers();
 
             return View(users);
         }

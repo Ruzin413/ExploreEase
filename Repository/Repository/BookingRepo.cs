@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Repository.Interfaces;
 
 namespace Repository.Repository
 {
-    public class BookingRepo
+    public class BookingRepo : IBookingRepo
     {
         private readonly ExploreEaseDbContext _exploreEaseDbContext;
         public BookingRepo(ExploreEaseDbContext exploreEaseDbContext)

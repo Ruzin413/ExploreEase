@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Repository.Interfaces;
 using Repository.Repository;
 using Services.Interfaces;
 using System;
@@ -12,10 +13,10 @@ namespace Services.Services
 {
     public class TourServices : ITourServices
     {
-        private readonly ImageSaveService _imageSaveService;
-        private readonly TourRepository _tourRepository;
+        private readonly IimageService _imageSaveService;
+        private readonly ITourPackageRepository _tourRepository;
 
-        public TourServices( ImageSaveService imageSaveService, TourRepository tourRepository)
+        public TourServices( IimageService imageSaveService, ITourPackageRepository tourRepository)
         {
             _imageSaveService = imageSaveService;
             _tourRepository = tourRepository;

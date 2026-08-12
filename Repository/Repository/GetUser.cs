@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repository
 {
-    public class GetUser
-        //: IGetUsers
+    public class GetUser : IGetUsers
     {
         public UserManager<ExploreEaseUser> _userManager;
         public GetUser(UserManager<ExploreEaseUser> _userManager)
